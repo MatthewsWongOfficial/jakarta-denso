@@ -1,7 +1,7 @@
-import { Phone, MapPin } from "lucide-react"
-import Link from "next/link"
+import React from "react";
+import { Phone, MapPin } from "lucide-react";
 
-export default function Footer() {
+const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-900 text-gray-100">
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -19,13 +19,13 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-xl font-semibold mb-4">Hubungi Kami</h3>
             <div className="flex items-center space-x-3">
-              <Phone className="w-5 h-5 text-blue-400" />
+              <Phone className="w-5 h-5 text-blue-400" aria-hidden="true" />
               <span className="hover:text-blue-400 transition-colors">
                 (0231) 205148
               </span>
             </div>
             <div className="flex items-center space-x-3">
-              <MapPin className="w-5 h-5 text-blue-400" />
+              <MapPin className="w-5 h-5 text-blue-400" aria-hidden="true" />
               <address className="not-italic">
                 Jl. Garuda Raya No 2-4 Cirebon
               </address>
@@ -39,17 +39,11 @@ export default function Footer() {
             <p className="text-sm text-gray-400">
               © {new Date().getFullYear()} Jakarta Intl Denso Cirebon. All rights reserved.
             </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy" className="text-sm text-gray-400 hover:text-white transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="text-sm text-gray-400 hover:text-white transition-colors">
-                Terms of Service
-              </Link>
-            </div>
           </div>
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
+
+export default Footer;
