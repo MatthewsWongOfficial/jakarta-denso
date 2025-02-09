@@ -6,7 +6,6 @@ import { motion } from "framer-motion"
 
 interface VideoData {
   url: string
-  thumbnail: string
 }
 
 interface AlasanData {
@@ -40,17 +39,14 @@ const alasanMemilih: AlasanData[] = [
 
 const videoPortofolio: VideoData[] = [
   {
-    url: "/videos/video-bengkel.mp4",
-    thumbnail: "/images/thumbnail-1.jpg"
+    url: "/videos/video-bengkel.mp4"
   },
   {
-    url: "/videos/video-bengkel2.mp4",
-    thumbnail: "/images/thumbnail-2.jpg"
+    url: "/videos/video-bengkel2.mp4"
   }
 ]
 
 const KelebihanKami: React.FC = () => {
-  const [loadedVideos, setLoadedVideos] = React.useState<number[]>([])
   const [isVisible, setIsVisible] = React.useState(false)
 
   React.useEffect(() => {
@@ -72,10 +68,6 @@ const KelebihanKami: React.FC = () => {
       }
     }
   }, [])
-
-  const handleVideoLoad = (index: number): void => {
-    setLoadedVideos(prev => [...prev, index])
-  }
 
   return (
     <section id="kelebihan-kami" className="py-16 md:py-24 bg-white relative overflow-hidden">
@@ -104,7 +96,7 @@ const KelebihanKami: React.FC = () => {
 
         <div className="grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
           {/* Videos Section */}
-          <div className="flex justify-center gap-6 px-4">
+          <div className="flex flex-row justify-center gap-4 sm:gap-6 w-full">
             {videoPortofolio.map((video, index) => (
               <motion.div
                 key={index}
@@ -112,24 +104,18 @@ const KelebihanKami: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className="relative group"
+                className="relative group w-1/2"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/50 to-blue-600/50 blur-2xl opacity-30 group-hover:opacity-50 transition-opacity" />
                 
                 <div className="relative p-[2px] rounded-3xl bg-gradient-to-br from-blue-500 via-blue-400 to-blue-600 shadow-xl">
-                  <div className="relative bg-white rounded-3xl overflow-hidden aspect-[9/16] w-44 sm:w-56 md:w-72 lg:w-80">
-                    {!loadedVideos.includes(index) && (
-                      <div className="absolute inset-0 bg-gray-100 animate-pulse" />
-                    )}
-                    
+                  <div className="relative bg-white rounded-3xl overflow-hidden aspect-[9/16] w-full">
                     <video
                       autoPlay
                       loop
                       muted
                       playsInline
-                      onLoadedData={() => handleVideoLoad(index)}
                       className="w-full h-full object-cover"
-                      preload="metadata"
                     >
                       <source src={video.url} type="video/mp4" />
                     </video>
