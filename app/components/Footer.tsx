@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 gap-8 items-start">
           <div className="space-y-6">
-            <h3 className="text-3xl font-bold mb-4 gradient-text">Jakarta Int'l Denso Cirebon</h3>
+            <h3 className="text-3xl font-bold mb-4 gradient-text">Jakarta Intl Denso Cirebon</h3>
             <p className="text-gray-300 mb-4 max-w-md">
               Bengkel AC Mobil & Perawatan Mobil Terpercaya di Cirebon sejak 2004. Kami menyediakan layanan berkualitas
               tinggi dengan harga terjangkau.
@@ -36,7 +36,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Jakarta Int'l Denso Cirebon. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Jakarta Intl Denso Cirebon. All rights reserved.</p>
         </div>
       </div>
     </footer>

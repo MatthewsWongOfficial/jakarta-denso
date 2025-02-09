@@ -1,25 +1,163 @@
-import { Phone, Mail, MapPin } from "lucide-react"
+"use client"
 
-export default function Contact() {
+import { Phone, MapPin, Instagram, Mail, Clock, ArrowRight } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import { useState, type FC, type ReactNode } from "react"
+
+interface SocialButtonProps {
+  href: string
+  className?: string
+  children: ReactNode
+}
+
+const SocialButton: FC<SocialButtonProps> = ({ href, className = "", children }) => (
+  <Link
+    href={href}
+    className={`group flex items-center justify-between gap-3 px-6 py-4 rounded-xl text-white font-medium transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1 ${className}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <div className="flex items-center gap-3">{children}</div>
+    <ArrowRight className="h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
+  </Link>
+)
+
+interface ContactCardProps {
+  icon: ReactNode
+  title: string
+  content: string
+  subContent?: string
+  className?: string
+}
+
+const ContactCard: FC<ContactCardProps> = ({ icon, title, content, subContent, className = "" }) => {
+  const [isHovered, setIsHovered] = useState(false)
+
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">Hubungi Kami</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <Phone className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Telepon</h3>
-            <p>(0231) 205148</p>
+    <div
+      className={`relative group cursor-pointer ${className}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-300"></div>
+      <div className="relative p-6 bg-white rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl border border-gray-100">
+        <div className="flex items-start gap-4">
+          <div className={`text-blue-600 transform transition-all duration-300 ${isHovered ? "scale-110 rotate-12" : ""}`}>
+            {icon}
           </div>
-          <div className="text-center">
-            <Mail className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Email</h3>
-            <p>info@jakartaintldenso.com</p>
+          <div>
+            <h3 className="text-lg font-semibold mb-1 text-gray-900">{title}</h3>
+            <p className="text-gray-600 font-medium">{content}</p>
+            {subContent && <p className="text-gray-500 text-sm mt-1">{subContent}</p>}
           </div>
-          <div className="text-center">
-            <MapPin className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Alamat</h3>
-            <p>Jl. Garuda Raya No 2-4 Cirebon</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const Contact: FC = () => {
+  return (
+    <section id='contact' className="py-24 lg:py-32 bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-40 animate-[pulse_4s_ease-in-out_infinite]"></div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="text-center mb-16 lg:mb-24">
+          <span className="text-blue-600 font-semibold mb-4 block uppercase tracking-wider">Kontak Kami</span>
+          <h2 className="text-4xl lg:text-6xl font-black text-gray-900 mb-6 tracking-tight">Hubungi Kami</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto mb-8 text-lg">
+            Kami siap melayani Anda. Jangan ragu untuk menghubungi kami melalui berbagai channel yang tersedia.
+          </p>
+          <div className="h-1 w-24 bg-gradient-to-r from-blue-600 to-blue-400 mx-auto rounded-full"></div>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+          {/* Owner Card */}
+          <div className="relative group rounded-2xl overflow-hidden shadow-2xl hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_50px_rgba(8,112,184,0.7)]
+ transition-shadow duration-300">
+            <div className="aspect-[4/5] relative">
+              <Image
+                src="/images/owner.jpeg"
+                alt="Owner Jakarta Int'l Denso Cirebon"
+                fill
+                className="object-cover transform group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-60"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-8">
+                <div className="space-y-4 transform translate-y-0 group-hover:-translate-y-2 transition-transform duration-300">
+                  <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 shadow-lg">
+                    <h3 className="text-4xl font-bold text-white mb-2">Suminto Wijaya</h3>
+                    <p className="text-blue-300 font-medium text-xl">Owner Jakarta Intl Denso Cirebon</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Info and Social Media */}
+          <div className="space-y-8">
+            <div className="grid sm:grid-cols-2 gap-6">
+              <ContactCard
+                icon={<Phone className="h-8 w-8" />}
+                title="Telepon"
+                content="0819-647-333"
+                subContent="Senin - Minggu, 08:00 - 17:00"
+              />
+              <ContactCard
+                icon={<MapPin className="h-8 w-8" />}
+                title="Alamat"
+                content="Jl. Garuda Raya No 2-4"
+                subContent="Cirebon, Jawa Barat"
+              />
+              <ContactCard
+                icon={<Mail className="h-8 w-8" />}
+                title="Gratis Konsultasi"
+                content={"Tentang AC Mobil 🚗❄️"}
+                subContent={"Hubungi kami untuk info lebih lanjut"}
+              />
+
+              <ContactCard
+                icon={<Clock className="h-8 w-8" />}
+                title="Jam Operasional"
+                content="Senin - Minggu"
+                subContent="08:00 - 17:00 WIB"
+              />
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <SocialButton
+                href="https://wa.me/62819647333"
+                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 flex-1"
+              >
+                <Phone className="h-5 w-5" />
+                <span>WhatsApp</span>
+              </SocialButton>
+
+              <SocialButton
+                href="https://www.tiktok.com/@jakdenso?_t=ZS-8tlklFFzQmX&_r=1"
+                className="bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black flex-1"
+              >
+                <Image
+                  src="/images/tiktok-social.png"
+                  alt="TikTok"
+                  width={20}
+                  height={20}
+                  className="brightness-0 invert"
+                />
+                <span>TikTok</span>
+              </SocialButton>
+
+              <SocialButton
+                href="https://www.instagram.com/jakarta_intl_denso?igsh=MXdmcTBmMndlbG43aw=="
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 flex-1"
+              >
+                <Instagram className="h-5 w-5" />
+                <span>Instagram</span>
+              </SocialButton>
+            </div>
           </div>
         </div>
       </div>
@@ -27,3 +165,4 @@ export default function Contact() {
   )
 }
 
+export default Contact

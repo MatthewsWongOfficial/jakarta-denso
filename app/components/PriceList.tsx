@@ -2,10 +2,12 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { ChevronRight, ChevronDown } from "lucide-react"
 
 const priceCategories = [
   {
     name: "Cuci Mobil",
+    icon: "🚗",
     items: [
       { name: "Cuci Motor Salju", price: "Rp 25.000" },
       { name: "Cuci Mobil Salju", price: "Rp 55.000" },
@@ -16,6 +18,7 @@ const priceCategories = [
   },
   {
     name: "Salon Mobil / Motor",
+    icon: "✨",
     items: [
       { name: "Poles Motor", price: "Rp 50.000" },
       { name: "Poles Jamur Kaca", price: "Rp 150.000" },
@@ -28,67 +31,152 @@ const priceCategories = [
   },
   {
     name: "Service Mesin Mobil",
+    icon: "⚙️",
     items: [
       { name: "Isi Gas Nitrogen", price: "Rp 10.000 / Ban" },
       { name: "Charge ACCU", price: "Rp 15.000" },
       { name: "Tambal Ban TUBLES", price: "Rp 25.000" },
+      { name: "Service AC Mobil", price: "Rp 600.000" },
+      { name: "Ganti Filter Kabin", price: "Rp 75.000- 100.000" },
+      { name: "Perbaikan AC Mobil", price: "Sesuai jenis mobil & kondisi" },
+      { name: "Ganti Sparepart AC", price: "Sesuai jenis mobil & kondisi" },
     ],
   },
 ]
 
 export default function PriceList() {
   const [activeCategory, setActiveCategory] = useState(priceCategories[0].name)
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <section id="price-list" className="py-20 bg-white">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-800 gradient-text">DAFTAR HARGA</h2>
-        <div className="flex justify-center mb-8 flex-wrap">
+    <section id="price-list" className="relative py-24 bg-white">
+      <div className="container mx-auto px-4 md:px-6">
+        {/* Enhanced Header */}
+        <div className="text-center mb-12 md:mb-20">
+          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 tracking-tight">
+            DAFTAR HARGA
+          </h2>
+          <div className="h-2 w-32 bg-gradient-to-r from-blue-600 to-blue-400 mx-auto rounded-full"></div>
+        </div>
+
+        {/* Mobile Dropdown */}
+        <div className="md:hidden mb-8">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-full px-6 py-4 bg-white rounded-xl border border-gray-200 shadow-sm flex items-center justify-between"
+          >
+            <div className="flex items-center space-x-3">
+              <span className="text-2xl">{priceCategories.find(cat => cat.name === activeCategory)?.icon}</span>
+              <span className="font-semibold text-lg">{activeCategory}</span>
+            </div>
+            <ChevronDown 
+              className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            />
+          </button>
+          
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="absolute z-20 left-4 right-4 mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+              >
+                {priceCategories.map((category) => (
+                  <motion.button
+                    key={category.name}
+                    onClick={() => {
+                      setActiveCategory(category.name)
+                      setIsOpen(false)
+                    }}
+                    className={`w-full px-6 py-4 flex items-center space-x-3 ${
+                      activeCategory === category.name
+                        ? 'bg-blue-50 text-blue-600'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span className="text-2xl">{category.icon}</span>
+                    <span className="font-medium">{category.name}</span>
+                  </motion.button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Desktop Category Buttons */}
+        <div className="hidden md:flex justify-center mb-12 flex-wrap gap-4">
           {priceCategories.map((category) => (
-            <button
+            <motion.button
               key={category.name}
               onClick={() => setActiveCategory(category.name)}
-              className={`px-6 py-3 m-2 rounded-full transition-all duration-300 text-lg font-semibold ${
+              className={`relative px-8 py-4 rounded-xl transition-all duration-300 text-lg font-bold ${
                 activeCategory === category.name
-                  ? "bg-blue-600 text-white shadow-lg transform scale-105"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  ? "bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-lg"
+                  : "bg-white text-gray-700 hover:shadow-md border border-gray-200"
               }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
+              <span className="mr-2">{category.icon}</span>
               {category.name}
-            </button>
+            </motion.button>
           ))}
         </div>
+
+        {/* Enhanced Price Table */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCategory}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="bg-white rounded-lg shadow-xl p-6 max-w-3xl mx-auto"
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="relative p-[2px] rounded-3xl bg-gradient-to-br from-blue-500 via-blue-400 to-blue-600"
           >
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="text-left py-3 px-4 text-gray-700 font-bold">Layanan</th>
-                  <th className="text-right py-3 px-4 text-gray-700 font-bold">Harga</th>
-                </tr>
-              </thead>
-              <tbody>
-                {priceCategories
-                  .find((category) => category.name === activeCategory)
-                  ?.items.map((item, index) => (
-                    <tr key={index} className="border-t border-gray-200 hover:bg-gray-50 transition-colors">
-                      <td className="py-3 px-4 text-gray-800">{item.name}</td>
-                      <td className="text-right py-3 px-4 text-gray-800 font-semibold">{item.price}</td>
+            <div className="absolute inset-0 blur-xl bg-gradient-to-br from-blue-500/50 to-blue-600/50 -z-10"></div>
+            
+            <div className="relative bg-white rounded-3xl overflow-hidden shadow-2xl">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gradient-to-r from-gray-50 to-white">
+                      <th className="text-left py-6 px-6 md:px-8 text-gray-800 text-lg md:text-xl font-bold">Layanan</th>
+                      <th className="text-right py-6 px-6 md:px-8 text-gray-800 text-lg md:text-xl font-bold">Harga</th>
                     </tr>
-                  ))}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    {priceCategories
+                      .find((category) => category.name === activeCategory)
+                      ?.items.map((item, index) => (
+                        <motion.tr
+                          key={index}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
+                          className="border-t border-gray-100 hover:bg-blue-50/50 transition-colors group"
+                        >
+                          <td className="py-4 md:py-6 px-6 md:px-8">
+                            <div className="flex items-center space-x-2">
+                              <ChevronRight className="w-5 h-5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                              <span className="text-base md:text-lg text-gray-800 font-medium">{item.name}</span>
+                            </div>
+                          </td>
+                          <td className="text-right py-4 md:py-6 px-6 md:px-8">
+                            <span className="text-base md:text-lg text-gray-800 font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                              {item.price}
+                            </span>
+                          </td>
+                        </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>
     </section>
   )
 }
-

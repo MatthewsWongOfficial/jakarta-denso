@@ -14,11 +14,13 @@ const navItems: NavItem[] = [
   { name: 'Beranda', href: '#' },
   { name: 'Layanan', href: '#services' },
   { name: 'Harga', href: '#price-list' },
-  { name: 'Galeri', href: '#gallery' },
+  { name: 'Kelebihan Kami', href: '#kelebihan-kami' },
+  { name: 'Galeri', href: '#galeri' },
+  { name: 'Ulasan', href: '#ulasan' },
   { name: 'Kontak', href: '#contact' },
 ]
 
-const Navbar = (): JSX.Element => {
+const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const [scrolled, setScrolled] = React.useState<boolean>(false)
 
@@ -78,9 +80,10 @@ const Navbar = (): JSX.Element => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`ml-2 px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 
-                  ${scrolled
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900'
-                    : 'bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800'
+                  ${
+                    scrolled
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900'
+                      : 'bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800'
                   } text-white shadow-lg hover:shadow-xl`}
               >
                 Hubungi Kami
@@ -98,11 +101,7 @@ const Navbar = (): JSX.Element => {
             }`}
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
           >
-            {isOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
       </div>

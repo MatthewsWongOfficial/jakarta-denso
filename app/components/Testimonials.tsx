@@ -1,67 +1,164 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { Star } from "lucide-react";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
-const testimonials = [
+interface Review {
+  id: number;
+  name: string;
+  role?: string;
+  rating: number;
+  content: string;
+  images: string[];
+}
+
+interface ReviewStarsProps {
+  rating: number;
+}
+
+interface ReviewImagesProps {
+  images: string[];
+}
+
+const reviews: Review[] = [
   {
-    name: "Budi Santoso",
-    role: "Pelanggan Setia",
+    id: 1,
+    name: "Dante Istanto",
+    role: "Local Guide",
+    rating: 5,
     content:
-      "Saya sudah menjadi pelanggan Jakarta Int'l Denso Cirebon selama bertahun-tahun. Layanan mereka selalu memuaskan dan harganya terjangkau.",
+      "Kolong Bersih, cepat, interior di vacuum, semua mobil sy cuci disini",
+    images: ["/images/review1.png", "/images/review2.png"],
   },
   {
-    name: "Siti Rahayu",
-    role: "Pengusaha",
+    id: 2,
+    name: "Bagas Anindito",
+    rating: 5,
     content:
-      "Bengkel ini sangat profesional. Mereka selalu memberikan saran yang tepat untuk perawatan mobil saya. Sangat direkomendasikan!",
+      "Tempat cuci mobil terbaik di Cirebon, pelayanannya sangat baik dan mobil bersih luar & dalam.\nHarga cuci mobil menurut saya standar, yaitu 45k.\nTerdapat pelayanan yang lain seperti Service AC, Custom Jok, Ganti Oli, dll.\nBerlokasi strategis di tengah kota tepatnya di Jalan Ampera di pertigaan.\nYang paling saya suka di sini terdapat 2 jenis hidrolik, yang standar alias yang hanya menyangga bagian tengah mobil, dan ada yang menyangga ban mobilnya juga sehingga kaki-kaki mobil tidak cepat rusak.\nTerdapat tempat untuk menunggu.\nWaktu yang dihabiskan sekitar 30 menit - 1 jam untuk 1 mobil tergantung jenis mobilnya.",
+    images: [],
   },
   {
-    name: "Agus Pratama",
-    role: "Sopir Taksi",
+    id: 3,
+    name: "Aditya Rifki Satria",
+    rating: 5,
     content:
-      "Sebagai sopir taksi, saya membutuhkan perawatan mobil yang cepat dan berkualitas. Jakarta Int'l Denso Cirebon selalu bisa diandalkan.",
+      "Cuci mobil paling juara, dengan harga yg worth it, terjangkau. Bisa mendapat kebersihan maksimal luar dalam, ya meski tempatnya selalu penuh dan saya nunggu dari jam set9 pagi baru selesai jam 11 siang. Tapi saya puas akan hasilnya.. oiya saya betah nunggu karena tempatnya enak, bisa ngopi juga, juara pokoknya disini pelayananya 🙏",
+    images: ["/images/review3.png"],
   },
-]
+  {
+    id: 4,
+    name: "Ferry Hendryk",
+    rating: 5,
+    content:
+      "om Ownernya baek, waktu mau beli air mineral dingin keabisan eh di kasih nya minuman manis tp bayarnya seharga air mineral 😂😂 ...mantap pelayanan nya.. tetap pertahankan kualitas dan pelayanan nya",
+    images: [],
+  },
+  {
+    id: 5,
+    name: "Rudi Mus Andriyanto",
+    rating: 5,
+    content: "Bersih maksimal..",
+    images: ["/images/review4.png"],
+  },
+  {
+    id: 6,
+    name: "Hariadi Sugandi",
+    rating: 5,
+    content:
+      "Mantap, kerja bersih drpd cuci mobil yg lain ada di crb, pertahankan terus utk lbh baik",
+    images: [],
+  },
+];
 
-export default function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0)
+const ReviewStars: React.FC<ReviewStarsProps> = ({ rating }) => {
+  return (
+    <div className="flex gap-1">
+      {[...Array(5)].map((_, index) => (
+        <Star
+          key={index}
+          size={16}
+          className={
+            index < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+          }
+        />
+      ))}
+    </div>
+  );
+};
 
-  const nextTestimonial = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length)
-  }
-
-  const prevTestimonial = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length)
-  }
+const ReviewImages: React.FC<ReviewImagesProps> = ({ images }) => {
+  if (!images || images.length === 0) return null;
 
   return (
-    <section className="py-20 bg-gray-100">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">Apa Kata Pelanggan Kami</h2>
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-lg shadow-md p-8 relative">
-            <button
-              onClick={prevTestimonial}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white rounded-full p-2 hover:bg-blue-700 transition duration-150 ease-in-out"
+    <div className="mt-4 grid grid-cols-3 gap-2">
+      {images.map((image, index) => (
+        <div
+          key={index}
+          className="relative aspect-square rounded-lg overflow-hidden"
+        >
+          <Image
+            src={image}
+            alt={`Review image ${index + 1}`}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default function Reviews() {
+  return (
+    <section id="ulasan" className="py-24 bg-white relative">
+      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:32px_32px] opacity-30"></div>
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-20 relative">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 tracking-tight relative z-10">
+            Ulasan Pelanggan
+          </h2>
+          <p className="text-xl text-gray-600 mb-6">Dari hasil Google Reviews</p>
+          <div className="absolute inset-x-0 bottom-2 h-10 bg-gradient-to-t from-white to-transparent"></div>
+          <div className="h-2 w-32 bg-gradient-to-r from-blue-600 to-blue-400 mx-auto rounded-full"></div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {reviews.map((review, index) => (
+            <motion.div
+              key={review.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="group relative p-[2px] rounded-3xl bg-gradient-to-br from-blue-500 via-blue-400 to-blue-600 shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              onClick={nextTestimonial}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white rounded-full p-2 hover:bg-blue-700 transition duration-150 ease-in-out"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-            <div className="text-center">
-              <p className="text-lg mb-4">"{testimonials[currentIndex].content}"</p>
-              <p className="font-semibold">{testimonials[currentIndex].name}</p>
-              <p className="text-gray-600">{testimonials[currentIndex].role}</p>
-            </div>
-          </div>
+              <div className="efek-blur absolute inset-0 blur-xl bg-gradient-to-br from-blue-500/50 to-blue-600/50 -z-10"></div>
+
+              <div className="bg-white p-6 rounded-3xl h-full">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="font-bold text-gray-900">{review.name}</h3>
+                    {review.role && (
+                      <p className="text-sm text-gray-600">{review.role}</p>
+                    )}
+                  </div>
+                </div>
+
+                <ReviewStars rating={review.rating} />
+
+                <p className="mt-4 text-gray-700 leading-relaxed">
+                  {review.content}
+                </p>
+
+                <ReviewImages images={review.images} />
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
-  )
+  );
 }
-
