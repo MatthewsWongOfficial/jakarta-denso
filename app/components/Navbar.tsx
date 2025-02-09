@@ -76,7 +76,7 @@ const Navbar: React.FC = () => {
                 </Link>
               ))}
               <Link
-                href="https://wa.me/+6281234567890"
+                href="https://wa.me/+62819647333"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`ml-2 px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 

@@ -1,9 +1,21 @@
 "use client"
 
+import React from "react"
 import { Award, ThumbsUp, DollarSign, MapPin } from "lucide-react"
 import { motion } from "framer-motion"
 
-const alasanMemilih = [
+interface VideoData {
+  url: string
+  thumbnail: string
+}
+
+interface AlasanData {
+  icon: React.ElementType
+  title: string
+  description: string
+}
+
+const alasanMemilih: AlasanData[] = [
   {
     icon: Award,
     title: "Profesional & Berpengalaman",
@@ -26,29 +38,73 @@ const alasanMemilih = [
   },
 ]
 
-const videoPortofolio = [
-  "/videos/video-bengkel.mp4",
-  "/videos/video-bengkel2.mp4"
+const videoPortofolio: VideoData[] = [
+  {
+    url: "/videos/video-bengkel.mp4",
+    thumbnail: "/images/thumbnail-1.jpg"
+  },
+  {
+    url: "/videos/video-bengkel2.mp4",
+    thumbnail: "/images/thumbnail-2.jpg"
+  }
 ]
 
-export default function KelebihanKami() {
+const KelebihanKami: React.FC = () => {
+  const [loadedVideos, setLoadedVideos] = React.useState<number[]>([])
+  const [isVisible, setIsVisible] = React.useState(false)
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting)
+      },
+      { threshold: 0.1 }
+    )
+
+    const sectionEl = document.getElementById('kelebihan-kami')
+    if (sectionEl) {
+      observer.observe(sectionEl)
+    }
+
+    return () => {
+      if (sectionEl) {
+        observer.unobserve(sectionEl)
+      }
+    }
+  }, [])
+
+  const handleVideoLoad = (index: number): void => {
+    setLoadedVideos(prev => [...prev, index])
+  }
+
   return (
-    <section id="kelebihan-kami" className="seksi-kelebihan py-24 bg-white relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="latar-belakang absolute top-0 left-0 w-full h-full bg-gradient-to-b from-gray-50/50 to-white/50"></div>
+    <section id="kelebihan-kami" className="py-16 md:py-24 bg-white relative overflow-hidden">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isVisible ? 1 : 0 }}
+        transition={{ duration: 1 }}
+        className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-gray-50/50 via-white/30 to-white/50"
+      />
       
-      <div className="kontainer-utama container mx-auto px-4 relative z-10">
-        {/* Enhanced Header */}
-        <div className="kepala-seksi text-center mb-20">
-          <h2 className="judul-utama text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 tracking-tight">
+      <div className="container mx-auto px-4 relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16 md:mb-24"
+        >
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 tracking-tight leading-tight">
             Mengapa Memilih Kami?
           </h2>
-          <div className="garis-judul h-2 w-32 bg-gradient-to-r from-blue-600 to-blue-400 mx-auto rounded-full"></div>
-        </div>
+          <div className="relative">
+            <div className="h-2 w-32 md:w-40 bg-gradient-to-r from-blue-600 to-blue-400 mx-auto rounded-full" />
+            <div className="absolute top-0 h-2 w-32 md:w-40 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto rounded-full blur-xl opacity-50 left-1/2 transform -translate-x-1/2" />
+          </div>
+        </motion.div>
 
-        <div className="konten-utama grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
           {/* Videos Section */}
-          <div className="bagian-video flex justify-center gap-8 md:gap-12">
+          <div className="flex justify-center gap-6 px-4">
             {videoPortofolio.map((video, index) => (
               <motion.div
                 key={index}
@@ -56,26 +112,35 @@ export default function KelebihanKami() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className="pembungkus-video relative p-[2px] rounded-3xl bg-gradient-to-br from-blue-500 via-blue-400 to-blue-600 shadow-xl"
+                className="relative group"
               >
-                <div className="efek-blur absolute inset-0 blur-xl bg-gradient-to-br from-blue-500/50 to-blue-600/50 -z-10"></div>
-                <div className="video-konten relative bg-white rounded-3xl overflow-hidden aspect-[9/16] w-48 md:w-72 lg:w-80">
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="video-tampilan w-full h-full object-cover"
-                  >
-                    <source src={video} type="video/mp4" />
-                  </video>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/50 to-blue-600/50 blur-2xl opacity-30 group-hover:opacity-50 transition-opacity" />
+                
+                <div className="relative p-[2px] rounded-3xl bg-gradient-to-br from-blue-500 via-blue-400 to-blue-600 shadow-xl">
+                  <div className="relative bg-white rounded-3xl overflow-hidden aspect-[9/16] w-44 sm:w-56 md:w-72 lg:w-80">
+                    {!loadedVideos.includes(index) && (
+                      <div className="absolute inset-0 bg-gray-100 animate-pulse" />
+                    )}
+                    
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      onLoadedData={() => handleVideoLoad(index)}
+                      className="w-full h-full object-cover"
+                      preload="metadata"
+                    >
+                      <source src={video.url} type="video/mp4" />
+                    </video>
+                  </div>
                 </div>
               </motion.div>
             ))}
           </div>
 
           {/* Reasons Grid */}
-          <div className="daftar-alasan grid sm:grid-cols-2 gap-8">
+          <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
             {alasanMemilih.map((alasan, index) => (
               <motion.div
                 key={index}
@@ -83,19 +148,19 @@ export default function KelebihanKami() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="item-alasan group"
+                className="group"
               >
-                <div className="kartu-alasan bg-white rounded-2xl p-6 h-full border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                  <div className="ikon-pembungkus mb-6 relative">
-                    <div className="efek-blur-ikon absolute inset-0 bg-blue-500/10 blur-xl rounded-full"></div>
-                    <div className="ikon-konten relative bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-4 w-16 h-16 flex items-center justify-center">
-                      <alasan.icon className="ikon-alasan h-8 w-8 text-white" />
+                <div className="bg-white rounded-2xl p-6 h-full border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="mb-6 relative">
+                    <div className="absolute inset-0 bg-blue-500/10 blur-xl rounded-full group-hover:bg-blue-500/20 transition-colors" />
+                    <div className="relative bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-4 w-14 h-14 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <alasan.icon className="h-7 w-7 text-white" />
                     </div>
                   </div>
-                  <h3 className="judul-alasan text-xl font-bold mb-3 text-gray-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-lg md:text-xl font-bold mb-3 text-gray-900 group-hover:text-blue-600 transition-colors">
                     {alasan.title}
                   </h3>
-                  <p className="deskripsi-alasan text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed text-sm md:text-base">
                     {alasan.description}
                   </p>
                 </div>
@@ -107,3 +172,5 @@ export default function KelebihanKami() {
     </section>
   )
 }
+
+export default KelebihanKami

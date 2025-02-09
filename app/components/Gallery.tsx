@@ -35,7 +35,7 @@ const galleryImages = [
     category: "Aksesoris Mobil",
   },
   {
-    src: "/images/Purging.jpeg",
+    src: "/images/purging.jpeg",
     title: "Purging Diesel",
     category: "Perawatan Mobil",
   },
