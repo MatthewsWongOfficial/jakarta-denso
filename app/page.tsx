@@ -1,4 +1,5 @@
 import { Suspense, lazy } from "react";
+import { Analytics } from '@vercel/analytics/next';
 
 const Navbar = lazy(() => import("./components/Navbar"));
 const Hero = lazy(() => import("./components/Hero"));
@@ -25,7 +26,9 @@ export default function Home() {
         <Contact />
         <Footer />
         <WhatsAppButton />
+        <Analytics />
       </Suspense>
     </main>
+    
   );
 }

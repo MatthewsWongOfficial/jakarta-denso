@@ -70,7 +70,7 @@ const Contact: FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-16 lg:mb-24">
           <span className="text-blue-600 font-semibold mb-4 block uppercase tracking-wider">Kontak Kami</span>
-          <h2 className="text-4xl lg:text-6xl font-black text-gray-900 mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-400">
+          <h2 className="text-4xl lg:text-6xl font-black text-gray-900 mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-400 leading-normal">
             Hubungi Kami
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto mb-8 text-lg">

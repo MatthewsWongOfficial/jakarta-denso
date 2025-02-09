@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Award, ThumbsUp, DollarSign, MapPin } from "lucide-react"
+import { Award, ThumbsUp, Droplet, MapPin } from "lucide-react"
 import { motion } from "framer-motion"
 
 interface VideoData {
@@ -26,9 +26,9 @@ const alasanMemilih: AlasanData[] = [
     description: "Kami mengutamakan kepuasan pelanggan dengan hasil cuci dan poles berkualitas tinggi.",
   },
   {
-    icon: DollarSign,
-    title: "Harga Bersaing",
-    description: "Harga yang kompetitif dengan hasil maksimal untuk mobil Anda.",
+    icon: Droplet,
+    title: "Cuci Mobil dengan Air PDAM Berkualitas",
+    description: "Kami menggunakan air PDAM berkualitas untuk mencuci mobil Anda, memastikan hasil bersih tanpa bercak.",
   },
   {
     icon: MapPin,

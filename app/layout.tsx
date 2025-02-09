@@ -33,13 +33,13 @@ export default function RootLayout({
     "name": "Jakarta Int'l Denso Cirebon",
     "image": "https://jakartaintldenso.com/images/Cuci-mobil.jpeg",
     "url": metadata.openGraph.url,
-    "telephone": "+62 123 4567", // Replace with actual phone number
+    "telephone": "+62819647333", // Replace with actual phone number
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Jl. Contoh Alamat No. 123",
+      "streetAddress": "Jl. Garuda No 2",
       "addressLocality": "Cirebon",
       "addressRegion": "Jawa Barat",
-      "postalCode": "45111",
+      "postalCode": "45131",
       "addressCountry": "ID"
     },
     "geo": {
