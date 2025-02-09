@@ -1,8 +1,8 @@
 import { Suspense, lazy } from "react";
 import { Analytics } from '@vercel/analytics/next';
+import Navbar from "./components/Navbar"; 
+import Hero from "./components/Hero";  // Load Hero immediately
 
-const Navbar = lazy(() => import("./components/Navbar"));
-const Hero = lazy(() => import("./components/Hero"));
 const Services = lazy(() => import("./components/Services"));
 const PriceList = lazy(() => import("./components/PriceList"));
 const WhyChooseUs = lazy(() => import("./components/WhyChooseUs"));
@@ -15,9 +15,10 @@ const WhatsAppButton = lazy(() => import("./components/WhatsAppButton"));
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
+      <Navbar />
+      <Hero />  {/* Hero loads instantly */}
+
       <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
-        <Navbar />
-        <Hero />
         <Services />
         <PriceList />
         <WhyChooseUs />
@@ -26,9 +27,9 @@ export default function Home() {
         <Contact />
         <Footer />
         <WhatsAppButton />
-        <Analytics />
       </Suspense>
+
+      <Analytics />
     </main>
-    
   );
 }
