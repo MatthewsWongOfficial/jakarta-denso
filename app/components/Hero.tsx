@@ -17,32 +17,50 @@ export default function Hero() {
       </Head>
 
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 w-full h-full">
-          <Image
-            src="/images/2022-09-07.avif"
-            alt="Bengkel AC Mobil"
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority
-            quality={85}
-            placeholder="blur"
-            blurDataURL="/images/2022-09-07-blur.avif"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-blue-900/50"></div>
-        </div>
+      <div className="absolute inset-0 w-full h-full">
+ <Image
+   src="/images/2022-09-07.avif"
+   alt="Bengkel AC Mobil"
+   fill
+   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+   priority
+   quality={85}
+   placeholder="blur"
+   blurDataURL="/images/2022-09-07-blur.avif"
+   className="object-cover"
+ />
+ <div className="absolute inset-0 bg-black/50"></div>
+ <div className="absolute inset-0 bg-gradient-to-b from-blue-900/40 via-blue-800/20 to-blue-700/10 opacity-90"></div>
+</div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
           <div className="space-y-8 max-w-5xl mx-auto">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-              BENGKEL AC MOBIL & PERAWATAN MOBIL TERPERCAYA DI CIREBON
+          <h1 className="text-[2rem] sm:text-[2.5rem] md:text-[3rem] lg:text-[3.5rem] 
+               font-extrabold text-white leading-tight 
+               text-center break-words 
+               drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]
+               max-w-4xl mx-auto">
+              BENGKEL AC MOBIL & <br className="hidden sm:block" />
+              PERAWATAN MOBIL TERPERCAYA DI CIREBON
             </h1>
-
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-100 font-medium tracking-wide">
-              <span className="inline-block">20+ Tahun Pengalaman</span>
-              <span className="mx-4 text-blue-400">|</span>
-              <span className="inline-block">Est. 2004</span>
-            </p>
+     
+            <p className="text-xl sm:text-2xl md:text-3xl 
+             bg-gradient-to-r from-orange-500 to-white 
+             bg-clip-text text-transparent 
+             font-bold tracking-wide 
+             flex items-center justify-center space-x-4
+             bg-white/10 
+             px-6 py-2 rounded-full
+             shadow-sm
+             drop-shadow-[0_1px_2px_rgba(0,0,0,0.1)]">
+  <span className="inline-block text-center">
+    20+ Tahun Pengalaman
+  </span>
+  <span className="text-orange-400 opacity-70">|</span>
+  <span className="inline-block text-center">
+    Sejak 2004
+  </span>
+</p>
 
             <div className="flex justify-center">
               <Link
