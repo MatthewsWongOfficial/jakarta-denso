@@ -6,52 +6,44 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <>
-      {/* SEO Meta Tags */}
       <Head>
         <title>Bengkel AC Mobil & Perawatan Mobil Terpercaya di Cirebon</title>
         <meta name="description" content="Bengkel terbaik di Cirebon untuk AC mobil dan perawatan mobil. Layanan berkualitas dengan pengalaman lebih dari 20 tahun." />
         <meta name="keywords" content="Bengkel Terbaik Cirebon, Cuci Mobil Cirebon, Bengkel AC Cirebon, Perawatan Mobil Cirebon" />
         <meta name="author" content="Bengkel AC Cirebon" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow" />
+        <link rel="preload" href="/images/2022-09-07.jpg" as="image" />
       </Head>
 
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Optimized Background Image with Blur Placeholder */}
         <div className="absolute inset-0 w-full h-full">
           <Image
-            src="/images/2022-09-07.jpg"
+            src="/images/2022-09-07.avif"
             alt="Bengkel AC Mobil"
-            layout="fill"
-            objectFit="cover"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             priority
-            quality={85} // Optimize performance
+            quality={85}
             placeholder="blur"
-            blurDataURL="/images/2022-09-07-blur.jpg" // Low-res blurred version
+            blurDataURL="/images/2022-09-07-blur.avif"
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-blue-900/50"></div>
         </div>
 
-        {/* Content Container */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
           <div className="space-y-8 max-w-5xl mx-auto">
-            {/* Main Heading */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight 
-                           animate-fade-in-up
-                           [text-shadow:_2px_2px_8px_rgb(0_0_0_/_50%),_4px_4px_16px_rgb(0_0_0_/_30%)]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
               BENGKEL AC MOBIL & PERAWATAN MOBIL TERPERCAYA DI CIREBON
             </h1>
 
-            {/* Subheading */}
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-100 
-                         [text-shadow:_1px_1px_4px_rgb(0_0_0_/_40%)]
-                         animate-fade-in-up animation-delay-200
-                         font-medium tracking-wide">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-100 font-medium tracking-wide">
               <span className="inline-block">20+ Tahun Pengalaman</span>
               <span className="mx-4 text-blue-400">|</span>
               <span className="inline-block">Est. 2004</span>
             </p>
 
-            {/* CTA Button */}
             <div className="flex justify-center">
               <Link
                 href="#services"
@@ -63,8 +55,7 @@ export default function Hero() {
                            text-white
                            transition-all duration-300
                            hover:scale-105
-                           hover:shadow-[0_8px_16px_rgba(0,0,0,0.3)]
-                           animate-fade-in-up animation-delay-400"
+                           hover:shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
               >
                 <span className="flex items-center">
                   Lihat Layanan Kami
@@ -75,7 +66,6 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Bottom Gradient */}
         <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent"></div>
       </div>
     </>
