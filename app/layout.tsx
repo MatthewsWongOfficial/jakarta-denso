@@ -74,30 +74,42 @@ export default function RootLayout({
   return (
     <html lang="id">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
-        <meta name="keywords" content={metadata.keywords} />
-        <meta name="author" content="Jakarta Int'l Denso Cirebon" />
-        <meta name="robots" content="index, follow" />
-        {/* Canonical URL */}
-        <link rel="canonical" href={metadata.openGraph.url} />
-        {/* Open Graph Meta Tags for social sharing */}
-        <meta property="og:title" content={metadata.openGraph.title} />
-        <meta property="og:description" content={metadata.openGraph.description} />
-        <meta property="og:url" content={metadata.openGraph.url} />
-        <meta property="og:type" content={metadata.openGraph.type} />
-        <meta property="og:image" content={metadata.openGraph.image} />
-        <meta property="og:locale" content="id_ID" />
-        <meta property="og:site_name" content="Jakarta Int'l Denso Cirebon" />
-        <meta property="og:location" content={metadata.openGraph.location} />
-        {/* JSON-LD Schema Markup for better SEO */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-      </head>
+      <meta charSet="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>{metadata.title}</title>
+      <meta name="description" content={metadata.description} />
+      <meta name="keywords" content={metadata.keywords} />
+      <meta name="author" content="Jakarta Int'l Denso Cirebon" />
+      <meta name="robots" content="index, follow" />
+      
+      {/* Canonical URL */}
+      <link rel="canonical" href={metadata.openGraph.url} />
+
+      {/* Open Graph Meta Tags */}
+      <meta property="og:title" content={metadata.openGraph.title} />
+      <meta property="og:description" content={metadata.openGraph.description} />
+      <meta property="og:url" content={metadata.openGraph.url} />
+      <meta property="og:type" content={metadata.openGraph.type} />
+      <meta property="og:image" content={metadata.openGraph.image} />
+      <meta property="og:locale" content="id_ID" />
+      <meta property="og:site_name" content="Jakarta Int'l Denso Cirebon" />
+      <meta property="og:location" content={metadata.openGraph.location} />
+
+      {/* ✅ Favicon */}
+      <link rel="icon" href="/favicon.ico" sizes="any" />
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+      <link rel="manifest" href="/site.webmanifest" />
+      <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+      <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+
+
+      {/* JSON-LD Schema Markup */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+    </head>
+
       <body className={inter.className}>{children}</body>
     </html>
   )
