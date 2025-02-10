@@ -16,7 +16,7 @@ export const metadata = {
       "Bengkel mobil terbaik di Cirebon, melayani service AC, cuci mobil, detailing, dan banyak lagi. Kunjungi lokasi kami sekarang!",
     url: "https://jakartaintldenso.com", // Replace with actual website URL
     type: "website",
-    image: "/images/Cuci-mobil.jpeg", // Ensure this file is in public/images/
+    image: "/images/og-image.jpg", // Ensure this file is in public/images/
     location: "https://maps.app.goo.gl/YpXNX5oDLjxaNsCk8",
   },
 }
