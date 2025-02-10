@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useEffect, useRef, useCallback } from "react"
-import { Award, ThumbsUp, Droplet, MapPin } from "lucide-react"
+import React, { useEffect, useRef, useCallback, useState } from "react"
+import { Award, ThumbsUp, Droplet, MapPin, X, Maximize2, Minimize2 } from "lucide-react"
 import { motion } from "framer-motion"
 
 interface VideoData {
@@ -14,6 +14,7 @@ interface AlasanData {
   description: string
 }
 
+// Rest of the interfaces and constants remain the same...
 const alasanMemilih: AlasanData[] = [
   { icon: Award, title: "Profesional & Berpengalaman", description: "Teknisi kami ahli dalam perawatan mobil sejak tahun 2004." },
   { icon: ThumbsUp, title: "Pelayanan Terbaik", description: "Kami mengutamakan kepuasan pelanggan dengan hasil cuci dan poles berkualitas tinggi." },
@@ -26,34 +27,145 @@ const videoPortofolio: VideoData[] = [
   { url: "/videos/video-bengkel2.mp4" }
 ]
 
+// VideoModal component remains the same...
+const VideoModal = ({ 
+  isOpen, 
+  onClose, 
+  videoUrl 
+}: { 
+  isOpen: boolean
+  onClose: () => void
+  videoUrl: string 
+}) => {
+  const modalVideoRef = useRef<HTMLVideoElement>(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      modalVideoRef.current?.requestFullscreen()
+      setIsFullscreen(true)
+    } else {
+      document.exitFullscreen()
+      setIsFullscreen(false)
+    }
+  }
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  }, [])
+
+  if (!isOpen) return null
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative z-50 w-full max-w-4xl bg-black rounded-lg overflow-hidden">
+        <div className="absolute top-4 right-4 z-10 flex gap-2">
+          <button 
+            onClick={toggleFullscreen}
+            className="p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors"
+          >
+            {isFullscreen ? (
+              <Minimize2 className="h-5 w-5 text-white" />
+            ) : (
+              <Maximize2 className="h-5 w-5 text-white" />
+            )}
+          </button>
+          <button 
+            onClick={onClose}
+            className="p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors"
+          >
+            <X className="h-5 w-5 text-white" />
+          </button>
+        </div>
+        <video
+          ref={modalVideoRef}
+          src={videoUrl}
+          className="w-full aspect-video object-contain"
+          controls
+          autoPlay
+          playsInline
+        />
+      </div>
+    </div>
+  )
+}
+
+// VideoThumbnail component remains the same...
+const VideoThumbnail = ({ 
+  videoUrl, 
+  onOpenModal 
+}: { 
+  videoUrl: string
+  onOpenModal: () => void
+}) => {
+  const thumbnailVideoRef = useRef<HTMLVideoElement>(null)
+  
+  useEffect(() => {
+    if (thumbnailVideoRef.current) {
+      thumbnailVideoRef.current.load()
+      thumbnailVideoRef.current.preload = "metadata"
+    }
+  }, [videoUrl])
+
+  return (
+    <div 
+      onClick={onOpenModal}
+      className="cursor-pointer group relative bg-white rounded-3xl overflow-hidden aspect-[9/16] w-full"
+    >
+      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-10">
+        <Maximize2 className="w-12 h-12 text-white" />
+      </div>
+      <video
+        ref={thumbnailVideoRef}
+        src={videoUrl}
+        className="w-full h-full object-cover"
+        muted
+        playsInline
+        loop
+        poster={videoUrl + '?thumb=1'}
+      />
+    </div>
+  )
+}
+
 const KelebihanKami: React.FC = () => {
-  // ✅ Correctly typed useRef with HTMLVideoElement[]
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null)
+  const thumbnailObserver = useRef<IntersectionObserver | null>(null)
+  // Fixed type definition for refs array
+  const thumbnailRefs = useRef<Array<HTMLDivElement | null>>([])
 
   const handleIntersection = useCallback((entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry) => {
-      const video = entry.target as HTMLVideoElement
-      if (entry.isIntersecting && video.dataset.src) {
-        video.src = video.dataset.src // Lazy-load video source
-        video.play()
-      } else {
+      const container = entry.target as HTMLDivElement
+      const video = container.querySelector('video')
+      if (entry.isIntersecting && video) {
+        video.play().catch(() => {
+          console.log('Autoplay prevented')
+        })
+      } else if (video) {
         video.pause()
       }
     })
   }, [])
 
   useEffect(() => {
-    const observer = new IntersectionObserver(handleIntersection, { threshold: 0.5 })
+    thumbnailObserver.current = new IntersectionObserver(handleIntersection, {
+      threshold: 0.5,
+      rootMargin: '50px'
+    })
 
-    videoRefs.current.forEach((video) => {
-      if (video) observer.observe(video)
+    thumbnailRefs.current.forEach((ref) => {
+      if (ref) thumbnailObserver.current?.observe(ref)
     })
 
     return () => {
-      videoRefs.current.forEach((video) => {
-        if (video) observer.unobserve(video)
-      })
-      observer.disconnect()
+      thumbnailObserver.current?.disconnect()
     }
   }, [handleIntersection])
 
@@ -73,22 +185,23 @@ const KelebihanKami: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
           <div className="flex flex-row justify-center gap-4 sm:gap-6 w-full">
             {videoPortofolio.map((video, index) => (
-              <motion.div key={index} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.2 }} viewport={{ once: true }} className="relative group w-1/2">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+                viewport={{ once: true }}
+                className="relative group w-1/2"
+                ref={el => {
+                  thumbnailRefs.current[index] = el
+                }}
+              >
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/50 to-blue-600/50 blur-2xl opacity-30 group-hover:opacity-50 transition-opacity" />
                 <div className="relative p-[2px] rounded-3xl bg-gradient-to-br from-blue-500 via-blue-400 to-blue-600 shadow-xl">
-                  <div className="relative bg-white rounded-3xl overflow-hidden aspect-[9/16] w-full">
-                    <video
-                      ref={(el) => {
-                        if (el) videoRefs.current[index] = el
-                      }}
-                      data-src={video.url}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+                  <VideoThumbnail
+                    videoUrl={video.url}
+                    onOpenModal={() => setSelectedVideo(video.url)}
+                  />
                 </div>
               </motion.div>
             ))}
@@ -114,6 +227,14 @@ const KelebihanKami: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {selectedVideo && (
+        <VideoModal
+          isOpen={!!selectedVideo}
+          onClose={() => setSelectedVideo(null)}
+          videoUrl={selectedVideo}
+        />
+      )}
     </section>
   )
 }
