@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 const galleryImages = [
   {
     src: "/images/proses-cuci.jpeg",
-    title: "Proses Cuci Mobil Premium dengan air PDAM",
+    title: "Proses Cuci Mobil Premium",
     category: "Cuci Mobil",
   },
   {

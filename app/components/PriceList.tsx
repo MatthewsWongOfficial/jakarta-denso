@@ -49,29 +49,36 @@ export default function PriceList() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <section id="price-list" className="relative py-24 bg-white">
+    <section id="price-list" className="relative py-24 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4 md:px-6">
-        {/* Enhanced Header */}
-        <div className="text-center mb-12 md:mb-20">
+        {/* Enhanced Header with Animation */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12 md:mb-20"
+        >
           <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 tracking-tight">
             DAFTAR HARGA
           </h2>
           <div className="h-2 w-32 bg-gradient-to-r from-blue-600 to-blue-400 mx-auto rounded-full"></div>
-        </div>
+        </motion.div>
 
-        {/* Mobile Dropdown */}
+        {/* Improved Mobile Dropdown */}
         <div className="md:hidden mb-8">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="w-full px-6 py-4 bg-white rounded-xl border border-gray-200 shadow-sm flex items-center justify-between"
+            className="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg flex items-center justify-between transform transition-all duration-200 hover:shadow-xl active:scale-95"
           >
             <div className="flex items-center space-x-3">
               <span className="text-2xl">{priceCategories.find(cat => cat.name === activeCategory)?.icon}</span>
-              <span className="font-semibold text-lg">{activeCategory}</span>
+              <span className="font-semibold text-lg text-white">{activeCategory}</span>
             </div>
-            <ChevronDown 
-              className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-            />
+            <motion.div
+              animate={{ rotate: isOpen ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ChevronDown className="w-5 h-5 text-white" />
+            </motion.div>
           </button>
           
           <AnimatePresence>
@@ -80,7 +87,7 @@ export default function PriceList() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="absolute z-20 left-4 right-4 mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+                className="absolute z-20 left-4 right-4 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden"
               >
                 {priceCategories.map((category) => (
                   <motion.button
@@ -94,6 +101,7 @@ export default function PriceList() {
                         ? 'bg-blue-50 text-blue-600'
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
+                    whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <span className="text-2xl">{category.icon}</span>
@@ -105,7 +113,7 @@ export default function PriceList() {
           </AnimatePresence>
         </div>
 
-        {/* Desktop Category Buttons */}
+        {/* Enhanced Desktop Category Buttons */}
         <div className="hidden md:flex justify-center mb-12 flex-wrap gap-4">
           {priceCategories.map((category) => (
             <motion.button
@@ -116,7 +124,7 @@ export default function PriceList() {
                   ? "bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-lg"
                   : "bg-white text-gray-700 hover:shadow-md border border-gray-200"
               }`}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.4)" }}
               whileTap={{ scale: 0.95 }}
             >
               <span className="mr-2">{category.icon}</span>
@@ -125,7 +133,7 @@ export default function PriceList() {
           ))}
         </div>
 
-        {/* Enhanced Price Table */}
+        {/* Enhanced Price Table with Better Visual Hierarchy */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCategory}
@@ -141,7 +149,7 @@ export default function PriceList() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-gradient-to-r from-gray-50 to-white">
+                    <tr className="bg-gradient-to-r from-blue-50 to-white">
                       <th className="text-left py-6 px-6 md:px-8 text-gray-800 text-lg md:text-xl font-bold">Layanan</th>
                       <th className="text-right py-6 px-6 md:px-8 text-gray-800 text-lg md:text-xl font-bold">Harga</th>
                     </tr>
@@ -159,12 +167,18 @@ export default function PriceList() {
                         >
                           <td className="py-4 md:py-6 px-6 md:px-8">
                             <div className="flex items-center space-x-2">
-                              <ChevronRight className="w-5 h-5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                              <motion.div
+                                initial={{ x: -10, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                className="text-blue-500"
+                              >
+                                <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                              </motion.div>
                               <span className="text-base md:text-lg text-gray-800 font-medium">{item.name}</span>
                             </div>
                           </td>
                           <td className="text-right py-4 md:py-6 px-6 md:px-8">
-                            <span className="text-base md:text-lg text-gray-800 font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                            <span className="text-base md:text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
                               {item.price}
                             </span>
                           </td>
