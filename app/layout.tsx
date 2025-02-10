@@ -58,17 +58,13 @@ export default function RootLayout({
           "Wednesday",
           "Thursday",
           "Friday",
-          "Saturday"
+          "Saturday",
+          "Sunday"
         ],
         "opens": "08:00",
         "closes": "18:00"
       }
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.7",
-      "reviewCount": "38"
-    }
+    ]
   }
 
   return (

@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-900 text-gray-100">
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           {/* Company Info */}
           <div>
             <h2 className="text-2xl font-bold mb-4">Jakarta Intl Denso Cirebon</h2>
@@ -30,6 +30,18 @@ const Footer: React.FC = () => {
                 Jl. Garuda Raya No 2-4 Cirebon
               </address>
             </div>
+          </div>
+
+          {/* Google Maps */}
+          <div className="w-full h-full min-h-[300px] rounded-3xl overflow-hidden relative bg-gradient-to-r from-blue-500 to-blue-600 p-1">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.41563466146!2d108.55457877511101!3d-6.719028993276872!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6ee2706f072381%3A0xa508c7af4ac76e3d!2sJakarta%20Int&#39;l%20Denso%20CarWash!5e0!3m2!1sen!2sid!4v1739173434526!5m2!1sen!2sid"
+              className="w-full h-full rounded-2xl"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
 
