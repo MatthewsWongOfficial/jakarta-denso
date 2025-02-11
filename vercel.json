@@ -1,0 +1,10 @@
+{
+    "redirects": [
+      {
+        "source": "/robots.txt",
+        "destination": "/robots.txt",
+        "permanent": false
+      }
+    ]
+  }
+  
