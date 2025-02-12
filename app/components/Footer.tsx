@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
             <h2 className="text-2xl font-bold mb-4">Jakarta Intl Denso Cirebon</h2>
             <p className="text-gray-400 mb-6 max-w-md">
               Bengkel AC Mobil & Perawatan Mobil Terpercaya di Cirebon sejak 2004. 
-              Kami menyediakan layanan berkualitas tinggi dengan harga terjangkau.
+              Kami menyediakan layanan berkualitas tinggi dengan harga terbaik.
             </p>
           </div>
 

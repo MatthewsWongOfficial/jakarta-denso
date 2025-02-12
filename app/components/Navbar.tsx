@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 
 interface NavItem {
@@ -11,18 +12,21 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { name: 'Beranda', href: '#' },
-  { name: 'Layanan', href: '#services' },
-  { name: 'Harga', href: '#price-list' },
-  { name: 'Kelebihan Kami', href: '#kelebihan-kami' },
-  { name: 'Galeri', href: '#galeri' },
-  { name: 'Ulasan', href: '#ulasan' },
-  { name: 'Kontak', href: '#contact' },
+  { name: 'Beranda', href: '/' },
+  { name: 'Layanan', href: '/#services' },
+  { name: 'Harga', href: '/#price-list' },
+  { name: 'Kelebihan Kami', href: '/#kelebihan-kami' },
+  { name: 'Galeri', href: '/#galeri' },
+  { name: 'Ulasan', href: '/#ulasan' },
+  { name: 'Blog', href: '/#BlogPreview' }, // Changed back to #BlogPreview
+  { name: 'Kontak', href: '/#contact' },
 ]
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const [scrolled, setScrolled] = React.useState<boolean>(false)
+  const pathname = usePathname()
+  const isBlogPage = pathname?.startsWith('/blogs')
 
   React.useEffect(() => {
     const handleScroll = (): void => {
@@ -33,10 +37,23 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Get the correct href based on current page
+  const getNavHref = (item: NavItem): string => {
+    // If we're on a blog page and the link is a hash link, redirect to home page with hash
+    if (isBlogPage && item.href.startsWith('/#')) {
+      return item.href
+    }
+    // For non-hash links, use the href as is
+    return item.href
+  }
+
+  // Use scrolled style if actually scrolled OR if we're on a blog page
+  const useScrolledStyle = scrolled || isBlogPage
+
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'
+        useScrolledStyle ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,7 +70,7 @@ const Navbar: React.FC = () => {
             </div>
             <span
               className={`text-xl sm:text-2xl font-extrabold tracking-tight ${
-                scrolled ? 'text-blue-900' : 'text-white'
+                useScrolledStyle ? 'text-blue-900' : 'text-white'
               }`}
             >
               Jakarta Intl Denso
@@ -65,9 +82,9 @@ const Navbar: React.FC = () => {
               {navItems.map((item) => (
                 <Link
                   key={item.name}
-                  href={item.href}
+                  href={getNavHref(item)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    scrolled
+                    useScrolledStyle
                       ? 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
                       : 'text-white hover:bg-white/20'
                   }`}
@@ -81,7 +98,7 @@ const Navbar: React.FC = () => {
                 rel="noopener noreferrer"
                 className={`ml-2 px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 
                   ${
-                    scrolled
+                    useScrolledStyle
                       ? 'bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900'
                       : 'bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800'
                   } text-white shadow-lg hover:shadow-xl`}
@@ -95,7 +112,7 @@ const Navbar: React.FC = () => {
             type="button"
             onClick={() => setIsOpen(!isOpen)}
             className={`md:hidden inline-flex items-center justify-center p-2 rounded-lg ${
-              scrolled
+              useScrolledStyle
                 ? 'text-gray-700 hover:bg-gray-100'
                 : 'text-white hover:bg-white/20'
             }`}
@@ -112,7 +129,7 @@ const Navbar: React.FC = () => {
             {navItems.map((item) => (
               <Link
                 key={item.name}
-                href={item.href}
+                href={getNavHref(item)}
                 onClick={() => setIsOpen(false)}
                 className="block px-4 py-2 text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors duration-200"
               >
@@ -120,7 +137,7 @@ const Navbar: React.FC = () => {
               </Link>
             ))}
             <Link
-              href="https://wa.me/+6281234567890"
+              href="https://wa.me/+62819647333"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setIsOpen(false)}
