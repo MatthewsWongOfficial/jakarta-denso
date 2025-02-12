@@ -27,7 +27,7 @@ export default function BlogPreview() {
         const res = await fetch("/api/blog-posts")
         if (!res.ok) throw new Error("Failed to fetch posts")
         const data = await res.json()
-        setPosts(data.slice(0, 3))
+        setPosts(data.slice(0, 6))
       } catch (error) {
         console.error("Error fetching posts:", error)
       }
