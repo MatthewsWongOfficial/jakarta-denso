@@ -4,7 +4,7 @@ import type React from "react"
 import { useEffect, useState, Suspense } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
-import { Calendar, Clock, ChevronLeft, Share2, Bookmark, Eye, Lightbulb } from "lucide-react"
+import { Calendar, Clock, ChevronLeft, Share2, Maximize, Eye, Lightbulb } from "lucide-react"
 import { MDXRemote, type MDXRemoteSerializeResult } from "next-mdx-remote"
 import Link from "next/link"
 import dynamic from "next/dynamic"
@@ -534,7 +534,7 @@ const BlogPost: React.FC = () => {
                     className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
                     aria-label="Toggle fullscreen"
                   >
-                    <Bookmark className="w-5 h-5 text-gray-600" />
+                    <Maximize className="w-5 h-5 text-gray-600" />
                   </motion.button>
                 </div>
               </nav>
