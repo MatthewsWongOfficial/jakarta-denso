@@ -45,7 +45,7 @@ const galleryImages = [
     category: "Aksesoris Mobil",
   },
   {
-    src: "/images/bengkel-jid.jpeg",
+    src: "/images/lokasi-kami.jpeg",
     title: "Lokasi Kami",
     category: "Galeri Bengkel",
   },

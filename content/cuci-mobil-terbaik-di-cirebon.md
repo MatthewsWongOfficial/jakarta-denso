@@ -47,6 +47,9 @@ Cirebon memiliki beberapa pilihan layanan cuci mobil berkualitas. Berikut rekome
 Jakarta Int'l Denso Cirebon menawarkan paket cuci mobil lengkap dengan harga terjangkau dan kualitas premium. Kunjungi kami untuk pengalaman cuci mobil terbaik di Cirebon!
 </Highlight>
 
+![Proses Cuci Mobil Di Jakarta Intl Denso Cirebon](/images/Cuci-mobil12.jpeg)
+
+
 ## Tips Perawatan Mobil di Rumah
 
 Selain menggunakan layanan cuci mobil profesional, Anda juga dapat merawat mobil di rumah. Berikut beberapa tips yang bisa Anda terapkan:

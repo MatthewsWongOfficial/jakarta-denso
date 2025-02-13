@@ -91,17 +91,47 @@ const localBusinessSchema = {
       },
       author: {
         "@type": "Person",
-        name: "Ahmad Subarjo",
+        name: "Bagas Anindito",
+      },
+      datePublished: "2022-01-15",
+      reviewBody:
+        "Tempat cuci mobil terbaik di Cirebon, pelayanannya sangat baik dan mobil bersih luar & dalam. Terdapat pelayanan yang lain seperti Service AC, Custom Jok, Ganti Oli dll . Berlokasi strategis di tengah kota Cirebon tepatnya di Jalan Ampera di pertigaan. ang paling saya suka disini terdapat 2 jenis hidrolik, yang standar alias yang hanya menyangga bagian tengah mobil, dan ada yang menyangga ban mobil nya juga sehingga kaki-kaki mobil tidak cepat rusak",
+    },
+    {
+      "@type": "Review",
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: "5",
+        bestRating: "5",
+      },
+      author: {
+        "@type": "Person",
+        name: "Aditya Rifki Satria",
+      },
+      datePublished: "2020-01-15",
+      reviewBody:
+        "Cuci mobil paling juara, dengan harga yg worth it, terjangkau. Bisa mendapat kebersihan maksimal luar dalam, ya meski tempatnya selalu penuh dan saya nunggu dari jam set9 pagi baru selesai jam 11 siang. Tapi saya puas akan hasilnya.. oiya saya betah nunggu karena tempatnya enak, bisa ngopi juga, juara pokoknya disini pelayananya ",
+    },
+    {
+      "@type": "Review",
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: "5",
+        bestRating: "5",
+      },
+      author: {
+        "@type": "Person",
+        name: "Matthews Wong",
       },
       datePublished: "2024-01-15",
       reviewBody:
-        "Bengkel terbaik di Cirebon, pelayanan ramah dan profesional",
+        "Jakarta International Denso merupakan pilihan tepat bagi Anda yang sedang mencari jasa cuci mobil terbaik di Cirebon dan memuaskan di Cirebon. Dengan pengalaman bertahun-tahun dalam industri ini, mereka telah membuktikan diri sebagai salah satu penyedia layanan cuci mobil terpercaya yang tidak hanya mengutamakan kebersihan kendaraan, tetapi juga memberikan pelayanan pelanggan yang luar biasa.Kebersihan dan Kualitas: Tidak ada yang lebih memuaskan daripada melihat mobil bersih dan berkilau setelah menjalani layanan cuci. Jakarta International Denso Cirebon sangat memahami pentingnya kebersihan kendaraan bagi para pelanggannya. Tim profesional mereka dilengkapi dengan pengetahuan dan peralatan modern untuk membersihkan mobil dengan sangat hati-hati. Mereka menggunakan produk pembersih berkualitas tinggi yang aman untuk cat dan permukaan kendaraan, sehingga Anda dapat yakin bahwa mobil Anda akan kembali dalam kondisi prima setelah proses cuci selesai",
     },
   ],
   aggregateRating: {
     "@type": "AggregateRating",
     ratingValue: "4.9",
-    reviewCount: "218",
+    reviewCount: "160",
     bestRating: "5",
     worstRating: "3",
   },
