@@ -4,7 +4,23 @@ import type React from "react"
 import { useEffect, useState, Suspense } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
-import { Calendar, Clock, ChevronLeft, Share2, Maximize, Eye, Lightbulb } from "lucide-react"
+import { 
+  Calendar,
+  Clock, 
+  ChevronLeft, 
+  Share2, 
+  Maximize, 
+  Eye, 
+  ArrowRight,
+  MapPin,
+  ImageIcon,
+  PhoneCall,
+  BookOpen,
+  DollarSign,
+  Award,
+  MessageSquare,
+  Lightbulb
+} from "lucide-react"
 import { MDXRemote, type MDXRemoteSerializeResult } from "next-mdx-remote"
 import Link from "next/link"
 import dynamic from "next/dynamic"
@@ -34,6 +50,11 @@ interface Frontmatter {
 interface BlogPost {
   frontmatter: Frontmatter
   content: MDXRemoteSerializeResult
+}
+interface BlogLink {
+  url: string;
+  title: string;
+  date: string;
 }
 
 interface StructuredData {
@@ -407,6 +428,8 @@ const BlogPost: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState<boolean>(false)
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
+  const [recentPosts] = useState<BlogLink[]>([]);
+
 
   useEffect(() => {
     const handleScroll = (): void => {
@@ -436,6 +459,19 @@ const BlogPost: React.FC = () => {
       fetchPost()
     }
   }, [slug])
+
+  // useEffect(() => {
+  //   const fetchRecentPosts = async () => {
+  //     try {
+  //       const res = await fetch('/api/recent-posts');
+  //       const data = await res.json();
+  //       setRecentPosts(data.slice(0, 3)); // Get 3 most recent posts
+  //     } catch (err) {
+  //       console.error('Error fetching recent posts:', err);
+  //     }
+  //   };
+  //   fetchRecentPosts();
+  // }, []);
 
   const handleShare = async (): Promise<void> => {
     try {
@@ -581,6 +617,143 @@ const BlogPost: React.FC = () => {
               <div className="prose prose-lg max-w-none prose-headings:text-gray-800 prose-p:text-gray-600 prose-a:text-blue-600 hover:prose-a:text-blue-800">
                 <MDXRemote {...post.content} components={MDXComponents} />
               </div>
+              {/* Add Indonesian SEO Backlinks Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mt-12 pt-8 border-t border-gray-200"
+              >
+                <div className="space-y-8">
+                  {/* Main Navigation Links */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-800 mb-4">Jelajahi Layanan Kami</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <Link 
+        href="/services" 
+        className="group flex items-center p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all duration-300"
+      >
+        <div className="flex-shrink-0 w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+          <BookOpen className="w-5 h-5 text-white" />
+        </div>
+        <div className="ml-4">
+          <p className="font-medium text-blue-900">Layanan</p>
+          <p className="text-sm text-blue-600">Service AC & Salon Mobil</p>
+        </div>
+        <ArrowRight className="w-4 h-4 ml-auto text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+      </Link>
+
+      <Link 
+        href="/price-list" 
+        className="group flex items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-all duration-300"
+      >
+        <div className="flex-shrink-0 w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+          <DollarSign className="w-5 h-5 text-white" />
+        </div>
+        <div className="ml-4">
+          <p className="font-medium text-green-900">Harga</p>
+          <p className="text-sm text-green-600">Daftar Harga Layanan</p>
+        </div>
+        <ArrowRight className="w-4 h-4 ml-auto text-green-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+      </Link>
+
+      <Link 
+        href="/kelebihan-kami" 
+        className="group flex items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-all duration-300"
+      >
+        <div className="flex-shrink-0 w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+          <Award className="w-5 h-5 text-white" />
+        </div>
+        <div className="ml-4">
+          <p className="font-medium text-purple-900">Keunggulan</p>
+          <p className="text-sm text-purple-600">Mengapa Memilih Kami</p>
+        </div>
+        <ArrowRight className="w-4 h-4 ml-auto text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+      </Link>
+
+      <Link 
+        href="/galeri" 
+        className="group flex items-center p-4 bg-orange-50 rounded-xl hover:bg-orange-100 transition-all duration-300"
+      >
+        <div className="flex-shrink-0 w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+          <ImageIcon className="w-5 h-5 text-white" />
+        </div>
+        <div className="ml-4">
+          <p className="font-medium text-orange-900">Galeri</p>
+          <p className="text-sm text-orange-600">Portofolio Pekerjaan</p>
+        </div>
+        <ArrowRight className="w-4 h-4 ml-auto text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+      </Link>
+
+      <Link 
+        href="/ulasan" 
+        className="group flex items-center p-4 bg-pink-50 rounded-xl hover:bg-pink-100 transition-all duration-300"
+      >
+        <div className="flex-shrink-0 w-10 h-10 bg-pink-500 rounded-lg flex items-center justify-center">
+          <MessageSquare className="w-5 h-5 text-white" />
+        </div>
+        <div className="ml-4">
+          <p className="font-medium text-pink-900">Ulasan</p>
+          <p className="text-sm text-pink-600">Testimoni Pelanggan</p>
+        </div>
+        <ArrowRight className="w-4 h-4 ml-auto text-pink-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+      </Link>
+
+      <Link 
+        href="/contact" 
+        className="group flex items-center p-4 bg-red-50 rounded-xl hover:bg-red-100 transition-all duration-300"
+      >
+        <div className="flex-shrink-0 w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+          <PhoneCall className="w-5 h-5 text-white" />
+        </div>
+        <div className="ml-4">
+          <p className="font-medium text-red-900">Kontak</p>
+          <p className="text-sm text-red-600">Hubungi Kami</p>
+        </div>
+        <ArrowRight className="w-4 h-4 ml-auto text-red-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+      </Link>
+    </div>
+
+                  </div>
+
+                  {/* Recent Blog Posts */}
+                  {recentPosts.length > 0 && (
+                    <div className="mt-8">
+                      <h3 className="text-xl font-semibold text-gray-800 mb-4">Artikel Terkait</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {recentPosts.map((post) => (
+                          <Link
+                            key={post.url}
+                            href={post.url}
+                            className="group p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-300"
+                          >
+                            <p className="font-medium text-gray-900 line-clamp-2 group-hover:text-blue-600">
+                              {post.title}
+                            </p>
+                            <p className="text-sm text-gray-500 mt-2">
+                              {new Date(post.date).toLocaleDateString('id-ID', {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                              })}
+                            </p>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Service Area */}
+                  <div className="bg-gray-50 rounded-xl p-4 mt-6">
+                    <div className="flex items-center space-x-2 text-gray-600">
+                      <MapPin className="w-5 h-5" />
+                      <p className="text-sm">
+                        Melayani area: Cirebon, Kuningan, Majalengka, Indramayu, dan sekitarnya
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
 
               {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
                 <motion.div
