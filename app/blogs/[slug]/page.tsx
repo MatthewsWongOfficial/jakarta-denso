@@ -700,7 +700,7 @@ const BlogPost: React.FC = () => {
       </Link>
 
       <Link 
-        href="/contact" 
+        href="/#contact" 
         className="group flex items-center p-4 bg-red-50 rounded-xl hover:bg-red-100 transition-all duration-300"
       >
         <div className="flex-shrink-0 w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
