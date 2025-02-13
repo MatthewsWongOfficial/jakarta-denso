@@ -2,7 +2,7 @@
 title: "Tempat Cuci Mobil Terbaik di Kota Cirebon, Auto Kinclong !"
 date: "2025-02-12"
 excerpt: "Temukan layanan cuci mobil terbaik di Cirebon dan pelajari tips perawatan kendaraan untuk menjaga mobil Anda tetap bersih dan berkilau."
-coverImage: "/images/bengkel-jid.jpeg"
+coverImage: "/images/review1.png"
 author: "Tim Jakarta Int'l Denso"
 category: "Tempat Cuci Mobil Cirebon"
 tags: ["Cuci Mobil", "Perawatan Kendaraan", "Cirebon", "Detailing Mobil"]
