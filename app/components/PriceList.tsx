@@ -122,13 +122,13 @@ const priceCategories: PriceCategory[] = [
   {
     name: "Service AC Mobil",
     icon: "❄️",
-    description: "Bengkel specialist AC mobil terpercaya di Cirebon dengan teknisi bersertifikat",
+    description: "Bengkel specialist AC mobil terpercaya di Cirebon dengan teknisi berpengalaman",
     items: [
       {
         name: "Service AC",
         price: "Rp 600.000",
         description:
-          "Bengkel AC mobil terpercaya dengan teknisi bersertifikat. Menangani AC tidak dingin, bocor, berisik, dan masalah AC lainnya. Menggunakan spare part original dan alat diagnosa digital.",
+          "Bengkel AC mobil terpercaya dengan teknisi berpengalaman. Menangani AC tidak dingin, bocor, berisik, dan masalah AC lainnya. Menggunakan spare part original dan alat diagnosa digital.",
         keywords: ["service ac mobil cirebon", "bengkel ac cirebon", "perbaikan ac mobil", "ac mobil bermasalah"],
       },
       {
