@@ -60,14 +60,14 @@ export default function Hero() {
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
           <Image
-            src="/images/2022-09-07.avif"
+            src="/images/hero.avif"
             alt="Bengkel AC Mobil"
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             priority
             quality={85}
             placeholder="blur"
-            blurDataURL="/images/2022-09-07-blur.avif"
+            blurDataURL="/images/hero-fallback.avif"
             className="object-cover"
           />
           <div className="absolute inset-0 bg-black/50"></div>
