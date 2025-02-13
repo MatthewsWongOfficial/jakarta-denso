@@ -630,7 +630,7 @@ const BlogPost: React.FC = () => {
                     <h3 className="text-xl font-semibold text-gray-800 mb-4">Jelajahi Layanan Kami</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <Link 
-        href="/services" 
+        href="/#services" 
         className="group flex items-center p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all duration-300"
       >
         <div className="flex-shrink-0 w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
@@ -644,7 +644,7 @@ const BlogPost: React.FC = () => {
       </Link>
 
       <Link 
-        href="/price-list" 
+        href="/#price-list" 
         className="group flex items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-all duration-300"
       >
         <div className="flex-shrink-0 w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
@@ -658,7 +658,7 @@ const BlogPost: React.FC = () => {
       </Link>
 
       <Link 
-        href="/kelebihan-kami" 
+        href="/#kelebihan-kami" 
         className="group flex items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-all duration-300"
       >
         <div className="flex-shrink-0 w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
@@ -672,7 +672,7 @@ const BlogPost: React.FC = () => {
       </Link>
 
       <Link 
-        href="/galeri" 
+        href="/#galeri" 
         className="group flex items-center p-4 bg-orange-50 rounded-xl hover:bg-orange-100 transition-all duration-300"
       >
         <div className="flex-shrink-0 w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
@@ -686,7 +686,7 @@ const BlogPost: React.FC = () => {
       </Link>
 
       <Link 
-        href="/ulasan" 
+        href="/#ulasan" 
         className="group flex items-center p-4 bg-pink-50 rounded-xl hover:bg-pink-100 transition-all duration-300"
       >
         <div className="flex-shrink-0 w-10 h-10 bg-pink-500 rounded-lg flex items-center justify-center">
@@ -700,7 +700,7 @@ const BlogPost: React.FC = () => {
       </Link>
 
       <Link 
-        href="/contact" 
+        href="/#contact" 
         className="group flex items-center p-4 bg-red-50 rounded-xl hover:bg-red-100 transition-all duration-300"
       >
         <div className="flex-shrink-0 w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
