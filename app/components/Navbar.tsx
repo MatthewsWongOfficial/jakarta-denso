@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
           <div className="flex items-center gap-4">
             <div className="relative h-16 w-16 sm:h-20 sm:w-20">
               <Image
-                src="/images/logo-jid.png"
+                src="/images/logo.avif"
                 alt="Jakarta Intl Denso Logo"
                 fill
                 className="object-contain"

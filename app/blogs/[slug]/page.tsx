@@ -743,17 +743,16 @@ const BlogPost: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Service Area */}
-                  <div className="bg-gray-50 rounded-xl p-4 mt-6">
-                    <div className="flex items-center space-x-2 text-gray-600">
-                      <MapPin className="w-5 h-5" />
-                      <p className="text-sm">
-                        Melayani area: Cirebon, Kuningan, Majalengka, Indramayu, dan sekitarnya
-                      </p>
+                    {/* Service Area */}
+                    <div className="bg-gray-50 rounded-xl p-4 mt-6">
+                      <div className="flex items-center space-x-2 text-gray-600">
+                        <MapPin className="w-5 h-5" />
+                        <p className="text-sm">
+                        Jadi tunggu apalagi? Segera kunjungi <strong>Jakarta Intl Denso Cirebon</strong>! Bagi Anda yang berada di sekitar Cirebon, seperti <strong>Indramayu</strong>, <strong>Majalengka</strong>, dan seluruh kecamatan di Cirebon, silakan datang ke lokasi kami. Konsultasikan dan service mobil Anda di tempat terbaik untuk perawatan <strong>AC mobil</strong> dan layanan perawatan mobil lainnya. Kami spesialis AC mobil dan siap memberikan solusi terbaik untuk kendaraan Anda!</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
 
               {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
                 <motion.div
