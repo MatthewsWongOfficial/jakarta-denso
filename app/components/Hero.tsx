@@ -20,29 +20,41 @@ const ExperienceBanner = () => {
   }, [count]);
 
   return (
-    <div className="inline-flex items-center justify-center 
-      bg-white/10 
+    <div className="relative inline-flex items-center justify-center 
       px-6 py-2 
       rounded-full 
-      shadow-lg 
-      drop-shadow-[0_4px_6px_rgba(0,0,0,0.2)]
-      space-x-4
+      overflow-hidden
       text-xl sm:text-2xl md:text-3xl
-      backdrop-blur-sm">
-      <span className="bg-gradient-to-r from-white to-gray-300 
-        bg-clip-text text-transparent 
-        font-bold tracking-wide">
-        {count}+ Tahun Pengalaman
-      </span>
-      <span className="w-[3px] h-8 bg-white/50 opacity-70 select-none"></span>
-      <span className="bg-gradient-to-r from-white to-gray-300 
-        bg-clip-text text-transparent 
-        font-bold tracking-wide">
-        Sejak 2004
-      </span>
+      will-change-transform">
+      <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+      <div className="relative z-10 flex items-center space-x-4">
+        <span className="bg-gradient-to-r from-white to-gray-300 
+          bg-clip-text text-transparent 
+          font-bold tracking-wide
+          transform-gpu">
+          {count}+ Tahun Pengalaman
+        </span>
+        <span className="w-[3px] h-8 bg-white/50 opacity-70 select-none"></span>
+        <span className="bg-gradient-to-r from-white to-gray-300 
+          bg-clip-text text-transparent 
+          font-bold tracking-wide
+          transform-gpu">
+          Sejak 2004
+        </span>
+      </div>
     </div>
   );
 };
+
+const GradientOverlay = () => (
+  <>
+    <div className="absolute inset-0 bg-black/50"></div>
+    <div 
+      className="absolute inset-0 bg-gradient-to-b from-blue-900/40 via-blue-800/20 to-blue-700/10 opacity-90"
+      style={{ willChange: 'opacity' }}
+    ></div>
+  </>
+);
 
 export default function Hero() {
   return (
@@ -54,7 +66,7 @@ export default function Hero() {
         <meta name="author" content="Bengkel AC Cirebon" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="robots" content="index, follow" />
-        <link rel="preload" href="/images/2022-09-07.jpg" as="image" />
+        <link rel="preload" href="/images/hero.avif" as="image" />
       </Head>
 
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -63,24 +75,24 @@ export default function Hero() {
             src="/images/hero.avif"
             alt="Bengkel AC Mobil"
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="100vw"
             priority
             quality={85}
             placeholder="blur"
             blurDataURL="/images/hero-fallback.avif"
-            className="object-cover"
+            className="object-cover transform-gpu"
           />
-          <div className="absolute inset-0 bg-black/50"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/40 via-blue-800/20 to-blue-700/10 opacity-90"></div>
+          <GradientOverlay />
         </div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
           <div className="space-y-8 max-w-5xl mx-auto">
-            <h1 className="text-[2rem] sm:text-[2.5rem] md:text-[3rem] lg:text-[3.5rem]
+            <h1 className="relative text-[2rem] sm:text-[2.5rem] md:text-[3rem] lg:text-[3.5rem]
               font-extrabold text-white leading-tight
               text-center break-words
-              drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]
-              max-w-4xl mx-auto">
+              max-w-4xl mx-auto
+              [text-shadow:_0_1px_2px_rgba(0,0,0,0.3)]
+              transform-gpu">
               BENGKEL AC MOBIL & <br className="hidden sm:block" />
               PERAWATAN MOBIL TERPERCAYA DI CIREBON
             </h1>
@@ -90,17 +102,18 @@ export default function Hero() {
             <div className="flex justify-center">
               <Link
                 href="#services"
-                className="group inline-flex items-center px-8 py-4
+                className="group 
+                  relative
+                  inline-flex items-center px-8 py-4
                   text-lg font-semibold
                   rounded-full
-                  bg-blue-600 hover:bg-blue-700
-                  border-2 border-blue-400/30
                   text-white
-                  transition-all duration-300
-                  hover:scale-105
-                  hover:shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
+                  overflow-hidden
+                  transform-gpu"
               >
-                <span className="flex items-center">
+                <div className="absolute inset-0 bg-blue-600 transition-colors duration-300 group-hover:bg-blue-700"></div>
+                <div className="absolute inset-0 border-2 border-blue-400/30 rounded-full"></div>
+                <span className="relative z-10 flex items-center">
                   Lihat Layanan Kami
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
@@ -109,7 +122,10 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent"></div>
+        <div 
+          className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent"
+          style={{ willChange: 'opacity' }}
+        ></div>
       </div>
     </>
   );
