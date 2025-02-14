@@ -4,6 +4,7 @@ import { Suspense, useState, useEffect, useCallback } from "react";
 import { Analytics } from '@vercel/analytics/next';
 import dynamic from 'next/dynamic';
 import { useInView } from 'react-intersection-observer';
+import { useHashScroll } from './hooks/useHashScroll'; // Adjust the path as needed
 
 // Critical path components loaded immediately
 import Navbar from "./components/Navbar";
@@ -110,6 +111,9 @@ const WhatsAppButton = dynamic(
 );
 
 export default function Home() {
+  // Use the hash scroll hook
+  useHashScroll();
+
   // Performance monitoring
   const measurePerformance = useCallback(() => {
     if (typeof window !== 'undefined') {
