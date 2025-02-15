@@ -27,7 +27,6 @@ const nextConfig: NextConfig = {
 
   // Experimental features - updated for Next.js 15
   experimental: {
-    ppr: true, // Set to true instead of 'incremental' for v15
     optimizePackageImports: [
       "lucide-react",
       "@radix-ui/react-icons",
