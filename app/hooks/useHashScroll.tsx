@@ -1,34 +1,38 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export const useHashScroll = () => {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     const scrollToHash = () => {
-      const hash = window.location.hash.substring(1); // Remove "#"
+      const hash = window.location.hash.substring(1); // Get the hash without "#"
       if (hash) {
         setTimeout(() => {
           const element = document.getElementById(hash);
           if (element) {
             element.scrollIntoView({ behavior: "smooth", block: "start" });
           }
-        }, 200); // Slight delay to ensure rendering
+        }, 100); // Delay to allow rendering
       }
     };
 
-    // Handle direct page loads with hash (e.g., /about#services)
-    setTimeout(scrollToHash, 300); // Delay to wait for component mount
+    // Handle direct page loads with a hash (e.g., /about#services)
+    if (window.location.hash) {
+      scrollToHash();
+    }
 
-    // Listen for hash changes (for internal links)
-    const onHashChange = () => scrollToHash();
+    // Listen for hash changes (for internal anchor links)
+    const onHashChange = () => {
+      scrollToHash();
+    };
+
     window.addEventListener("hashchange", onHashChange);
 
     return () => {
       window.removeEventListener("hashchange", onHashChange);
     };
-  }, [pathname, searchParams]); // Re-run when navigating
+  }, [pathname]); // Runs when pathname changes
 };

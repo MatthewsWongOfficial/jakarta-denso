@@ -1,16 +1,16 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useState, Suspense } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
-import { 
+import {
   Calendar,
-  Clock, 
-  ChevronLeft, 
-  Share2, 
-  Maximize, 
-  Eye, 
+  Clock,
+  ChevronLeft,
+  Share2,
+  Maximize,
+  Eye,
   ArrowRight,
   MapPin,
   ImageIcon,
@@ -19,7 +19,7 @@ import {
   DollarSign,
   Award,
   MessageSquare,
-  Lightbulb
+  Lightbulb,
 } from "lucide-react"
 import { MDXRemote, type MDXRemoteSerializeResult } from "next-mdx-remote"
 import Link from "next/link"
@@ -27,6 +27,9 @@ import dynamic from "next/dynamic"
 import Head from "next/head"
 import { motion, AnimatePresence } from "framer-motion"
 import type { MDXRemoteProps } from "next-mdx-remote"
+import { Suspense } from "react"
+import { useCallback } from "react"
+import { useRouter } from "next/navigation"
 
 // Dynamic imports
 const Navbar = dynamic(() => import("../../components/Navbar"), { ssr: false })
@@ -52,9 +55,9 @@ interface BlogPost {
   content: MDXRemoteSerializeResult
 }
 interface BlogLink {
-  url: string;
-  title: string;
-  date: string;
+  url: string
+  title: string
+  date: string
 }
 
 interface StructuredData {
@@ -207,8 +210,8 @@ const generateKeywords = (post: BlogPost): string => {
     "Perawatan AC Mobil Cepat Indonesia",
     "Bengkel AC Mobil Cepat Indonesia",
     "Bengkel AC Mobil Handal Indonesia",
-    "Perbaikan AC Mobil Handal Indonesia"
-  ]  
+    "Perbaikan AC Mobil Handal Indonesia",
+  ]
   const titleKeywords = post.frontmatter.title.split(" ")
   const allKeywords = [
     ...baseKeywords,
@@ -428,16 +431,17 @@ const BlogPost: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState<boolean>(false)
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
-  const [recentPosts] = useState<BlogLink[]>([]);
+  const [recentPosts] = useState<BlogLink[]>([])
+  const router = useRouter()
 
+  const handleScroll = useCallback((): void => {
+    setIsScrolled(window.scrollY > 100)
+  }, [])
 
   useEffect(() => {
-    const handleScroll = (): void => {
-      setIsScrolled(window.scrollY > 100)
-    }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [handleScroll])
 
   useEffect(() => {
     const fetchPost = async (): Promise<void> => {
@@ -460,20 +464,7 @@ const BlogPost: React.FC = () => {
     }
   }, [slug])
 
-  // useEffect(() => {
-  //   const fetchRecentPosts = async () => {
-  //     try {
-  //       const res = await fetch('/api/recent-posts');
-  //       const data = await res.json();
-  //       setRecentPosts(data.slice(0, 3)); // Get 3 most recent posts
-  //     } catch (err) {
-  //       console.error('Error fetching recent posts:', err);
-  //     }
-  //   };
-  //   fetchRecentPosts();
-  // }, []);
-
-  const handleShare = async (): Promise<void> => {
+  const handleShare = useCallback(async (): Promise<void> => {
     try {
       if (navigator.share && post) {
         await navigator.share({
@@ -488,9 +479,9 @@ const BlogPost: React.FC = () => {
     } catch (err) {
       console.error("Error sharing:", err)
     }
-  }
+  }, [post])
 
-  const toggleFullScreen = async (): Promise<void> => {
+  const toggleFullScreen = useCallback(async (): Promise<void> => {
     try {
       if (!document.fullscreenElement) {
         await document.documentElement.requestFullscreen()
@@ -502,7 +493,65 @@ const BlogPost: React.FC = () => {
     } catch (err) {
       console.error("Error toggling fullscreen:", err)
     }
-  }
+  }, [])
+
+  const handleNavigation = useCallback(
+    (href: string) => {
+      // Check if the href is for the home page
+      if (href === '/') {
+        router.push(href);
+      } else {
+        // For other pages, navigate to the home page with the hash fragment
+        router.push(`/#${href.substring(1)}`);
+      }
+    },
+    [router]
+  );
+
+  const scrollToSection = useCallback((hash: string) => {
+    const targetElement = document.getElementById(hash)
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" })
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash) {
+        const hash = window.location.hash.substring(1)
+        setTimeout(() => scrollToSection(hash), 0)
+      }
+    }
+
+    handleHashChange() // Handle initial load
+    window.addEventListener("hashchange", handleHashChange)
+    return () => window.removeEventListener("hashchange", handleHashChange)
+  }, [scrollToSection])
+
+  useEffect(() => {
+    // This effect runs after the component mounts or updates
+    if (window.location.hash) {
+      const id = window.location.hash.substring(1) // Remove the '#' character
+      const element = document.getElementById(id)
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" })
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    //This is removed because of the new useEffect above
+    // const scrollTarget = localStorage.getItem("scrollTarget")
+    // if (scrollTarget) {
+    //   const element = document.getElementById(scrollTarget)
+    //   if (element) {
+    //     setTimeout(() => {
+    //       element.scrollIntoView({ behavior: "smooth" })
+    //       localStorage.removeItem("scrollTarget")
+    //     }, 100)
+    //   }
+    // }
+  }, [])
 
   if (isLoading) return <LoadingSpinner />
   if (error || !post) return <ErrorState error={error} />
@@ -629,91 +678,94 @@ const BlogPost: React.FC = () => {
                   <div>
                     <h3 className="text-xl font-semibold text-gray-800 mb-4">Jelajahi Layanan Kami</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <Link 
-        href="/#services" 
-        className="group flex items-center p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all duration-300"
-      >
-        <div className="flex-shrink-0 w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-          <BookOpen className="w-5 h-5 text-white" />
-        </div>
-        <div className="ml-4">
-          <p className="font-medium text-blue-900">Layanan</p>
-          <p className="text-sm text-blue-600">Service AC & Salon Mobil</p>
-        </div>
-        <ArrowRight className="w-4 h-4 ml-auto text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-      </Link>
-
-      <Link 
-        href="/#price-list" 
-        className="group flex items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-all duration-300"
-      >
-        <div className="flex-shrink-0 w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-          <DollarSign className="w-5 h-5 text-white" />
-        </div>
-        <div className="ml-4">
-          <p className="font-medium text-green-900">Harga</p>
-          <p className="text-sm text-green-600">Daftar Harga Layanan</p>
-        </div>
-        <ArrowRight className="w-4 h-4 ml-auto text-green-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-      </Link>
-
-      <Link 
-        href="/#kelebihan-kami" 
-        className="group flex items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-all duration-300"
-      >
-        <div className="flex-shrink-0 w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
-          <Award className="w-5 h-5 text-white" />
-        </div>
-        <div className="ml-4">
-          <p className="font-medium text-purple-900">Keunggulan</p>
-          <p className="text-sm text-purple-600">Mengapa Memilih Kami</p>
-        </div>
-        <ArrowRight className="w-4 h-4 ml-auto text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-      </Link>
-
-      <Link 
-        href="/#galeri" 
-        className="group flex items-center p-4 bg-orange-50 rounded-xl hover:bg-orange-100 transition-all duration-300"
-      >
-        <div className="flex-shrink-0 w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-          <ImageIcon className="w-5 h-5 text-white" />
-        </div>
-        <div className="ml-4">
-          <p className="font-medium text-orange-900">Galeri</p>
-          <p className="text-sm text-orange-600">Portofolio Pekerjaan</p>
-        </div>
-        <ArrowRight className="w-4 h-4 ml-auto text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-      </Link>
-
-      <Link 
-        href="/#ulasan" 
-        className="group flex items-center p-4 bg-pink-50 rounded-xl hover:bg-pink-100 transition-all duration-300"
-      >
-        <div className="flex-shrink-0 w-10 h-10 bg-pink-500 rounded-lg flex items-center justify-center">
-          <MessageSquare className="w-5 h-5 text-white" />
-        </div>
-        <div className="ml-4">
-          <p className="font-medium text-pink-900">Ulasan</p>
-          <p className="text-sm text-pink-600">Testimoni Pelanggan</p>
-        </div>
-        <ArrowRight className="w-4 h-4 ml-auto text-pink-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-      </Link>
-
-      <Link 
-        href="/#contact" 
-        className="group flex items-center p-4 bg-red-50 rounded-xl hover:bg-red-100 transition-all duration-300"
-      >
-        <div className="flex-shrink-0 w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
-          <PhoneCall className="w-5 h-5 text-white" />
-        </div>
-        <div className="ml-4">
-          <p className="font-medium text-red-900">Kontak</p>
-          <p className="text-sm text-red-600">Hubungi Kami</p>
-        </div>
-        <ArrowRight className="w-4 h-4 ml-auto text-red-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-      </Link>
-    </div>
-
+                      {[
+                        {
+                          href: "/services",
+                          icon: BookOpen,
+                          title: "Layanan",
+                          description: "Service AC & Salon Mobil",
+                          bgClass: "bg-blue-50",
+                          hoverClass: "hover:bg-blue-100",
+                          iconBgClass: "bg-blue-500",
+                          textClass: "text-blue-900",
+                          descClass: "text-blue-600",
+                        },
+                        {
+                          href: "/price-list",
+                          icon: DollarSign,
+                          title: "Harga",
+                          description: "Daftar Harga Layanan",
+                          bgClass: "bg-green-50",
+                          hoverClass: "hover:bg-green-100",
+                          iconBgClass: "bg-green-500",
+                          textClass: "text-green-900",
+                          descClass: "text-green-600",
+                        },
+                        {
+                          href: "/kelebihan-kami",
+                          icon: Award,
+                          title: "Keunggulan",
+                          description: "Mengapa Memilih Kami",
+                          bgClass: "bg-purple-50",
+                          hoverClass: "hover:bg-purple-100",
+                          iconBgClass: "bg-purple-500",
+                          textClass: "text-purple-900",
+                          descClass: "text-purple-600",
+                        },
+                        {
+                          href: "/galeri",
+                          icon: ImageIcon,
+                          title: "Galeri",
+                          description: "Portofolio Pekerjaan",
+                          bgClass: "bg-orange-50",
+                          hoverClass: "hover:bg-orange-100",
+                          iconBgClass: "bg-orange-500",
+                          textClass: "text-orange-900",
+                          descClass: "text-orange-600",
+                        },
+                        {
+                          href: "/ulasan",
+                          icon: MessageSquare,
+                          title: "Ulasan",
+                          description: "Testimoni Pelanggan",
+                          bgClass: "bg-pink-50",
+                          hoverClass: "hover:bg-pink-100",
+                          iconBgClass: "bg-pink-500",
+                          textClass: "text-pink-900",
+                          descClass: "text-pink-600",
+                        },
+                        {
+                          href: "/contact",
+                          icon: PhoneCall,
+                          title: "Kontak",
+                          description: "Hubungi Kami",
+                          bgClass: "bg-red-50",
+                          hoverClass: "hover:bg-red-100",
+                          iconBgClass: "bg-red-500",
+                          textClass: "text-red-900",
+                          descClass: "text-red-600",
+                        },
+                      ].map((item) => (
+                        <button
+                          key={item.href}
+                          onClick={() => handleNavigation(item.href)}
+                          className={`group flex items-center p-4 ${item.bgClass} rounded-xl ${item.hoverClass} transition-all duration-300`}
+                        >
+                          <div
+                            className={`flex-shrink-0 w-10 h-10 ${item.iconBgClass} rounded-lg flex items-center justify-center`}
+                          >
+                            <item.icon className="w-5 h-5 text-white" />
+                          </div>
+                          <div className="ml-4">
+                            <p className={`font-medium ${item.textClass}`}>{item.title}</p>
+                            <p className={`text-sm ${item.descClass}`}>{item.description}</p>
+                          </div>
+                          <ArrowRight
+                            className={`w-4 h-4 ml-auto ${item.descClass} opacity-0 group-hover:opacity-100 transition-opacity`}
+                          />
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Recent Blog Posts */}
@@ -731,10 +783,10 @@ const BlogPost: React.FC = () => {
                               {post.title}
                             </p>
                             <p className="text-sm text-gray-500 mt-2">
-                              {new Date(post.date).toLocaleDateString('id-ID', {
-                                day: 'numeric',
-                                month: 'long',
-                                year: 'numeric'
+                              {new Date(post.date).toLocaleDateString("id-ID", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
                               })}
                             </p>
                           </Link>
@@ -743,16 +795,21 @@ const BlogPost: React.FC = () => {
                     </div>
                   )}
 
-                    {/* Service Area */}
-                    <div className="bg-gray-50 rounded-xl p-4 mt-6">
-                      <div className="flex items-center space-x-2 text-gray-600">
-                        <MapPin className="w-5 h-5" />
-                        <p className="text-sm">
-                        Jadi tunggu apalagi? Segera kunjungi <strong>Jakarta Intl Denso Cirebon</strong>! Bagi Anda yang berada di sekitar Cirebon, seperti <strong>Indramayu</strong>, <strong>Majalengka</strong>, dan seluruh kecamatan di Cirebon, silakan datang ke lokasi kami. Konsultasikan dan service mobil Anda di tempat terbaik untuk perawatan <strong>AC mobil</strong> dan layanan perawatan mobil lainnya. Kami spesialis AC mobil dan siap memberikan solusi terbaik untuk kendaraan Anda!</p>
-                      </div>
+                  {/* Service Area */}
+                  <div className="bg-gray-50 rounded-xl p-4 mt-6">
+                    <div className="flex items-center space-x-2 text-gray-600">
+                      <MapPin className="w-5 h-5" />
+                      <p className="text-sm">
+                        Jadi tunggu apalagi? Segera kunjungi <strong>Jakarta Intl Denso Cirebon</strong>! Bagi Anda yang
+                        berada di sekitar Cirebon, seperti <strong>Indramayu</strong>, <strong>Majalengka</strong>, dan
+                        seluruh kecamatan di Cirebon, silakan datang ke lokasi kami. Konsultasikan dan service mobil
+                        Anda di tempat terbaik untuk perawatan <strong>AC mobil</strong> dan layanan perawatan mobil
+                        lainnya. Kami spesialis AC mobil dan siap memberikan solusi terbaik untuk kendaraan Anda!
+                      </p>
                     </div>
                   </div>
-                </motion.div>
+                </div>
+              </motion.div>
 
               {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
                 <motion.div

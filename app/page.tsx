@@ -4,7 +4,6 @@ import { Suspense, useState, useEffect, useCallback } from "react";
 import { Analytics } from '@vercel/analytics/next';
 import dynamic from 'next/dynamic';
 import { useInView } from 'react-intersection-observer';
-import { useHashScroll } from './hooks/useHashScroll'; // Adjust the path as needed
 
 // Critical path components loaded immediately
 import Navbar from "./components/Navbar";
@@ -111,8 +110,84 @@ const WhatsAppButton = dynamic(
 );
 
 export default function Home() {
-  // Use the hash scroll hook
-  useHashScroll();
+  // Super reliable hash scroll implementation
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    // Store the initial hash for later use
+    const initialHash = window.location.hash;
+    
+    const scrollToHash = (hash: string) => {
+      if (!hash) return;
+      
+      const id = hash.substring(1);
+      const element = document.getElementById(id);
+      
+      if (element) {
+        // For most reliable scrolling on initial load/redirect
+        setTimeout(() => {
+          // Use scrollIntoView for best browser compatibility
+          element.scrollIntoView();
+          
+          // Additional scroll position adjustment for fixed headers if needed
+          // Adjust the 80 value to match your header height if you have a fixed header
+          // window.scrollBy(0, -80);
+        }, 0);
+      }
+    };
+    
+    // Initial check - immediate
+    if (initialHash) {
+      scrollToHash(initialHash);
+      
+      // Backup check with a small delay to ensure DOM is ready
+      setTimeout(() => scrollToHash(initialHash), 100);
+      
+      // Final check with longer delay for lazily loaded components
+      setTimeout(() => scrollToHash(initialHash), 500);
+    }
+    
+    // Handle future hash changes
+    const handleHashChange = () => {
+      const currentHash = window.location.hash;
+      if (currentHash) {
+        scrollToHash(currentHash);
+      }
+    };
+    
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Advanced component preloading
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Immediately preload Services component if hash is #services
+      if (window.location.hash === '#services') {
+        import("./components/Services").catch(() => null);
+      }
+      
+      // Rest of preloading logic...
+      const preloadComponents = async () => {
+        try {
+          await Promise.all([
+            import("./components/Services"),
+            import("./components/PriceList")
+          ].map(p => p.catch(() => null)));
+          
+          console.debug('High priority components preloaded');
+        } catch (error) {
+          console.warn('Preloading failed:', error);
+        }
+      };
+
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => preloadComponents(), { timeout: 2000 });
+      } else {
+        setTimeout(preloadComponents, 1000);
+      }
+    }
+  }, []);
 
   // Performance monitoring
   const measurePerformance = useCallback(() => {
@@ -139,33 +214,11 @@ export default function Home() {
   // Optimized state management
   const [shouldLoadWhatsApp, setShouldLoadWhatsApp] = useState(false);
 
-  // Advanced component preloading
+  // Delayed WhatsApp button loading
   useEffect(() => {
     if (typeof window !== 'undefined') {
       measurePerformance();
-
-      // Preload high-priority components
-      const preloadComponents = async () => {
-        try {
-          await Promise.all([
-            import("./components/Services"),
-            import("./components/PriceList")
-          ].map(p => p.catch(() => null)));
-          
-          console.debug('High priority components preloaded');
-        } catch (error) {
-          console.warn('Preloading failed:', error);
-        }
-      };
-
-      // Use requestIdleCallback if available
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => preloadComponents(), { timeout: 2000 });
-      } else {
-        setTimeout(preloadComponents, 1000);
-      }
-
-      // Delayed WhatsApp button loading
+      
       const timer = setTimeout(() => {
         setShouldLoadWhatsApp(true);
       }, 3000);
@@ -181,7 +234,7 @@ export default function Home() {
       <Hero />
 
       {/* Priority 1: Above fold content */}
-      <div ref={servicesRef}>
+      <div ref={servicesRef} id="services">
         {servicesInView && (
           <Suspense fallback={<LoadingState height="600px" />}>
             <section className="content-visibility-auto">
