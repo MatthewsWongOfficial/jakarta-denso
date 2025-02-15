@@ -6,7 +6,7 @@ import type React from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Bengkel Terbaik Cirebon - Jakarta Int'l Denso | Spesialis AC Mobil",
+  title: "Bengkel AC Mobil Terbaik Cirebon - Jakarta Int'l Denso | Spesialis AC Mobil",
   description:
     "Jakarta Int'l Denso - Bengkel terpercaya di Cirebon dengan layanan lengkap: service AC mobil, cuci mobil, detailing & poles. Rating 4.9/5 dari 200+ pelanggan. Teknisi berpengalaman.",
   keywords:
