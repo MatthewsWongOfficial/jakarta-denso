@@ -46,12 +46,15 @@ export async function GET(): Promise<NextResponse> {
     // Static pages with more detailed configuration
     const staticPages: PageInfo[] = [
       { url: "/", priority: "1.0", changefreq: "daily", lastmod: new Date().toISOString().split('T')[0] },
-      { url: "/services", priority: "0.9", changefreq: "weekly", lastmod: "2024-02-01" },
-      { url: "/price-list", priority: "0.8", changefreq: "weekly", lastmod: "2024-02-01" },
-      { url: "/kelebihan-kami", priority: "0.8", changefreq: "weekly", lastmod: "2024-01-15" },
-      { url: "/galeri", priority: "0.7", changefreq: "monthly", lastmod: "2024-01-10", hasImages: true },
-      { url: "/ulasan", priority: "0.7", changefreq: "monthly", lastmod: "2024-01-05" },
-      { url: "/contact", priority: "0.9", changefreq: "weekly", lastmod: "2024-01-01" },
+      { url: "/services", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-01" },
+      { url: "/price-list", priority: "0.8", changefreq: "weekly", lastmod: "2025-02-01" },
+      { url: "/kelebihan-kami", priority: "0.8", changefreq: "weekly", lastmod: "2025-01-15" },
+      { url: "/galeri", priority: "0.7", changefreq: "monthly", lastmod: "2025-01-10", hasImages: true },
+      { url: "/ulasan", priority: "0.7", changefreq: "monthly", lastmod: "2025-01-05" },
+      { url: "/contact", priority: "0.9", changefreq: "weekly", lastmod: "2025-01-01" },
+      { url: "/cuci-mobil", priority: "0.9", changefreq: "weekly", lastmod: "2025-01-01" },
+      { url: "/salon-mobil", priority: "0.9", changefreq: "weekly", lastmod: "2025-01-01" },
+      { url: "/service-ac-dan-mesin", priority: "0.9", changefreq: "weekly", lastmod: "2025-01-01" },
       { url: "/blogs", priority: "0.8", changefreq: "daily", lastmod: new Date().toISOString().split('T')[0] },
     ];
 
