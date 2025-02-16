@@ -4,7 +4,7 @@ import { Suspense, useState, useEffect, useCallback, useMemo } from "react"
 import { Analytics } from "@vercel/analytics/react"
 import dynamic from "next/dynamic"
 import { useInView } from "react-intersection-observer"
-import { useRouter, usePathname } from "next/navigation"
+import { usePathname } from "next/navigation" // Removed unused router import
 
 // Critical path components loaded immediately
 import Navbar from "./components/Navbar"
@@ -22,36 +22,32 @@ const LoadingState = ({ height }: { height: string }) => (
   />
 )
 
-// Global loading indicator 
+// Improved global loading indicator with fade effects
 const GlobalLoading = () => (
   <div 
-    className="fixed inset-0 bg-white bg-opacity-80 z-50 flex items-center justify-center transition-opacity duration-300"
+    className="fixed inset-0 bg-white bg-opacity-90 z-50 flex items-center justify-center transition-opacity duration-300"
     role="alert"
     aria-busy="true"
   >
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+    <div className="flex flex-col items-center">
+      <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mb-4"></div>
+      <p className="text-sm text-gray-600">Loading content...</p>
+    </div>
   </div>
 )
 
-// Eager load components needed for hash navigation
-const preloadComponents = () => {
-  if (typeof window !== "undefined" && window.location.hash) {
-    const hash = window.location.hash.substring(1)
-    if (hash === "services" || hash === "price-list") {
-      import("./components/Services")
-      import("./components/PriceList")
-    } else if (hash === "kelebihan-kami" || hash === "galeri") {
-      import("./components/WhyChooseUs")
-      import("./components/Gallery")
-    } else if (hash === "ulasan" || hash === "contact") {
-      import("./components/BlogPreview")
-      import("./components/Contact")
-      import("./components/Footer")
-    }
-  }
-}
+// Define hash to section ID mapping for consistency
+const HASH_TO_ID_MAP: Record<string, string> = {
+  services: "services",
+  "price-list": "price-list",
+  "kelebihan-kami": "kelebihan-kami",
+  galeri: "galeri",
+  ulasan: "ulasan",
+  contact: "contact",
+  beranda: "",  // Added beranda mapping to empty string for top of page
+} as const
 
-// Direct dynamic imports with proper loading states
+// Lazy load components with optimized loading sequence
 const Services = dynamic(() => import("./components/Services"), {
   loading: () => <LoadingState height="400px" />,
   ssr: true,
@@ -98,32 +94,35 @@ const WhatsAppButton = dynamic(() => import("./components/WhatsAppButton"), {
   loading: () => null,
 })
 
-// Define hash to section ID mapping for consistency
-const HASH_TO_ID_MAP: Record<string, string> = {
-  services: "services",
-  "price-list": "price-list",
-  "kelebihan-kami": "kelebihan-kami",
-  galeri: "galeri",
-  ulasan: "ulasan",
-  contact: "contact",
-} as const
-
 export default function Home() {
-  const router = useRouter()
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
   const [allComponentsVisible, setAllComponentsVisible] = useState(false)
   const [initialHashProcessed, setInitialHashProcessed] = useState(false)
   const [isNavigating, setIsNavigating] = useState(false)
+  const [isProgrammaticNavigation, setIsProgrammaticNavigation] = useState(false)
+  
+  // Optimized intersection observer with better thresholds
+  const observerOptions = useMemo(
+    () => ({
+      triggerOnce: true,
+      threshold: 0.1,
+      rootMargin: "200px 0px",
+    }),
+    []
+  )
 
-  // Trigger preload of components based on initial hash
-  useEffect(() => {
-    preloadComponents()
-  }, [])
+  const [servicesRef, servicesInView] = useInView(observerOptions)
+  const [midSectionRef, midSectionInView] = useInView(observerOptions)
+  const [bottomSectionRef, bottomSectionInView] = useInView(observerOptions)
+  const [shouldLoadWhatsApp, setShouldLoadWhatsApp] = useState(false)
 
-  // Critical CSS variables for layout stability - set only once
+  // Setup critical CSS variables and mark mounting complete
   useEffect(() => {
-    if (document.documentElement.hasAttribute("data-css-vars-set")) return
+    if (document.documentElement.hasAttribute("data-css-vars-set")) {
+      setMounted(true)
+      return
+    }
 
     const root = document.documentElement
     root.style.setProperty("--container-padding", "1rem")
@@ -133,28 +132,102 @@ export default function Home() {
     setMounted(true)
   }, [])
 
-  // Show all components immediately if there's a hash in the URL
+  // Fix for navigation from subdir to beranda
   useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hash) {
-      setAllComponentsVisible(true)
+    if (!mounted) return
+    
+    // Store current navigation timestamp
+    const storeNavTime = () => {
+      sessionStorage.setItem('lastNavTime', Date.now().toString())
     }
-  }, [])
+    
+    // Handle click on beranda link
+    const handleBerandaClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      const link = target.closest('a')
+      
+      if (!link) return
+      
+      const href = link.getAttribute('href')
+      // Check if this is a beranda link
+      if (href === '/' || href === '/#beranda' || href === '#beranda') {
+        // If we're already on home page just scroll to top
+        if (pathname === '/') {
+          e.preventDefault()
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+          return
+        }
+        
+        // Coming from subdir - mark as programmatic navigation and store timestamp
+        storeNavTime()
+        setIsProgrammaticNavigation(true)
+      }
+    }
+    
+    document.addEventListener('click', handleBerandaClick)
+    return () => document.removeEventListener('click', handleBerandaClick)
+  }, [mounted, pathname])
 
-  // Scroll to hash function - extracted for reuse
+  // Check if we need to handle a programmatic navigation to beranda
+  useEffect(() => {
+    if (!mounted || !pathname) return
+    
+    const checkProgrammaticNav = () => {
+      if (pathname === '/' && !isProgrammaticNavigation) {
+        const lastNavTime = sessionStorage.getItem('lastNavTime')
+        const currentTime = Date.now()
+        
+        if (lastNavTime && (currentTime - parseInt(lastNavTime, 10)) < 2000) {
+          // This is likely a navigation from subdir to beranda that just completed
+          // Clear the flag and scroll to top
+          sessionStorage.removeItem('lastNavTime')
+          window.scrollTo({ top: 0, behavior: 'auto' })
+          
+          // Enable smooth scrolling again after a short delay
+          setTimeout(() => {
+            const styleEl = document.createElement('style')
+            styleEl.textContent = 'html { scroll-behavior: smooth; }'
+            document.head.appendChild(styleEl)
+          }, 100)
+        }
+      }
+    }
+    
+    // Run once on initial mount
+    checkProgrammaticNav()
+    
+    // And also when isProgrammaticNavigation changes
+    if (isProgrammaticNavigation) {
+      setIsProgrammaticNavigation(false)
+    }
+  }, [mounted, pathname, isProgrammaticNavigation])
+
+  // Enhanced scroll to hash function with improved error handling
   const scrollToHash = useCallback((hash: string) => {
-    if (!hash) return
+    if (!hash) return false
 
     // Remove the # if it exists
     const cleanHash = hash.startsWith("#") ? hash.substring(1) : hash
 
+    // Special case for 'beranda' - scroll to top
+    if (cleanHash === 'beranda') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return true
+    }
+
     // Look up the section ID in our mapping or use the hash directly
     const id = HASH_TO_ID_MAP[cleanHash] || cleanHash
+    
+    // If id is empty string (top of page), scroll to top
+    if (id === '') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return true
+    }
 
     const element = document.getElementById(id)
     if (element) {
       // Use requestAnimationFrame for smoother scrolling
       requestAnimationFrame(() => {
-        // Use native scroll API for better performance
         element.scrollIntoView({
           behavior: "smooth",
           block: "start",
@@ -165,7 +238,7 @@ export default function Home() {
     return false
   }, [])
 
-  // Enhanced hash navigation with progressive enhancement
+  // Handle initial hash on page load
   useEffect(() => {
     if (!mounted || initialHashProcessed) return
 
@@ -197,12 +270,12 @@ export default function Home() {
         } else {
           setIsNavigating(false)
         }
-
-        setInitialHashProcessed(true)
       }
+      setInitialHashProcessed(true)
     }
 
-    handleInitialHash()
+    // Short delay to ensure components are mounted
+    setTimeout(handleInitialHash, 100)
   }, [mounted, scrollToHash, initialHashProcessed])
 
   // Handle dynamic hash changes
@@ -213,6 +286,7 @@ export default function Home() {
       const hash = window.location.hash
       if (hash) {
         setIsNavigating(true)
+        setAllComponentsVisible(true) // Ensure all components load for hash navigation
         const scrolled = scrollToHash(hash)
         
         // If initial scroll fails, try again after components have loaded
@@ -224,91 +298,86 @@ export default function Home() {
         } else {
           setIsNavigating(false)
         }
+      } else {
+        // No hash means we should scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        setIsNavigating(false)
       }
     }
 
     window.addEventListener("hashchange", handleHashChange)
-
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange)
-    }
+    return () => window.removeEventListener("hashchange", handleHashChange)
   }, [mounted, scrollToHash])
 
-  // Refresh page when navigating back to home route (/)
-  useEffect(() => {
-    if (!mounted) return
-    
-    // Using Next.js router to detect path changes
-    if (pathname === "/" && typeof window !== "undefined" && !window.location.hash) {
-      // Only reload if we weren't already on the homepage or if coming from another page
-      if (document.referrer && !document.referrer.includes(window.location.origin + "/")) {
-        setIsNavigating(true)
-        router.refresh()
-        
-        // Fallback in case router.refresh() doesn't trigger a full reload
-        setTimeout(() => {
-          window.location.reload()
-        }, 300)
-      }
-    }
-  }, [pathname, mounted, router])
-
-  // Handle browser back button
+  // Handle browser back button and popstate
   useEffect(() => {
     if (!mounted) return
     
     const handlePopState = () => {
+      // When using back button to navigate to home
       if (pathname === "/" && !window.location.hash) {
-        setIsNavigating(true)
-        setTimeout(() => {
-          router.refresh()
-          // Fallback reload if needed
-          setTimeout(() => {
-            window.location.reload()
-          }, 200)
-        }, 0)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else if (window.location.hash) {
+        // When back button navigates to a hash
+        scrollToHash(window.location.hash)
       }
     }
 
     window.addEventListener('popstate', handlePopState)
-    
-    return () => {
-      window.removeEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [mounted, pathname, scrollToHash])
+
+  // Show all components immediately if there's a hash in the URL
+  useEffect(() => {
+    if (mounted && window.location.hash) {
+      setAllComponentsVisible(true)
     }
-  }, [mounted, pathname, router])
+  }, [mounted])
 
-  // Optimized intersection observer with better thresholds
-  const observerOptions = useMemo(
-    () => ({
-      triggerOnce: true,
-      threshold: 0.1,
-      rootMargin: "200px 0px",
-    }),
-    []
-  )
+  // Optimized component preloading strategy
+  useEffect(() => {
+    if (mounted) {
+      // Immediate load for visible sections
+      if (window.location.hash) {
+        const hash = window.location.hash.substring(1)
+        if (hash in HASH_TO_ID_MAP) {
+          // Preload components related to the hash
+          if (["services", "price-list"].includes(hash)) {
+            import("./components/Services")
+            import("./components/PriceList")
+          } else if (["kelebihan-kami", "galeri"].includes(hash)) {
+            import("./components/WhyChooseUs")
+            import("./components/Gallery")
+          } else if (["ulasan", "contact"].includes(hash)) {
+            import("./components/BlogPreview")
+            import("./components/Contact")
+            import("./components/Footer")
+          }
+        }
+      }
 
-  const [servicesRef, servicesInView] = useInView(observerOptions)
-  const [midSectionRef, midSectionInView] = useInView(observerOptions)
-  const [bottomSectionRef, bottomSectionInView] = useInView(observerOptions)
+      // Delayed preload of first sections for better initial performance
+      setTimeout(() => {
+        import("./components/Services")
+        import("./components/PriceList")
+      }, 1000)
+    }
+  }, [mounted])
 
-  // Delayed WhatsApp button with priority handling
-  const [shouldLoadWhatsApp, setShouldLoadWhatsApp] = useState(false)
-
+  // Optimized WhatsApp button loading
   useEffect(() => {
     if (!mounted) return
 
-    const loadWhatsApp = () => setShouldLoadWhatsApp(true)
-
-    if ("requestIdleCallback" in window) {
-      // TypeScript-safe way to handle requestIdleCallback
-      const requestIdleCallback =
-        window.requestIdleCallback ||
-        ((cb: IdleRequestCallback, options?: IdleRequestOptions) =>
-          setTimeout(cb, options?.timeout || 1))
-
-      requestIdleCallback(loadWhatsApp, { timeout: 3000 })
+    // Use requestIdleCallback for non-critical UI elements
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      // @ts-expect-error - TypeScript doesn't fully support requestIdleCallback
+      window.requestIdleCallback(
+        () => setShouldLoadWhatsApp(true),
+        { timeout: 3000 }
+      )
     } else {
-      setTimeout(loadWhatsApp, 3000)
+      // Fallback for browsers without requestIdleCallback
+      setTimeout(() => setShouldLoadWhatsApp(true), 3000)
     }
   }, [mounted])
 

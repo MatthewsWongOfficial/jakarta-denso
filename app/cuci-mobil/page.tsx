@@ -170,7 +170,7 @@ const CuciMobilCirebon = () => {
               <ul className="space-y-3 md:space-y-4">
                 {[
                   "Cuci mobil premium dengan teknisi berpengalaman",
-                  "Servis AC mobil oleh teknisi tersertifikasi",
+                  "Servis AC mobil oleh teknisi terbaik",
                   "Garansi kepuasan 100% untuk setiap layanan",
                   "Fasilitas tunggu nyaman dengan WiFi gratis",
                 ].map((item, index) => (

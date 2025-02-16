@@ -180,7 +180,7 @@ const ServiceACMesin = () => {
               </p>
 
               <p className="text-base sm:text-lg text-gray-700 mb-6 md:mb-8">
-                Tim teknisi kami yang berpengalaman dan tersertifikasi siap menangani berbagai masalah AC dan mesin
+                Tim teknisi kami yang berpengalaman dan terfikasi siap menangani berbagai masalah AC dan mesin
                 mobil dengan cepat dan akurat.
               </p>
 

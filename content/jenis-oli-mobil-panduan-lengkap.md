@@ -91,7 +91,7 @@ Konsultasikan dengan teknisi Jakarta Int'l Denso Cirebon untuk rekomendasi oli t
 
 Kami menyediakan:
 - Oli berkualitas tinggi dari berbagai merek terpercaya
-- Teknisi berpengalaman dan tersertifikasi
+- Teknisi berpengalaman dan terbaik
 - Peralatan modern dan diagnosa komprehensif
 - Garansi layanan resmi
 
