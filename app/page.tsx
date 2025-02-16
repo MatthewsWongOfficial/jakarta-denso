@@ -364,22 +364,22 @@ export default function Home() {
     }
   }, [mounted])
 
-  // Optimized WhatsApp button loading
   useEffect(() => {
-    if (!mounted) return
-
-    // Use requestIdleCallback for non-critical UI elements
+    if (!mounted) return;
+  
+    const loadWhatsApp = () => setShouldLoadWhatsApp(true);
+  
     if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      // @ts-expect-error - TypeScript doesn't fully support requestIdleCallback
-      window.requestIdleCallback(
-        () => setShouldLoadWhatsApp(true),
+      (window.requestIdleCallback as (callback: IdleRequestCallback, options?: { timeout: number }) => void)(
+        loadWhatsApp,
         { timeout: 3000 }
-      )
+      );
     } else {
-      // Fallback for browsers without requestIdleCallback
-      setTimeout(() => setShouldLoadWhatsApp(true), 3000)
+      setTimeout(loadWhatsApp, 3000);
     }
-  }, [mounted])
+  }, [mounted]);
+  
+  
 
   return (
     <main className="min-h-screen bg-white">
