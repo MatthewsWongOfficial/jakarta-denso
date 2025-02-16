@@ -2,32 +2,9 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
 
-// Define types for frontmatter content
-type Frontmatter = Record<string, string>;
-
-// Simple function to extract frontmatter from markdown
-async function extractFrontmatter(content: string): Promise<Frontmatter> {
-  try {
-    const match = /^---\n([\s\S]*?)\n---/.exec(content);
-    if (!match) return {};
-    
-    const frontmatterBlock = match[1];
-    const frontmatter: Frontmatter = {};
-    
-    frontmatterBlock.split('\n').forEach(line => {
-      const [key, ...valueParts] = line.split(':');
-      if (key && valueParts.length) {
-        const value = valueParts.join(':').trim();
-        // Remove quotes if they exist
-        frontmatter[key.trim()] = value.replace(/^['"](.*)['"]$/, '$1');
-      }
-    });
-    
-    return frontmatter;
-  } catch (error) {
-    console.error("Error parsing frontmatter:", error);
-    return {};
-  }
+// Define types
+interface Frontmatter {
+  [key: string]: string;
 }
 
 interface PageInfo {
@@ -39,84 +16,98 @@ interface PageInfo {
   hasImages?: boolean;
 }
 
+const GALLERY_IMAGE_PATHS = [
+  "/images/og-image.jpg",
+  "/images/proses-cuci.jpeg",
+  "/images/Poles-Mobil.jpeg",
+  "/images/ekterior.jpeg",
+  "/images/eksterior2.jpeg",
+  "/images/Jok-mobil.jpeg",
+  "/images/Parfum-mobil.jpeg",
+  "/images/purging.jpeg",
+  "/images/velg.jpeg",
+  "/images/lokasi-kami.jpeg",
+];
+
+
+// Extract frontmatter from markdown
+async function extractFrontmatter(content: string): Promise<Frontmatter> {
+  try {
+    const match = /^---\n([\s\S]*?)\n---/.exec(content);
+    if (!match) return {};
+
+    const frontmatterBlock = match[1];
+    const frontmatter: Frontmatter = {};
+
+    frontmatterBlock.split("\n").forEach((line) => {
+      const [key, ...valueParts] = line.split(":");
+      if (key && valueParts.length) {
+        const value = valueParts.join(":").trim();
+        frontmatter[key.trim()] = value.replace(/^['"](.*)['"]$/, "$1");
+      }
+    });
+
+    return frontmatter;
+  } catch (error) {
+    console.error("Error parsing frontmatter:", error);
+    return {};
+  }
+}
+
 export async function GET(): Promise<NextResponse> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jakartaintldenso.com";
 
-    // Static pages with more detailed configuration
     const staticPages: PageInfo[] = [
-      { url: "/", priority: "1.0", changefreq: "daily", lastmod: new Date().toISOString().split('T')[0] },
+      { url: "/", priority: "1.0", changefreq: "daily", lastmod: new Date().toISOString().split("T")[0] },
       { url: "/services", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-01" },
       { url: "/price-list", priority: "0.8", changefreq: "weekly", lastmod: "2025-02-01" },
-      { url: "/kelebihan-kami", priority: "0.8", changefreq: "weekly", lastmod: "2025-01-15" },
-      { url: "/galeri", priority: "0.7", changefreq: "monthly", lastmod: "2025-01-10", hasImages: true },
-      { url: "/ulasan", priority: "0.7", changefreq: "monthly", lastmod: "2025-01-05" },
-      { url: "/contact", priority: "0.9", changefreq: "weekly", lastmod: "2025-01-01" },
-      { url: "/cuci-mobil", priority: "0.9", changefreq: "weekly", lastmod: "2025-01-01" },
-      { url: "/salon-mobil", priority: "0.9", changefreq: "weekly", lastmod: "2025-01-01" },
-      { url: "/service-ac-dan-mesin", priority: "0.9", changefreq: "weekly", lastmod: "2025-01-01" },
-      { url: "/blogs", priority: "0.8", changefreq: "daily", lastmod: new Date().toISOString().split('T')[0] },
+      { url: "/kelebihan-kami", priority: "0.8", changefreq: "weekly", lastmod: "2025-02-15" },
+      { url: "/galeri", priority: "0.7", changefreq: "monthly", lastmod: "2025-02-10", hasImages: true },
+      { url: "/ulasan", priority: "0.7", changefreq: "monthly", lastmod: "2025-02-05" },
+      { url: "/contact", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
+      { url: "/cuci-mobil", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
+      { url: "/salon-mobil", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
+      { url: "/service-ac-dan-mesin", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
+      { url: "/blogs", priority: "1.0", changefreq: "daily", lastmod: "2025-02-15" },
     ];
 
-    // Get blog posts with error handling
     const contentDirectory = path.join(process.cwd(), "content");
     let files: string[] = [];
     try {
       files = await fs.readdir(contentDirectory);
     } catch (error) {
       console.error("Error reading content directory:", error);
-      // Continue with just static pages if content directory cannot be read
     }
 
-    // Process blog posts with metadata extraction
     const blogPosts: PageInfo[] = await Promise.all(
-      files
-        .filter((file) => file.endsWith(".md"))
-        .map(async (file) => {
-          const filePath = path.join(contentDirectory, file);
-          const slug = file.replace(".md", "");
-          
-          try {
-            // Get file stats for last modification date
-            const stats = await fs.stat(filePath);
-            const lastmod = stats.mtime.toISOString().split('T')[0];
-            
-            // Try to parse frontmatter for additional metadata
-            let featuredImage: string | undefined = undefined;
-            try {
-              const content = await fs.readFile(filePath, 'utf8');
-              const frontmatter = await extractFrontmatter(content);
-              featuredImage = frontmatter.featuredImage;
-            } catch {
-              // Silently fail if we can't parse frontmatter
-            }
+      files.filter((file) => file.endsWith(".md")).map(async (file) => {
+        const filePath = path.join(contentDirectory, file);
+        const slug = file.replace(".md", "");
 
-            return {
-              url: `/blogs/${slug}`,
-              priority: "0.7",
-              changefreq: "weekly",
-              lastmod,
-              ...(featuredImage && { featuredImage }),
-            };
-          } catch (error) {
-            console.error(`Error processing blog post ${file}:`, error);
-            // Return basic info if we can't get detailed metadata
-            return {
-              url: `/blogs/${slug}`,
-              priority: "0.7",
-              changefreq: "weekly",
-            };
-          }
-        })
+        try {
+          const stats = await fs.stat(filePath);
+          const lastmod = stats.mtime.toISOString().split("T")[0];
+          let featuredImage: string | undefined = undefined;
+
+          try {
+            const content = await fs.readFile(filePath, "utf8");
+            const frontmatter = await extractFrontmatter(content);
+            featuredImage = frontmatter.featuredImage;
+          } catch {}
+
+          return { url: `/blogs/${slug}`, priority: "0.7", changefreq: "weekly", lastmod, ...(featuredImage && { featuredImage }) };
+        } catch (error) {
+          console.error(`Error processing blog post ${file}:`, error);
+          return { url: `/blogs/${slug}`, priority: "0.7", changefreq: "weekly" };
+        }
+      })
     );
 
-    // Combine static pages and blog posts
     const allPages: PageInfo[] = [...staticPages, ...blogPosts];
 
-    // Generate sitemap XML with image support
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   ${allPages
     .map(
       (page) => `
@@ -124,31 +115,29 @@ export async function GET(): Promise<NextResponse> {
     <loc>${baseUrl}${page.url}</loc>
     <priority>${page.priority}</priority>
     <changefreq>${page.changefreq}</changefreq>
-    ${page.lastmod ? `<lastmod>${page.lastmod}</lastmod>` : ''}
+    ${page.lastmod ? `<lastmod>${page.lastmod}</lastmod>` : ""}
     ${page.featuredImage ? `
     <image:image>
       <image:loc>${baseUrl}${page.featuredImage}</image:loc>
-    </image:image>` : ''}
-    ${page.hasImages ? `
+    </image:image>` : ""}
+    ${page.hasImages ? GALLERY_IMAGE_PATHS.map(imgPath => `
     <image:image>
-      <image:loc>${baseUrl}${page.url}/gallery-preview.jpg</image:loc>
-    </image:image>` : ''}
+      <image:loc>${baseUrl}${imgPath}</image:loc>
+    </image:image>`).join('') : ""}
   </url>`
     )
     .join("")}
 </urlset>`;
 
-    // Add caching headers
     return new NextResponse(sitemap, {
       headers: {
         "Content-Type": "application/xml",
-        "Cache-Control": "public, max-age=3600", // Cache for 1 hour
+        "Cache-Control": "public, max-age=3600",
       },
     });
   } catch (error) {
     console.error("Error generating sitemap:", error);
-    
-    // Return a minimal valid sitemap in case of error
+
     const fallbackSitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -157,11 +146,9 @@ export async function GET(): Promise<NextResponse> {
     <changefreq>daily</changefreq>
   </url>
 </urlset>`;
-    
+
     return new NextResponse(fallbackSitemap, {
-      headers: {
-        "Content-Type": "application/xml",
-      },
+      headers: { "Content-Type": "application/xml" },
       status: 500,
     });
   }

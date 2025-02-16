@@ -23,7 +23,6 @@ const ExperienceBanner = () => {
     <div className="relative inline-flex items-center justify-center 
       px-6 py-2 
       rounded-full 
-      overflow-hidden
       text-xl sm:text-2xl md:text-3xl
       will-change-transform">
       <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>

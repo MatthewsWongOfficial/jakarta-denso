@@ -4,6 +4,7 @@ import { Suspense, useState, useEffect, useCallback, useMemo } from "react"
 import { Analytics } from "@vercel/analytics/react"
 import dynamic from "next/dynamic"
 import { useInView } from "react-intersection-observer"
+import { useRouter, usePathname } from "next/navigation"
 
 // Critical path components loaded immediately
 import Navbar from "./components/Navbar"
@@ -21,59 +22,75 @@ const LoadingState = ({ height }: { height: string }) => (
   />
 )
 
-// Define component paths map for type safety and reusability
-const COMPONENT_PATHS = {
-  Services: "./components/Services",
-  PriceList: "./components/PriceList",
-  WhyChooseUs: "./components/WhyChooseUs",
-  Gallery: "./components/Gallery",
-  Testimonials: "./components/Testimonials",
-  BlogsPreview: "./components/BlogPreview",
-  Contact: "./components/Contact",
-  Footer: "./components/Footer",
-} as const
+// Global loading indicator 
+const GlobalLoading = () => (
+  <div 
+    className="fixed inset-0 bg-white bg-opacity-80 z-50 flex items-center justify-center transition-opacity duration-300"
+    role="alert"
+    aria-busy="true"
+  >
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+  </div>
+)
 
-// Type-safe dynamic import with correct typing
-const dynamicImport = (componentPath: string, height: string) => {
-  // Using require to avoid the Module not found error
-  return dynamic(() => {
-    switch(componentPath) {
-      case COMPONENT_PATHS.Services:
-        return import(COMPONENT_PATHS.Services)
-      case COMPONENT_PATHS.PriceList:
-        return import(COMPONENT_PATHS.PriceList)
-      case COMPONENT_PATHS.WhyChooseUs:
-        return import(COMPONENT_PATHS.WhyChooseUs)
-      case COMPONENT_PATHS.Gallery:
-        return import(COMPONENT_PATHS.Gallery)
-      case COMPONENT_PATHS.Testimonials:
-        return import(COMPONENT_PATHS.Testimonials)
-      case COMPONENT_PATHS.BlogsPreview:
-        return import(COMPONENT_PATHS.BlogsPreview)
-      case COMPONENT_PATHS.Contact:
-        return import(COMPONENT_PATHS.Contact)
-      case COMPONENT_PATHS.Footer:
-        return import(COMPONENT_PATHS.Footer)
-      default:
-        throw new Error(`Unknown component path: ${componentPath}`)
+// Eager load components needed for hash navigation
+const preloadComponents = () => {
+  if (typeof window !== "undefined" && window.location.hash) {
+    const hash = window.location.hash.substring(1)
+    if (hash === "services" || hash === "price-list") {
+      import("./components/Services")
+      import("./components/PriceList")
+    } else if (hash === "kelebihan-kami" || hash === "galeri") {
+      import("./components/WhyChooseUs")
+      import("./components/Gallery")
+    } else if (hash === "ulasan" || hash === "contact") {
+      import("./components/BlogPreview")
+      import("./components/Contact")
+      import("./components/Footer")
     }
-  }, {
-    loading: () => <LoadingState height={height} />,
-    ssr: true,
-  })
+  }
 }
 
-// Pre-cached critical components with parallel routes
-const Services = dynamicImport(COMPONENT_PATHS.Services, "400px")
-const PriceList = dynamicImport(COMPONENT_PATHS.PriceList, "400px")
+// Direct dynamic imports with proper loading states
+const Services = dynamic(() => import("./components/Services"), {
+  loading: () => <LoadingState height="400px" />,
+  ssr: true,
+})
 
-// Performance-optimized non-critical components
-const WhyChooseUs = dynamicImport(COMPONENT_PATHS.WhyChooseUs, "400px")
-const Gallery = dynamicImport(COMPONENT_PATHS.Gallery, "500px")
-const Testimonials = dynamicImport(COMPONENT_PATHS.Testimonials, "400px")
-const BlogsPreview = dynamicImport(COMPONENT_PATHS.BlogsPreview, "400px")
-const Contact = dynamicImport(COMPONENT_PATHS.Contact, "300px")
-const Footer = dynamicImport(COMPONENT_PATHS.Footer, "200px")
+const PriceList = dynamic(() => import("./components/PriceList"), {
+  loading: () => <LoadingState height="400px" />,
+  ssr: true,
+})
+
+const WhyChooseUs = dynamic(() => import("./components/WhyChooseUs"), {
+  loading: () => <LoadingState height="400px" />,
+  ssr: true,
+})
+
+const Gallery = dynamic(() => import("./components/Gallery"), {
+  loading: () => <LoadingState height="500px" />,
+  ssr: true,
+})
+
+const Testimonials = dynamic(() => import("./components/Testimonials"), {
+  loading: () => <LoadingState height="400px" />,
+  ssr: true,
+})
+
+const BlogsPreview = dynamic(() => import("./components/BlogPreview"), {
+  loading: () => <LoadingState height="400px" />,
+  ssr: true,
+})
+
+const Contact = dynamic(() => import("./components/Contact"), {
+  loading: () => <LoadingState height="300px" />,
+  ssr: true,
+})
+
+const Footer = dynamic(() => import("./components/Footer"), {
+  loading: () => <LoadingState height="200px" />,
+  ssr: true,
+})
 
 // Pure client component with enhanced loading strategy
 const WhatsAppButton = dynamic(() => import("./components/WhatsAppButton"), {
@@ -83,170 +100,182 @@ const WhatsAppButton = dynamic(() => import("./components/WhatsAppButton"), {
 
 // Define hash to section ID mapping for consistency
 const HASH_TO_ID_MAP: Record<string, string> = {
-  "services": "services",
+  services: "services",
   "price-list": "price-list",
   "kelebihan-kami": "kelebihan-kami",
-  "galeri": "galeri",
-  "ulasan": "ulasan",
-  "contact": "contact",
+  galeri: "galeri",
+  ulasan: "ulasan",
+  contact: "contact",
 } as const
 
 export default function Home() {
+  const router = useRouter()
+  const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
+  const [allComponentsVisible, setAllComponentsVisible] = useState(false)
+  const [initialHashProcessed, setInitialHashProcessed] = useState(false)
+  const [isNavigating, setIsNavigating] = useState(false)
 
-  // Function to load a component by its path - memoized to prevent recreation
-  const loadComponent = useCallback((path: string) => {
-    switch(path) {
-      case COMPONENT_PATHS.Services:
-        return import(COMPONENT_PATHS.Services).catch(() => null)
-      case COMPONENT_PATHS.PriceList:
-        return import(COMPONENT_PATHS.PriceList).catch(() => null)
-      case COMPONENT_PATHS.WhyChooseUs:
-        return import(COMPONENT_PATHS.WhyChooseUs).catch(() => null)
-      case COMPONENT_PATHS.Gallery:
-        return import(COMPONENT_PATHS.Gallery).catch(() => null)
-      case COMPONENT_PATHS.BlogsPreview:
-        return import(COMPONENT_PATHS.BlogsPreview).catch(() => null)
-      case COMPONENT_PATHS.Contact:
-        return import(COMPONENT_PATHS.Contact).catch(() => null)
-      default:
-        return Promise.resolve(null)
-    }
+  // Trigger preload of components based on initial hash
+  useEffect(() => {
+    preloadComponents()
   }, [])
 
   // Critical CSS variables for layout stability - set only once
   useEffect(() => {
-    if (document.documentElement.hasAttribute('data-css-vars-set')) return;
-    
+    if (document.documentElement.hasAttribute("data-css-vars-set")) return
+
     const root = document.documentElement
     root.style.setProperty("--container-padding", "1rem")
     root.style.setProperty("--hero-height", "80vh")
     root.style.setProperty("--section-spacing", "4rem")
-    root.setAttribute('data-css-vars-set', 'true')
+    root.setAttribute("data-css-vars-set", "true")
     setMounted(true)
+  }, [])
+
+  // Show all components immediately if there's a hash in the URL
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      setAllComponentsVisible(true)
+    }
   }, [])
 
   // Scroll to hash function - extracted for reuse
   const scrollToHash = useCallback((hash: string) => {
-    if (!hash) return;
-    
+    if (!hash) return
+
     // Remove the # if it exists
-    const cleanHash = hash.startsWith('#') ? hash.substring(1) : hash;
-    
+    const cleanHash = hash.startsWith("#") ? hash.substring(1) : hash
+
     // Look up the section ID in our mapping or use the hash directly
-    const id = HASH_TO_ID_MAP[cleanHash] || cleanHash;
-    
-    const element = document.getElementById(id);
+    const id = HASH_TO_ID_MAP[cleanHash] || cleanHash
+
+    const element = document.getElementById(id)
     if (element) {
       // Use requestAnimationFrame for smoother scrolling
       requestAnimationFrame(() => {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
+        // Use native scroll API for better performance
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
+      })
+      return true
     }
-  }, []);
+    return false
+  }, [])
 
-  // Enhanced hash navigation with smoother transitions
+  // Enhanced hash navigation with progressive enhancement
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || initialHashProcessed) return
 
-    // Initial hash handling
+    // Initial hash handling with progressive attempts
     const handleInitialHash = () => {
-      const hash = window.location.hash;
+      const hash = window.location.hash
       if (hash) {
-        // We need a small delay to ensure the DOM is fully rendered
-        setTimeout(() => scrollToHash(hash), 100);
-      }
-    };
+        // Show loading state while attempting to scroll
+        setIsNavigating(true)
+        
+        // First quick attempt
+        const scrolled = scrollToHash(hash)
 
-    // Handle hash changes
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        scrollToHash(hash);
-      }
-    };
+        if (!scrolled) {
+          // Second attempt after a brief delay
+          setTimeout(() => {
+            const secondAttempt = scrollToHash(hash)
 
-    // Initial check
-    handleInitialHash();
-
-    // Listen for changes
-    window.addEventListener("hashchange", handleHashChange);
-    
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange);
-    };
-  }, [mounted, scrollToHash]);
-
-  // Component mapping for preloading
-  const hashToComponentMap = useMemo(() => ({
-    "services": COMPONENT_PATHS.Services,
-    "price-list": COMPONENT_PATHS.PriceList,
-    "kelebihan-kami": COMPONENT_PATHS.WhyChooseUs,
-    "galeri": COMPONENT_PATHS.Gallery,
-    "ulasan": COMPONENT_PATHS.BlogsPreview,
-    "contact": COMPONENT_PATHS.Contact,
-  }), []);
-
-  // Smart preloading with improved prioritization
-  const preloadComponentByHash = useCallback(() => {
-    if (typeof window === 'undefined') return;
-
-    const hash = window.location.hash;
-    if (!hash) return;
-    
-    const cleanHash = hash.startsWith('#') ? hash.substring(1) : hash;
-    const componentPath = hashToComponentMap[cleanHash];
-    
-    if (componentPath) {
-      loadComponent(componentPath);
-    }
-  }, [loadComponent, hashToComponentMap]);
-
-  // Optimized preloading with improved error handling
-  useEffect(() => {
-    if (!mounted) return;
-
-    // Preload component based on current hash
-    preloadComponentByHash();
-
-    // Using intersection observer for priority-based preloading
-    const preloadBasedOnVisibility = () => {
-      // Create an observer that preloads components when they're close to viewport
-      const preloadObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const id = entry.target.id;
-              const componentPath = hashToComponentMap[id];
-              if (componentPath) {
-                loadComponent(componentPath);
-              }
-              preloadObserver.unobserve(entry.target);
+            if (!secondAttempt) {
+              // Final attempt with longer delay
+              setTimeout(() => {
+                scrollToHash(hash)
+                setIsNavigating(false)
+              }, 1000)
+            } else {
+              setIsNavigating(false)
             }
-          });
-        },
-        { rootMargin: '500px 0px' }
-      );
-      
-      // Observe all section containers
-      Object.keys(hashToComponentMap).forEach(id => {
-        const element = document.getElementById(id);
-        if (element) preloadObserver.observe(element);
-      });
-      
-      return () => preloadObserver.disconnect();
-    };
-    
-    // Start visibility-based preloading
-    const cleanup = preloadBasedOnVisibility();
-    
-    // Also handle hash changes
-    window.addEventListener("hashchange", preloadComponentByHash);
+          }, 200)
+        } else {
+          setIsNavigating(false)
+        }
+
+        setInitialHashProcessed(true)
+      }
+    }
+
+    handleInitialHash()
+  }, [mounted, scrollToHash, initialHashProcessed])
+
+  // Handle dynamic hash changes
+  useEffect(() => {
+    if (!mounted) return
+
+    const handleHashChange = () => {
+      const hash = window.location.hash
+      if (hash) {
+        setIsNavigating(true)
+        const scrolled = scrollToHash(hash)
+        
+        // If initial scroll fails, try again after components have loaded
+        if (!scrolled) {
+          setTimeout(() => {
+            scrollToHash(hash)
+            setIsNavigating(false)
+          }, 500)
+        } else {
+          setIsNavigating(false)
+        }
+      }
+    }
+
+    window.addEventListener("hashchange", handleHashChange)
+
     return () => {
-      window.removeEventListener("hashchange", preloadComponentByHash);
-      cleanup();
-    };
-  }, [mounted, preloadComponentByHash, loadComponent, hashToComponentMap]);
+      window.removeEventListener("hashchange", handleHashChange)
+    }
+  }, [mounted, scrollToHash])
+
+  // Refresh page when navigating back to home route (/)
+  useEffect(() => {
+    if (!mounted) return
+    
+    // Using Next.js router to detect path changes
+    if (pathname === "/" && typeof window !== "undefined" && !window.location.hash) {
+      // Only reload if we weren't already on the homepage or if coming from another page
+      if (document.referrer && !document.referrer.includes(window.location.origin + "/")) {
+        setIsNavigating(true)
+        router.refresh()
+        
+        // Fallback in case router.refresh() doesn't trigger a full reload
+        setTimeout(() => {
+          window.location.reload()
+        }, 300)
+      }
+    }
+  }, [pathname, mounted, router])
+
+  // Handle browser back button
+  useEffect(() => {
+    if (!mounted) return
+    
+    const handlePopState = () => {
+      if (pathname === "/" && !window.location.hash) {
+        setIsNavigating(true)
+        setTimeout(() => {
+          router.refresh()
+          // Fallback reload if needed
+          setTimeout(() => {
+            window.location.reload()
+          }, 200)
+        }, 0)
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [mounted, pathname, router])
 
   // Optimized intersection observer with better thresholds
   const observerOptions = useMemo(
@@ -256,36 +285,46 @@ export default function Home() {
       rootMargin: "200px 0px",
     }),
     []
-  );
+  )
 
-  const [servicesRef, servicesInView] = useInView(observerOptions);
-  const [midSectionRef, midSectionInView] = useInView(observerOptions);
-  const [bottomSectionRef, bottomSectionInView] = useInView(observerOptions);
+  const [servicesRef, servicesInView] = useInView(observerOptions)
+  const [midSectionRef, midSectionInView] = useInView(observerOptions)
+  const [bottomSectionRef, bottomSectionInView] = useInView(observerOptions)
 
   // Delayed WhatsApp button with priority handling
-  const [shouldLoadWhatsApp, setShouldLoadWhatsApp] = useState(false);
+  const [shouldLoadWhatsApp, setShouldLoadWhatsApp] = useState(false)
 
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted) return
 
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(() => setShouldLoadWhatsApp(true), { timeout: 3000 });
+    const loadWhatsApp = () => setShouldLoadWhatsApp(true)
+
+    if ("requestIdleCallback" in window) {
+      // TypeScript-safe way to handle requestIdleCallback
+      const requestIdleCallback =
+        window.requestIdleCallback ||
+        ((cb: IdleRequestCallback, options?: IdleRequestOptions) =>
+          setTimeout(cb, options?.timeout || 1))
+
+      requestIdleCallback(loadWhatsApp, { timeout: 3000 })
     } else {
-      setTimeout(() => setShouldLoadWhatsApp(true), 3000);
+      setTimeout(loadWhatsApp, 3000)
     }
-  }, [mounted]);
+  }, [mounted])
 
   return (
     <main className="min-h-screen bg-white">
+      {isNavigating && <GlobalLoading />}
+      
       <Navbar />
       <Hero />
 
       <div ref={servicesRef} id="services">
-        {mounted && servicesInView && (
+        {(mounted && (servicesInView || allComponentsVisible)) && (
           <Suspense fallback={<LoadingState height="600px" />}>
-            <section 
-              className="content-visibility-auto" 
-              style={{ contain: 'content', containIntrinsicSize: '1px 600px' }}
+            <section
+              className="content-visibility-auto"
+              style={{ contain: "content", containIntrinsicSize: "1px 600px" }}
             >
               <Services />
               <div id="price-list">
@@ -297,11 +336,11 @@ export default function Home() {
       </div>
 
       <div ref={midSectionRef}>
-        {mounted && midSectionInView && (
+        {(mounted && (midSectionInView || allComponentsVisible)) && (
           <Suspense fallback={<LoadingState height="900px" />}>
-            <section 
+            <section
               className="content-visibility-auto"
-              style={{ contain: 'content', containIntrinsicSize: '1px 900px' }}
+              style={{ contain: "content", containIntrinsicSize: "1px 900px" }}
             >
               <div id="kelebihan-kami">
                 <WhyChooseUs />
@@ -315,11 +354,11 @@ export default function Home() {
       </div>
 
       <div ref={bottomSectionRef}>
-        {mounted && bottomSectionInView && (
+        {(mounted && (bottomSectionInView || allComponentsVisible)) && (
           <Suspense fallback={<LoadingState height="1100px" />}>
-            <section 
+            <section
               className="content-visibility-auto"
-              style={{ contain: 'content', containIntrinsicSize: '1px 1100px' }}
+              style={{ contain: "content", containIntrinsicSize: "1px 1100px" }}
             >
               <Testimonials />
               <div id="ulasan">
