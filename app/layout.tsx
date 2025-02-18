@@ -6,11 +6,11 @@ import type React from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Bengkel AC Mobil Terbaik Cirebon - Jakarta Int'l Denso | Spesialis AC Mobil",
+  title: "Bengkel AC Mobil Terbaik Cirebon - Jakarta Int'l Denso",
   description:
-    "Jakarta Int'l Denso - Bengkel terpercaya di Cirebon dengan layanan lengkap: service AC mobil, cuci mobil, detailing & poles. Rating 4.9/5 dari 200+ pelanggan. Teknisi berpengalaman.",
+    "Jakarta Int'l Denso - Bengkel terpercaya di Cirebon dengan layanan lengkap: service AC mobil, cuci mobil, detailing & poles. Rating 4.4/5 dari 200+ pelanggan. Teknisi berpengalaman.",
   keywords:
-    "bengkel terbaik cirebon, bengkel ac cirebon, jakarta international denso, bengkel mobil cirebon, service ac mobil cirebon, cuci mobil cirebon, detailing mobil cirebon, poles mobil cirebon, perbaikan ac mobil cirebon, bengkel ac mobil terbaik cirebon, cuci mobil profesional cirebon, salon mobil cirebon, perawatan mobil cirebon",
+    "bengkel terbaik cirebon, bengkel ac cirebon, jakarta international denso, bengkel mobil cirebon, service ac mobil cirebon, cuci mobil cirebon, detailing mobil cirebon, poles mobil cirebon, perbaikan ac mobil cirebon, bengkel ac mobil terbaik cirebon, cuci mobil profesional cirebon, salon mobil cirebon, perawatan mobil cirebon, freon ac mobil cirebon, kompresor ac mobil cirebon, servis ac mobil pantura, bengkel resmi denso cirebon, teknisi ac mobil berpengalaman, ganti freon ac mobil cirebon, harga service ac mobil cirebon, bengkel ac mobil terdekat, ahli ac mobil cirebon, isi freon ac mobil cirebon, montir ac mobil cirebon, jasa perbaikan ac mobil, cleaning evaporator ac mobil, bengkel ac mobil bergaransi cirebon, sparepart ac mobil asli denso",
 };
 
 const websiteSchema = {
