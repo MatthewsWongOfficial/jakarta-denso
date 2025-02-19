@@ -2,6 +2,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import type React from "react";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -223,7 +224,22 @@ export default function RootLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       </Head>
-      <body className={inter.className}>{children}</body>
+      
+      <body className={inter.className}>{children}
+      <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-K7K4REKDN7"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-K7K4REKDN7');
+          `}
+        </Script>
+        {children}
+        </body>
     </html>
   );
 }
