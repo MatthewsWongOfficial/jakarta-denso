@@ -238,7 +238,6 @@ export default function RootLayout({
             gtag('config', 'G-FRX906FRWV');
           `}
         </Script>
-        {children}
         </body>
     </html>
   );
