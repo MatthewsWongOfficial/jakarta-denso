@@ -29,7 +29,7 @@ export default function WhatsAppButton() {
             fill
             sizes="64px"
             className="object-contain transform-gpu"
-            loading="lazy"
+            priority
           />
         </div>
       </div>
