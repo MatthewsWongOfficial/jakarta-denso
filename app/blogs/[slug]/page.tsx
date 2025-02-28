@@ -250,6 +250,34 @@ const BlogPost: React.FC = () => {
         if (data && data.frontmatter && data.frontmatter.title) {
           document.title = `${data.frontmatter.title} | Jakarta Int'l Denso Cirebon`
         }
+        
+        // Update meta description from the post's excerpt
+        if (data && data.frontmatter && data.frontmatter.excerpt) {
+          // Find the meta description tag if it exists
+          let metaDesc = document.querySelector('meta[name="description"]')
+          
+          // If it doesn't exist, create it
+          if (!metaDesc) {
+            metaDesc = document.createElement('meta')
+            metaDesc.setAttribute('name', 'description')
+            document.head.appendChild(metaDesc)
+          }
+          
+          // Set the content to the post's excerpt
+          metaDesc.setAttribute('content', data.frontmatter.excerpt)
+          
+          // Also update Open Graph description if it exists
+          const ogDesc = document.querySelector('meta[property="og:description"]')
+          if (ogDesc) {
+            ogDesc.setAttribute('content', data.frontmatter.excerpt)
+          } else {
+            // Create og:description if it doesn't exist
+            const ogMeta = document.createElement('meta')
+            ogMeta.setAttribute('property', 'og:description')
+            ogMeta.setAttribute('content', data.frontmatter.excerpt)
+            document.head.appendChild(ogMeta)
+          }
+        }
       } catch (err) {
         setError("An error occurred while fetching the post")
         console.error("Error fetching post:", err)
@@ -257,7 +285,7 @@ const BlogPost: React.FC = () => {
         setIsLoading(false)
       }
     }
-
+  
     if (slug) {
       fetchPost()
     }

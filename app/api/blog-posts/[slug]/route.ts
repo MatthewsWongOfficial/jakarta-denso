@@ -7,10 +7,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { LRUCache } from 'lru-cache';
 
-// Cache configuration with increased size and TTL for better performance
+// Cache configuration
 const cache = new LRUCache<string, BlogPost>({
-  max: 200,
-  ttl: 1000 * 60 * 60 * 24, // 24 hours
+  max: 100,
+  ttl: 1000 * 60 * 60,
 });
 
 // Zod schemas for runtime type validation
@@ -65,128 +65,106 @@ class BlogError extends Error {
   }
 }
 
-// Performance optimization: Use a more efficient reading time calculation
 const calculateReadingTime = (content: string): string => {
   const WORDS_PER_MINUTE = 200;
-  const wordCount = content.split(/\s+/).length;
+  const wordCount = content.trim().split(/\s+/).length;
   return `${Math.ceil(wordCount / WORDS_PER_MINUTE)} min read`;
 };
 
-// Memoized structured data generator
-const memoizedStructuredData = (() => {
-  const structuredDataCache = new Map();
-  
-  return (frontmatter: Frontmatter, url: string) => {
-    const cacheKey = `${url}-${frontmatter.lastModified}`;
-    
-    if (structuredDataCache.has(cacheKey)) {
-      return structuredDataCache.get(cacheKey);
-    }
-    
-    const data = {
-      '@context': 'https://schema.org' as const,
-      '@type': 'BlogPosting' as const,
-      headline: frontmatter.title,
-      image: [frontmatter.coverImage],
-      datePublished: frontmatter.date,
-      dateModified: frontmatter.lastModified,
-      author: {
-        '@type': 'Person' as const,
-        name: frontmatter.author,
-      },
-      description: frontmatter.excerpt,
-      keywords: frontmatter.keywords.join(', '),
-      url,
-    };
-    
-    structuredDataCache.set(cacheKey, data);
-    return data;
-  };
-})();
+const generateStructuredData = (frontmatter: Frontmatter, url: string) => ({
+  '@context': 'https://schema.org' as const,
+  '@type': 'BlogPosting' as const,
+  headline: frontmatter.title,
+  image: [frontmatter.coverImage],
+  datePublished: frontmatter.date,
+  dateModified: frontmatter.lastModified,
+  author: {
+    '@type': 'Person' as const,
+    name: frontmatter.author,
+  },
+  description: frontmatter.excerpt,
+  keywords: frontmatter.keywords.join(', '),
+  url,
+});
 
 async function getPostFromFile(slug: string, baseUrl: string): Promise<BlogPost> {
-  try {
-    const sanitizedSlug = slug.replace(/[^a-zA-Z0-9-]/g, '');
-    const filePath = path.join(process.cwd(), 'content', `${sanitizedSlug}.md`);
-    
-    const fileContent = await fs.readFile(filePath, 'utf8');
-    const { data, content } = matter(fileContent);
-    
-    if (!content) {
-      throw new BlogError('Empty content', 400, 'EMPTY_CONTENT');
-    }
-
-    const canonicalUrl = `${baseUrl}/blogs/${sanitizedSlug}`;
-
-    // Parse and validate frontmatter with additional computed fields
-    const parsedFrontmatter = FrontmatterSchema.parse({
-      ...data,
-      metaTitle: data.metaTitle || data.title,
-      metaDescription: data.metaDescription || data.excerpt,
-      readingTime: calculateReadingTime(content),
-      canonical: canonicalUrl,
-    });
-    
-    const mdxSource = await serialize(content, {
-      parseFrontmatter: false,
-      mdxOptions: {
-        development: process.env.NODE_ENV === 'development',
-      },
-    });
-
-    const structuredData = memoizedStructuredData(parsedFrontmatter, canonicalUrl);
-
-    return {
-      frontmatter: parsedFrontmatter,
-      content: mdxSource,
-      seo: {
-        structuredData: JSON.stringify(structuredData),
-        metaTags: {
-          title: parsedFrontmatter.metaTitle || parsedFrontmatter.title,
-          description: parsedFrontmatter.metaDescription || parsedFrontmatter.excerpt,
-          ogImage: parsedFrontmatter.coverImage,
-          ogType: 'article',
-          twitterCard: 'summary_large_image',
-          canonical: canonicalUrl,
-          keywords: parsedFrontmatter.keywords.join(', '),
-          author: parsedFrontmatter.author,
-          publishedTime: parsedFrontmatter.date,
-          modifiedTime: parsedFrontmatter.lastModified,
-        },
-      },
-    };
-  } catch (error) {
-    console.error(`Error processing post ${slug}:`, error);
-    throw error;
+  const sanitizedSlug = slug.replace(/[^a-zA-Z0-9-]/g, '');
+  const filePath = path.join(process.cwd(), 'content', `${sanitizedSlug}.md`);
+  
+  const fileContent = await fs.readFile(filePath, 'utf8');
+  const { data, content } = matter(fileContent);
+  
+  if (!content) {
+    throw new BlogError('Empty content', 400, 'EMPTY_CONTENT');
   }
+
+  const canonicalUrl = `${baseUrl}/blogs/${sanitizedSlug}`;
+  
+  // Ensure excerpt is present and prioritized
+  const excerpt = data.excerpt || '';
+  
+  // Parse and validate frontmatter with additional computed fields
+  const parsedFrontmatter = FrontmatterSchema.parse({
+    ...data,
+    // Ensure excerpt is explicitly set and not overridden
+    excerpt: excerpt,
+    metaTitle: data.metaTitle || data.title,
+    // Always use excerpt as metaDescription if available
+    metaDescription: excerpt || data.metaDescription,
+    readingTime: calculateReadingTime(content),
+    canonical: canonicalUrl,
+  });
+  
+  const mdxSource = await serialize(content, {
+    parseFrontmatter: false,
+    mdxOptions: {
+      development: process.env.NODE_ENV === 'development',
+    },
+  });
+
+  const structuredData = generateStructuredData(parsedFrontmatter, canonicalUrl);
+
+  return {
+    frontmatter: parsedFrontmatter,
+    content: mdxSource,
+    seo: {
+      structuredData: JSON.stringify(structuredData),
+      metaTags: {
+        title: parsedFrontmatter.metaTitle || parsedFrontmatter.title,
+        // Explicitly use excerpt for description
+        description: excerpt || parsedFrontmatter.metaDescription,
+        ogImage: parsedFrontmatter.coverImage,
+        ogType: 'article',
+        twitterCard: 'summary_large_image',
+        canonical: canonicalUrl,
+        keywords: parsedFrontmatter.keywords.join(', '),
+        author: parsedFrontmatter.author,
+        publishedTime: parsedFrontmatter.date,
+        modifiedTime: parsedFrontmatter.lastModified,
+      },
+    },
+  };
 }
 
-// Fixed route handler: Using proper NextJS App Router pattern with async access to params
 export async function GET(
   request: NextRequest,
-  context: { params: Record<string, string | string[]> }
+  { params }: { params: { slug: string } }
 ): Promise<NextResponse> {
   try {
-    // Correctly await and access the slug parameter
-    const params = context.params;
-    const slugParam = params?.slug;
-    
-    // Handle both string and string[] cases
-    const slug = Array.isArray(slugParam) ? slugParam[0] : slugParam;
-    
+    const slug = params.slug;
+    const baseUrl = 'https://jakartaintldenso.com';
+
     if (!slug) {
       throw new BlogError('Invalid slug provided', 400, 'INVALID_SLUG');
     }
-    
-    const baseUrl = 'https://jakartaintldenso.com';
 
-    // Check cache first for better performance
+    // Check cache first
     const cachedPost = cache.get(slug);
     if (cachedPost) {
       return NextResponse.json(cachedPost, {
         status: 200,
         headers: {
-          'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200',
+          'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=1800',
         },
       });
     }
@@ -199,7 +177,7 @@ export async function GET(
     return NextResponse.json(post, {
       status: 200,
       headers: {
-        'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200',
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=1800',
       },
     });
   } catch (error) {
