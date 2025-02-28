@@ -8,7 +8,7 @@ const services = [
     icon: Car,
     items: ["Cuci Motor Salju", "Cuci Mobil Salju", "Cuci Mobil Aneka Rasa", "Cuci Wetlook", "Doorsmeer T6"],
     image: "/images/cuci-mobil12.jpeg",
-    link: "/cuci-mobil",
+    link: "/cuci-mobil-terbaik-cirebon",
   },
   {
     title: "Salon Mobil",
@@ -23,7 +23,7 @@ const services = [
       "Paket Salon Komplit",
     ],
     image: "/images/Salon-mobil.jpeg",
-    link: "/salon-mobil",
+    link: "/salon-mobil-terbaik-cirebon",
   },
   {
     title: "Service AC & Mesin Mobil",
@@ -39,7 +39,7 @@ const services = [
       "Perbaikan Kebocoran AC",
     ],
     image: "/images/AC-Mobil.jpeg",
-    link: "/service-ac-dan-mesin",
+    link: "/service-ac-dan-mesin-terbaik-cirebon",
   },
 ]
 

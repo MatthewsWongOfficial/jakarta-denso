@@ -22,19 +22,19 @@ interface ServiceItem {
 const serviceItems: ServiceItem[] = [
   {
     name: "Cuci Mobil",
-    href: "/cuci-mobil",
+    href: "/cuci-mobil-terbaik-cirebon",
     icon: Car,
     description: "Layanan cuci mobil premium dengan teknologi snow wash",
   },
   {
     name: "Salon Mobil",
-    href: "/salon-mobil",
+    href: "/salon-mobil-terbaik-cirebon",
     icon: Spray,
     description: "Perawatan eksterior & interior untuk tampilan maksimal",
   },
   {
     name: "Service AC & Mesin",
-    href: "/service-ac-dan-mesin",
+    href: "/service-ac-dan-mesin-terbaik-cirebon",
     icon: Tool,
     description: "Perbaikan dan perawatan AC & mesin oleh teknisi ahli",
   },

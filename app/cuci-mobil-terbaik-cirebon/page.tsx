@@ -9,10 +9,33 @@ const Navbar = dynamic(() => import("../components/Navbar"), { ssr: false })
 const Footer = dynamic(() => import("../components/Footer"), { ssr: false })
 const WhatsAppButton = dynamic(() => import("../components/WhatsAppButton"), { ssr: false })
 
+// export const metadata: Metadata = {
+//   title: "Cuci Mobil Premium & Servis AC Mobil Cirebon - Jakarta Intl Denso Cirebon",
+//   description:
+//     "Pionir cuci mobil & servis AC di Cirebon sejak 2004. Layanan cuci mobil murah, cuci mobil terbaik dengan teknisi profesional, air PDAM berkualitas, dan lokasi strategis di Jl. Garuda Raya.",
+//   keywords:
+//     "cuci mobil cirebon, cuci mobil murah, cuci mobil terbaik, servis ac mobil cirebon, jakarta intl denso, cuci mobil premium, cuci mobil profesional, cuci mobil berkualitas, cuci mobil hidrolik, cuci mobil snow wash",
+//   openGraph: {
+//     title: "Cuci Mobil Premium & Servis AC Mobil Cirebon - Jakarta Intl Denso",
+//     description:
+//       "Pionir cuci mobil & servis AC di Cirebon sejak 2004. Layanan cuci mobil murah dan terbaik dengan teknisi profesional.",
+//     images: [
+//       {
+//         url: "/images/blog-cuci-mobil.jpeg",
+//         width: 1200,
+//         height: 630,
+//         alt: "Cuci Mobil Premium Cirebon",
+//       },
+//     ],
+//     locale: "id_ID",
+//     type: "website",
+//   },
+// }
+
 const CuciMobilCirebon = () => {
   const pageTitle = "Cuci Mobil Premium & Servis AC Mobil Cirebon - Jakarta Intl Denso Cirebon"
   const pageDescription =
-    "Pionir cuci mobil & servis AC di Cirebon sejak 2004. Teknisi profesional, air PDAM berkualitas, dan lokasi strategis di Jl. Garuda Raya. Booking sekarang untuk pelayanan terbaik!"
+    "Pionir cuci mobil & servis AC di Cirebon sejak 2004. Layanan cuci mobil murah, cuci mobil terbaik dengan teknisi profesional, air PDAM berkualitas, dan lokasi strategis di Jl. Garuda Raya. Booking sekarang untuk pelayanan terbaik!"
   const whatsappNumber = "62819647333"
 
   // Car wash steps
@@ -85,6 +108,18 @@ const CuciMobilCirebon = () => {
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
+        <meta
+          name="keywords"
+          content="cuci mobil cirebon, cuci mobil murah, cuci mobil terbaik, servis ac mobil cirebon, jakarta intl denso, cuci mobil premium, cuci mobil profesional, cuci mobil berkualitas, cuci mobil hidrolik, cuci mobil snow wash"
+        />
+        <meta property="og:title" content="Cuci Mobil Premium & Servis AC Mobil Cirebon - Jakarta Intl Denso" />
+        <meta
+          property="og:description"
+          content="Pionir cuci mobil & servis AC di Cirebon sejak 2004. Layanan cuci mobil murah dan terbaik dengan teknisi profesional."
+        />
+        <meta property="og:image" content="/images/blog-cuci-mobil.jpeg" />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="id_ID" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       </Head>
 
@@ -247,7 +282,7 @@ const CuciMobilCirebon = () => {
 
           <div className="relative">
             {/* Desktop Timeline Line */}
-            <div className="hidden lg:block absolute left-1/2 top-8 bottom-8 w-1 bg-blue-200 transform -translate-x-1/2 z-0"></div>
+            <div className="hidden lg:block absolute left-1/2 top-0 h-full w-1 bg-blue-200 transform -translate-x-1/2 z-0"></div>
 
             {carWashSteps.map((step, index) => (
               <div
@@ -267,7 +302,7 @@ const CuciMobilCirebon = () => {
 
                 {/* Desktop Layout */}
                 <div
-                  className={`hidden lg:flex ${index % 2 === 0 ? "flex-row-reverse justify-start mr-1/2" : "flex-row justify-end ml-1/2"} items-center w-1/2 mb-16`}
+                  className={`hidden lg:flex ${index % 2 === 0 ? "flex-row-reverse pr-8" : "flex-row pl-8"} items-center w-1/2 mb-16`}
                 >
                   <div className={`text-center ${index % 2 === 0 ? "mr-8" : "ml-8"} max-w-xs`}>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
@@ -278,8 +313,7 @@ const CuciMobilCirebon = () => {
                       {step.icon}
                     </div>
                     <div
-                      className="absolute top-1/2 transform -translate-y-1/2 w-6 h-1 bg-blue-200 z-0 
-                      ${index % 2 === 0 ? 'right-full' : 'left-full'}"
+                      className={`absolute top-1/2 transform -translate-y-1/2 w-6 h-1 bg-blue-200 z-0 ${index % 2 === 0 ? "right-full" : "left-full"}`}
                     ></div>
                   </div>
                 </div>
@@ -355,7 +389,7 @@ const CuciMobilCirebon = () => {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6">Siap Untuk Mencoba Layanan Kami?</h2>
           <p className="text-lg sm:text-xl mb-6 md:mb-10 max-w-3xl mx-auto">
-          Dapatkan Pengalaman Cuci Mobil Terbaik di Jakarta Intl Denso !
+            Dapatkan Pengalaman Cuci Mobil Terbaik di Jakarta Intl Denso !
           </p>
           <button
             className="bg-white text-blue-900 font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg hover:bg-blue-100 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
@@ -423,9 +457,10 @@ const CuciMobilCirebon = () => {
       </section>
 
       <Footer />
-      <WhatsAppButton/>
+      <WhatsAppButton />
     </>
   )
 }
 
 export default CuciMobilCirebon
+
