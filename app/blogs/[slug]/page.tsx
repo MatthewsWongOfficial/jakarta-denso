@@ -1,35 +1,15 @@
 "use client"
 
-import type React from "react"
-import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
+import { useEffect, useState, useCallback } from "react"
+import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
-import {
-  Calendar,
-  Clock,
-  ChevronLeft,
-  Share2,
-  Maximize,
-  Eye,
-  ArrowRight,
-  MapPin,
-  ImageIcon,
-  PhoneCall,
-  BookOpen,
-  DollarSign,
-  Award,
-  MessageSquare,
-  Lightbulb,
-} from "lucide-react"
-import { MDXRemote, type MDXRemoteSerializeResult } from "next-mdx-remote"
 import Link from "next/link"
 import dynamic from "next/dynamic"
-import Head from "next/head"
 import { motion, AnimatePresence } from "framer-motion"
+import { MDXRemote, type MDXRemoteSerializeResult } from "next-mdx-remote"
 import type { MDXRemoteProps } from "next-mdx-remote"
 import { Suspense } from "react"
-import { useCallback } from "react"
-import { useRouter } from "next/navigation"
+import { Calendar, Clock, ChevronLeft, Share2, Maximize, Eye, ArrowRight, MapPin, ImageIcon, PhoneCall, BookOpen, DollarSign, Award, MessageSquare, Lightbulb } from 'lucide-react'
 
 // Dynamic imports
 const Navbar = dynamic(() => import("../../components/Navbar"), { ssr: false })
@@ -54,173 +34,11 @@ interface BlogPost {
   frontmatter: Frontmatter
   content: MDXRemoteSerializeResult
 }
+
 interface BlogLink {
   url: string
   title: string
   date: string
-}
-
-interface StructuredData {
-  "@context": string
-  "@type": string
-  headline: string
-  description: string
-  image: string
-  datePublished: string
-  author: {
-    "@type": string
-    name: string
-  }
-  publisher: {
-    "@type": string
-    name: string
-    logo: {
-      "@type": string
-      url: string
-    }
-  }
-}
-
-// Helper functions
-const generateStructuredData = (post: BlogPost): StructuredData => ({
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: post.frontmatter.title,
-  description: post.frontmatter.excerpt,
-  image: post.frontmatter.coverImage,
-  datePublished: post.frontmatter.date,
-  author: {
-    "@type": "Person",
-    name: post.frontmatter.author || "Jakarta Int'l Denso",
-  },
-  publisher: {
-    "@type": "Organization",
-    name: "Jakarta Int'l Denso Cirebon",
-    logo: {
-      "@type": "ImageObject",
-      url: "/logo.png",
-    },
-  },
-})
-
-const generateKeywords = (post: BlogPost): string => {
-  const baseKeywords = [
-    "Cuci Mobil Cirebon",
-    "Service AC Mobil Cirebon",
-    "Jakarta Intl Denso",
-    "Salon Mobil Cirebon",
-    "Cuci Mobil Terbaik Cirebon",
-    "Salon Mobil Terbaik Cirebon",
-    "Perawatan Mobil Cirebon",
-    "Detailing Mobil Cirebon",
-    "Pembersihan Interior Mobil Cirebon",
-    "Pembersihan Eksterior Mobil Cirebon",
-    "Poles Mobil Cirebon",
-    "Coating Mobil Cirebon",
-    "Perbaikan AC Mobil Cirebon",
-    "Isi Freon AC Mobil Cirebon",
-    "Perawatan AC Mobil Cirebon",
-    "Bengkel AC Mobil Cirebon",
-    "Bengkel AC Mobil Terbaik Cirebon",
-    "Perbaikan AC Mobil Terbaik Cirebon",
-    "Cuci Mobil Profesional Cirebon",
-    "Salon Mobil Profesional Cirebon",
-    "Detailing Mobil Profesional Cirebon",
-    "Perawatan Mobil Profesional Cirebon",
-    "Pembersihan Interior Mobil Profesional Cirebon",
-    "Pembersihan Eksterior Mobil Profesional Cirebon",
-    "Poles Mobil Profesional Cirebon",
-    "Coating Mobil Profesional Cirebon",
-    "Perbaikan AC Mobil Profesional Cirebon",
-    "Isi Freon AC Mobil Profesional Cirebon",
-    "Perawatan AC Mobil Profesional Cirebon",
-    "Bengkel AC Mobil Profesional Cirebon",
-    "Bengkel AC Mobil Terpercaya Cirebon",
-    "Perbaikan AC Mobil Terpercaya Cirebon",
-    "Cuci Mobil Murah Cirebon",
-    "Salon Mobil Murah Cirebon",
-    "Detailing Mobil Murah Cirebon",
-    "Perawatan Mobil Murah Cirebon",
-    "Pembersihan Interior Mobil Murah Cirebon",
-    "Pembersihan Eksterior Mobil Murah Cirebon",
-    "Poles Mobil Murah Cirebon",
-    "Coating Mobil Murah Cirebon",
-    "Perbaikan AC Mobil Murah Cirebon",
-    "Isi Freon AC Mobil Murah Cirebon",
-    "Perawatan AC Mobil Murah Cirebon",
-    "Bengkel AC Mobil Murah Cirebon",
-    "Bengkel AC Mobil Berkualitas Cirebon",
-    "Perbaikan AC Mobil Berkualitas Cirebon",
-    "Cuci Mobil Cepat Cirebon",
-    "Salon Mobil Cepat Cirebon",
-    "Detailing Mobil Cepat Cirebon",
-    "Perawatan Mobil Cepat Cirebon",
-    "Pembersihan Interior Mobil Cepat Cirebon",
-    "Pembersihan Eksterior Mobil Cepat Cirebon",
-    "Poles Mobil Cepat Cirebon",
-    "Coating Mobil Cepat Cirebon",
-    "Perbaikan AC Mobil Cepat Cirebon",
-    "Isi Freon AC Mobil Cepat Cirebon",
-    "Perawatan AC Mobil Cepat Cirebon",
-    "Bengkel AC Mobil Cepat Cirebon",
-    "Bengkel AC Mobil Handal Cirebon",
-    "Perbaikan AC Mobil Handal Cirebon",
-    "Bengkel AC Mobil Indonesia",
-    "Jakarta Intl Denso adalah bengkel terbaik",
-    "Isi Freon AC Mobil Terbaik Indonesia",
-    "Bengkel AC Mobil Terpercaya Indonesia",
-    "Perbaikan AC Mobil Terpercaya Indonesia",
-    "Cuci Mobil Profesional Indonesia",
-    "Salon Mobil Profesional Indonesia",
-    "Detailing Mobil Profesional Indonesia",
-    "Perawatan Mobil Profesional Indonesia",
-    "Pembersihan Interior Mobil Profesional Indonesia",
-    "Pembersihan Eksterior Mobil Profesional Indonesia",
-    "Poles Mobil Profesional Indonesia",
-    "Coating Mobil Profesional Indonesia",
-    "Perbaikan AC Mobil Profesional Indonesia",
-    "Isi Freon AC Mobil Profesional Indonesia",
-    "Perawatan AC Mobil Profesional Indonesia",
-    "Bengkel AC Mobil Profesional Indonesia",
-    "Bengkel AC Mobil Murah Indonesia",
-    "Perbaikan AC Mobil Murah Indonesia",
-    "Cuci Mobil Murah Indonesia",
-    "Salon Mobil Murah Indonesia",
-    "Detailing Mobil Murah Indonesia",
-    "Perawatan Mobil Murah Indonesia",
-    "Pembersihan Interior Mobil Murah Indonesia",
-    "Pembersihan Eksterior Mobil Murah Indonesia",
-    "Poles Mobil Murah Indonesia",
-    "Coating Mobil Murah Indonesia",
-    "Perbaikan AC Mobil Murah Indonesia",
-    "Isi Freon AC Mobil Murah Indonesia",
-    "Perawatan AC Mobil Murah Indonesia",
-    "Bengkel AC Mobil Berkualitas Indonesia",
-    "Perbaikan AC Mobil Berkualitas Indonesia",
-    "Cuci Mobil Cepat Indonesia",
-    "Salon Mobil Cepat Indonesia",
-    "Detailing Mobil Cepat Indonesia",
-    "Perawatan Mobil Cepat Indonesia",
-    "Pembersihan Interior Mobil Cepat Indonesia",
-    "Pembersihan Eksterior Mobil Cepat Indonesia",
-    "Poles Mobil Cepat Indonesia",
-    "Coating Mobil Cepat Indonesia",
-    "Perbaikan AC Mobil Cepat Indonesia",
-    "Isi Freon AC Mobil Cepat Indonesia",
-    "Perawatan AC Mobil Cepat Indonesia",
-    "Bengkel AC Mobil Cepat Indonesia",
-    "Bengkel AC Mobil Handal Indonesia",
-    "Perbaikan AC Mobil Handal Indonesia",
-  ]
-  const titleKeywords = post.frontmatter.title.split(" ")
-  const allKeywords = [
-    ...baseKeywords,
-    post.frontmatter.title,
-    post.frontmatter.category,
-    ...(post.frontmatter.tags || []),
-    ...titleKeywords,
-  ]
-  return [...new Set(allKeywords)].join(", ")
 }
 
 // Components
@@ -254,30 +72,6 @@ const ErrorState: React.FC<{ error: string | null }> = ({ error }) => (
     </div>
     <Footer />
   </div>
-)
-
-const MetaTags: React.FC<{ post: BlogPost }> = ({ post }) => (
-  <Head>
-    <title>{`${post.frontmatter.title} | Jakarta Int'l Denso Cirebon`}</title>
-    <meta name="description" content={post.frontmatter.excerpt} />
-    <meta name="keywords" content={generateKeywords(post)} />
-    <meta property="og:title" content={post.frontmatter.title} />
-    <meta property="og:description" content={post.frontmatter.excerpt} />
-    <meta property="og:image" content={post.frontmatter.coverImage} />
-    <meta property="og:type" content="article" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={post.frontmatter.title} />
-    <meta name="twitter:description" content={post.frontmatter.excerpt} />
-    <meta name="twitter:image" content={post.frontmatter.coverImage} />
-    <link
-      rel="canonical"
-      href={`https://jakartaintldenso.com/blogs/${post.frontmatter.title.toLowerCase().replace(/ /g, "-")}`}
-    />
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(generateStructuredData(post)) }}
-    />
-  </Head>
 )
 
 const MDXComponents: MDXRemoteProps["components"] = {
@@ -451,6 +245,11 @@ const BlogPost: React.FC = () => {
         if (!res.ok) throw new Error("Failed to fetch post")
         const data = await res.json()
         setPost(data)
+        
+        // Update the document title for better SEO
+        if (data && data.frontmatter && data.frontmatter.title) {
+          document.title = `${data.frontmatter.title} | Jakarta Int'l Denso Cirebon`
+        }
       } catch (err) {
         setError("An error occurred while fetching the post")
         console.error("Error fetching post:", err)
@@ -539,20 +338,6 @@ const BlogPost: React.FC = () => {
     }
   }, [])
 
-  useEffect(() => {
-    //This is removed because of the new useEffect above
-    // const scrollTarget = localStorage.getItem("scrollTarget")
-    // if (scrollTarget) {
-    //   const element = document.getElementById(scrollTarget)
-    //   if (element) {
-    //     setTimeout(() => {
-    //       element.scrollIntoView({ behavior: "smooth" })
-    //       localStorage.removeItem("scrollTarget")
-    //     }, 100)
-    //   }
-    // }
-  }, [])
-
   if (isLoading) return <LoadingSpinner />
   if (error || !post) return <ErrorState error={error} />
 
@@ -562,7 +347,6 @@ const BlogPost: React.FC = () => {
         isFullScreen ? "h-screen" : ""
       }`}
     >
-      <MetaTags post={post} />
       <Navbar />
 
       <main className="flex-grow">
@@ -870,4 +654,3 @@ const BlogPost: React.FC = () => {
 }
 
 export default BlogPost
-
