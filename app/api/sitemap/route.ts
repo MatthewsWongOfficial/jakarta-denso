@@ -60,15 +60,16 @@ export async function GET(): Promise<NextResponse> {
 
     const staticPages: PageInfo[] = [
       { url: "/", priority: "1.0", changefreq: "daily", lastmod: new Date().toISOString().split("T")[0] },
-      { url: "/services", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-01" },
-      { url: "/price-list", priority: "0.8", changefreq: "weekly", lastmod: "2025-02-01" },
-      { url: "/kelebihan-kami", priority: "0.8", changefreq: "weekly", lastmod: "2025-02-15" },
-      { url: "/galeri", priority: "0.7", changefreq: "monthly", lastmod: "2025-02-10", hasImages: true },
-      { url: "/ulasan", priority: "0.7", changefreq: "monthly", lastmod: "2025-02-05" },
-      { url: "/contact", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
-      { url: "/cuci-mobil", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
-      { url: "/salon-mobil", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
-      { url: "/service-ac-dan-mesin", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
+      { url: "/#services", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-01" },
+      { url: "/#price-list", priority: "0.8", changefreq: "weekly", lastmod: "2025-02-01" },
+      { url: "/#kelebihan-kami", priority: "0.8", changefreq: "weekly", lastmod: "2025-02-15" },
+      { url: "/#galeri", priority: "0.7", changefreq: "monthly", lastmod: "2025-02-10", hasImages: true },
+      { url: "/#ulasan", priority: "0.7", changefreq: "monthly", lastmod: "2025-02-05" },
+      { url: "/#BlogPreview", priority: "0.7", changefreq: "monthly", lastmod: "2025-02-05" },
+      { url: "/#contact", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
+      { url: "/cuci-mobil-terbaik-cirebon", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
+      { url: "/salon-mobil-terbaik-cirebon", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
+      { url: "/service-ac-dan-mesin-terbaik-cirebon", priority: "0.9", changefreq: "weekly", lastmod: "2025-02-02" },
       { url: "/blogs", priority: "1.0", changefreq: "daily", lastmod: "2025-02-15" },
     ];
 
