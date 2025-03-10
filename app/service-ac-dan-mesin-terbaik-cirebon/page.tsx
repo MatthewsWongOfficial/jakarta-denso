@@ -282,7 +282,10 @@ const ServiceACMesin = () => {
 
                     {/* Connecting line */}
                     {index < 2 && (
-                      <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-blue-300"></div>
+                      <div
+                        className="hidden lg:block absolute top-1/2 right-0 w-8 h-1 bg-blue-300"
+                        style={{ transform: "translateX(100%)" }}
+                      ></div>
                     )}
                   </div>
                 ))}
@@ -290,7 +293,7 @@ const ServiceACMesin = () => {
 
               {/* Down arrow */}
               <div className="flex justify-center mb-10">
-                <div className="w-0.5 h-8 bg-blue-300"></div>
+                <div className="w-1 h-10 bg-blue-300"></div>
               </div>
 
               {/* Second row - 3 steps */}
@@ -314,7 +317,10 @@ const ServiceACMesin = () => {
 
                     {/* Connecting line */}
                     {index < 2 && (
-                      <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-blue-300"></div>
+                      <div
+                        className="hidden lg:block absolute top-1/2 right-0 w-8 h-1 bg-blue-300"
+                        style={{ transform: "translateX(100%)" }}
+                      ></div>
                     )}
                   </div>
                 ))}
@@ -322,7 +328,7 @@ const ServiceACMesin = () => {
 
               {/* Down arrow */}
               <div className="flex justify-center mb-10">
-                <div className="w-0.5 h-8 bg-blue-300"></div>
+                <div className="w-1 h-10 bg-blue-300"></div>
               </div>
 
               {/* Final step */}
