@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { Menu, X, ChevronDown, Car, SprayCanIcon as Spray, PenToolIcon as Tool } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface NavItem {
   name: string
@@ -221,6 +222,52 @@ const Navbar: React.FC = () => {
 
   const useScrolledStyle = scrolled || isBlogPage || !isHomePage || isServicePage
 
+  // Animation variants for mobile menu
+  const mobileMenuVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.3,
+        staggerChildren: 0.07,
+        delayChildren: 0.1
+      }
+    },
+    exit: { 
+      opacity: 0,
+      y: -20,
+      transition: { 
+        duration: 0.2,
+        staggerChildren: 0.05,
+        staggerDirection: -1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -10 }
+  }
+
+  const serviceDropdownVariants = {
+    hidden: { opacity: 0, height: 0 },
+    visible: { 
+      opacity: 1, 
+      height: "auto",
+      transition: { 
+        duration: 0.3,
+        staggerChildren: 0.1
+      }
+    },
+    exit: { 
+      opacity: 0, 
+      height: 0,
+      transition: { duration: 0.2 }
+    }
+  }
+
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
@@ -337,7 +384,7 @@ const Navbar: React.FC = () => {
             onClick={() => setIsOpen(!isOpen)}
             className={`md:hidden inline-flex items-center justify-center p-3 rounded-lg ${
               useScrolledStyle ? "text-gray-700 hover:bg-gray-100" : "text-white hover:bg-white/20"
-            }`}
+            } z-50 relative`}
             aria-expanded={isOpen}
             aria-label={isOpen ? "Close menu" : "Open menu"}
           >
@@ -346,84 +393,136 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu - with click outside handler */}
-      {isOpen && (
-        <>
-          {/* Backdrop for click-outside handling */}
-          <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
-            onClick={() => setIsOpen(false)}
-            aria-hidden="true"
-          />
-          
-          {/* Actual mobile menu */}
-          <div 
-            className="md:hidden fixed inset-0 top-16 sm:top-20 bg-white shadow-lg z-40 overflow-y-auto"
-            onClick={(e) => e.stopPropagation()} // Prevent clicks from closing when clicking menu items
+      {/* Full-screen Mobile Menu with AnimatePresence for enter/exit animations */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={mobileMenuVariants}
+            className="md:hidden fixed inset-0 bg-white z-40 flex flex-col overflow-hidden"
           >
-            <div className="px-4 pt-2 pb-3 space-y-1">
-              {navItems.map((item) => (
-                <div key={item.name} ref={item.hasDropdown ? mobileDropdownRef : null}>
-                  {item.hasDropdown ? (
-                    <div>
-                      {/* Mobile dropdown button - larger touch target */}
-                      <button
-                        onClick={toggleMobileServiceDropdown}
-                        className="w-full flex items-center justify-between px-4 py-4 text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors duration-200"
-                        aria-expanded={activeServiceDropdown}
+            {/* Logo and branding in mobile menu */}
+            <div className="pt-24 pb-6 px-6">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="relative h-16 w-16">
+                  <Image 
+                    src="/images/logo.avif" 
+                    alt="Jakarta Intl Denso Logo" 
+                    fill 
+                    className="object-contain" 
+                    priority 
+                  />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-extrabold text-blue-900">Jakarta Intl Denso</h2>
+                  <p className="text-sm text-gray-600">Layanan Otomotif Terbaik Cirebon</p>
+                </div>
+              </div>
+              <div className="h-0.5 bg-gradient-to-r from-blue-500 to-blue-200 w-full rounded-full"></div>
+            </div>
+
+            {/* Navigation items container with scroll */}
+            <div className="flex-1 overflow-y-auto px-6 pb-8">
+              <div className="space-y-1">
+                {navItems.map((item) => (
+                  <motion.div 
+                    key={item.name} 
+                    variants={itemVariants}
+                    ref={item.hasDropdown ? mobileDropdownRef : null}
+                    className="border-b border-gray-100 last:border-0"
+                  >
+                    {item.hasDropdown ? (
+                      <div>
+                        {/* Mobile dropdown button */}
+                        <button
+                          onClick={toggleMobileServiceDropdown}
+                          className="w-full flex items-center justify-between px-2 py-5 text-lg font-medium text-gray-800 hover:text-blue-700 transition-colors duration-200"
+                          aria-expanded={activeServiceDropdown}
+                        >
+                          {item.name}
+                          <ChevronDown
+                            className={`ml-1 h-5 w-5 text-blue-600 transition-transform duration-300 ${
+                              activeServiceDropdown ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                        
+                        {/* Mobile service items with animations */}
+                        <AnimatePresence>
+                          {activeServiceDropdown && (
+                            <motion.div 
+                              variants={serviceDropdownVariants}
+                              initial="hidden"
+                              animate="visible"
+                              exit="exit"
+                              className="pl-4 space-y-1 mb-4"
+                            >
+                              {serviceItems.map((service, idx) => (
+                                <motion.div
+                                  key={service.name}
+                                  variants={itemVariants}
+                                  custom={idx}
+                                >
+                                  <Link
+                                    href={service.href}
+                                    onClick={(e) => handleServiceItemClick(e, service.href)}
+                                    className="flex items-start space-x-4 p-4 my-1 rounded-xl bg-blue-50/80 hover:bg-blue-100 transition-colors duration-200"
+                                  >
+                                    <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+                                      <service.icon className="h-5 w-5 text-white" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <h3 className="font-semibold text-gray-900">{service.name}</h3>
+                                      <p className="text-sm text-gray-600">{service.description}</p>
+                                    </div>
+                                  </Link>
+                                </motion.div>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <Link
+                        href={getNavHref(item)}
+                        onClick={(e) => handleNavClick(e, getNavHref(item))}
+                        className="block px-2 py-5 text-lg font-medium text-gray-800 hover:text-blue-700 transition-colors duration-200"
                       >
                         {item.name}
-                        <ChevronDown
-                          className={`ml-1 h-5 w-5 transition-transform duration-200 ${
-                            activeServiceDropdown ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                      
-                      {/* Mobile service items */}
-                      {activeServiceDropdown && (
-                        <div className="pl-4 space-y-2 mt-2 mb-4">
-                          {serviceItems.map((service) => (
-                            <Link
-                              key={service.name}
-                              href={service.href}
-                              onClick={(e) => handleServiceItemClick(e, service.href)}
-                              className="flex items-start space-x-3 p-4 rounded-lg hover:bg-blue-50 transition-colors duration-200"
-                            >
-                              <service.icon className="h-5 w-5 text-blue-600 mt-1 flex-shrink-0" />
-                              <div className="flex-1">
-                                <h3 className="font-semibold text-gray-900">{service.name}</h3>
-                                <p className="text-sm text-gray-600">{service.description}</p>
-                              </div>
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <Link
-                      href={getNavHref(item)}
-                      onClick={(e) => handleNavClick(e, getNavHref(item))}
-                      className="block px-4 py-4 text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors duration-200"
-                    >
-                      {item.name}
-                    </Link>
-                  )}
-                </div>
-              ))}
+                      </Link>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Call to action fixed at bottom */}
+            <motion.div 
+              variants={itemVariants}
+              className="px-6 pb-10 pt-4 bg-gradient-to-b from-white/0 via-white to-white"
+            >
               <Link
                 href="https://wa.me/+62819647333"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsOpen(false)}
-                className="block px-4 py-4 mt-3 text-base font-medium text-white bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 rounded-lg text-center transition-colors duration-200 shadow-lg hover:shadow-xl"
+                className="flex items-center justify-center gap-2 w-full py-4 text-base font-medium text-white bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 rounded-xl text-center transition-all duration-300 shadow-lg hover:shadow-xl"
               >
-                Hubungi Kami
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                </svg>
+                Hubungi Kami via WhatsApp
               </Link>
-            </div>
-          </div>
-        </>
-      )}
+              
+              <div className="mt-6 flex justify-center">
+                <p className="text-xs text-gray-500">© 2025 Jakarta Intl Denso. All rights reserved.</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   )
 }

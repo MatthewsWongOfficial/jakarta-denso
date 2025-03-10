@@ -4,39 +4,14 @@ import { Suspense, useState, useEffect, useCallback, useMemo } from "react"
 import { Analytics } from "@vercel/analytics/react"
 import dynamic from "next/dynamic"
 import { useInView } from "react-intersection-observer"
-import { usePathname } from "next/navigation" // Removed unused router import
+import { usePathname } from "next/navigation"
 
 // Critical path components loaded immediately
 import Navbar from "./components/Navbar"
 import Hero from "./components/Hero"
+import Loading from "./loading" // Import the Next.js loading component
 
-// Type-safe loading state component with skeleton animation
-const LoadingState = ({ height }: { height: string }) => (
-  <div
-    className="w-full bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg 
-               animate-pulse opacity-0 transition-opacity duration-300
-               skeleton-loading"
-    style={{ minHeight: height }}
-    role="progressbar"
-    aria-busy="true"
-  />
-)
-
-// Improved global loading indicator with fade effects
-const GlobalLoading = () => (
-  <div 
-    className="fixed inset-0 bg-white bg-opacity-90 z-50 flex items-center justify-center transition-opacity duration-300"
-    role="alert"
-    aria-busy="true"
-  >
-    <div className="flex flex-col items-center">
-      <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mb-4"></div>
-      <p className="text-sm text-gray-600">Loading content...</p>
-    </div>
-  </div>
-)
-
-// Define hash to section ID mapping for consistency
+// Hash to section ID mapping for consistency
 const HASH_TO_ID_MAP: Record<string, string> = {
   services: "services",
   "price-list": "price-list",
@@ -47,44 +22,44 @@ const HASH_TO_ID_MAP: Record<string, string> = {
   beranda: "",  // Added beranda mapping to empty string for top of page
 } as const
 
-// Lazy load components with optimized loading sequence
+// Lazy load components with Next.js suspense boundaries
 const Services = dynamic(() => import("./components/Services"), {
-  loading: () => <LoadingState height="400px" />,
+  loading: () => <Loading />,
   ssr: true,
 })
 
 const PriceList = dynamic(() => import("./components/PriceList"), {
-  loading: () => <LoadingState height="400px" />,
+  loading: () => <Loading />,
   ssr: true,
 })
 
 const WhyChooseUs = dynamic(() => import("./components/WhyChooseUs"), {
-  loading: () => <LoadingState height="400px" />,
+  loading: () => <Loading />,
   ssr: true,
 })
 
 const Gallery = dynamic(() => import("./components/Gallery"), {
-  loading: () => <LoadingState height="500px" />,
+  loading: () => <Loading />,
   ssr: true,
 })
 
 const Testimonials = dynamic(() => import("./components/Testimonials"), {
-  loading: () => <LoadingState height="400px" />,
+  loading: () => <Loading />,
   ssr: true,
 })
 
 const BlogsPreview = dynamic(() => import("./components/BlogPreview"), {
-  loading: () => <LoadingState height="400px" />,
+  loading: () => <Loading />,
   ssr: true,
 })
 
 const Contact = dynamic(() => import("./components/Contact"), {
-  loading: () => <LoadingState height="300px" />,
+  loading: () => <Loading />,
   ssr: true,
 })
 
 const Footer = dynamic(() => import("./components/Footer"), {
-  loading: () => <LoadingState height="200px" />,
+  loading: () => <Loading />,
   ssr: true,
 })
 
@@ -378,19 +353,17 @@ export default function Home() {
       setTimeout(loadWhatsApp, 3000);
     }
   }, [mounted]);
-  
-  
 
   return (
     <main className="min-h-screen bg-white">
-      {isNavigating && <GlobalLoading />}
+      {isNavigating && <Loading />}
       
       <Navbar />
       <Hero />
 
       <div ref={servicesRef} id="services">
         {(mounted && (servicesInView || allComponentsVisible)) && (
-          <Suspense fallback={<LoadingState height="600px" />}>
+          <Suspense fallback={<Loading />}>
             <section
               className="content-visibility-auto"
               style={{ contain: "content", containIntrinsicSize: "1px 600px" }}
@@ -406,7 +379,7 @@ export default function Home() {
 
       <div ref={midSectionRef}>
         {(mounted && (midSectionInView || allComponentsVisible)) && (
-          <Suspense fallback={<LoadingState height="900px" />}>
+          <Suspense fallback={<Loading />}>
             <section
               className="content-visibility-auto"
               style={{ contain: "content", containIntrinsicSize: "1px 900px" }}
@@ -424,7 +397,7 @@ export default function Home() {
 
       <div ref={bottomSectionRef}>
         {(mounted && (bottomSectionInView || allComponentsVisible)) && (
-          <Suspense fallback={<LoadingState height="1100px" />}>
+          <Suspense fallback={<Loading />}>
             <section
               className="content-visibility-auto"
               style={{ contain: "content", containIntrinsicSize: "1px 1100px" }}

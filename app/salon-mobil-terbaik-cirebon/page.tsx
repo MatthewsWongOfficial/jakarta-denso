@@ -73,7 +73,7 @@ const SalonMobil = () => {
     geo: {
       "@type": "GeoCoordinates",
       latitude: -6.7320229,
-      longitude: 108.5523164
+      longitude: 108.5523164,
     },
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
@@ -198,66 +198,173 @@ const SalonMobil = () => {
         </div>
       </section>
 
-      {/* Salon Mobil Process */}
-      <section className="py-12 md:py-20 bg-gray-100">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
-            Proses Salon Mobil Premium Kami
-          </h2>
-          <p className="text-base sm:text-lg text-gray-700 mb-8 md:mb-12 max-w-3xl mx-auto">
-            Kami mengikuti 7 langkah sistematis untuk memberikan hasil salon mobil terbaik dan terpercaya
-          </p>
+      {/* Salon Mobil Process - Step by Step - Clean Uniform Design */}
+      <section className="py-16 md:py-24 bg-gradient-to-b from-white to-blue-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6 relative inline-block">
+              Proses Salon Mobil Premium Kami
+              <span className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-blue-600 rounded-full"></span>
+            </h2>
+            <p className="text-lg sm:text-xl text-gray-700 max-w-3xl mx-auto mt-6">
+              Kami mengikuti 7 langkah sistematis untuk memberikan hasil salon mobil terbaik dan terpercaya
+            </p>
+          </div>
 
-          <div className="relative">
-            {/* Desktop Timeline Line */}
-            <div className="hidden lg:block absolute left-1/2 top-8 bottom-8 w-1 bg-blue-200 transform -translate-x-1/2 z-0"></div>
+          {/* Mobile View (Interactive Timeline) - Unchanged */}
+          <div className="lg:hidden">
+            <div className="relative px-2">
+              {/* Vertical timeline line */}
+              <div className="absolute left-8 top-6 bottom-6 w-1 bg-gradient-to-b from-blue-500 to-blue-700 rounded-full"></div>
 
-            {salonSteps.map((step, index) => (
-              <div
-                key={index}
-                className={`relative z-10 mb-12 md:mb-16 lg:mb-0 flex flex-col lg:flex-row items-center lg:items-start ${
-                  index % 2 === 0 ? "lg:justify-end" : "lg:justify-start"
-                }`}
-              >
-                {/* Mobile and Tablet Layout */}
-                <div className="lg:hidden flex flex-col items-center">
-                  <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white rounded-full text-2xl mb-4 shadow-lg">
-                    {step.icon}
-                  </div>
-                  <div className="max-w-md text-center">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
-                    <p className="text-gray-700">{step.description}</p>
-                  </div>
-                </div>
+              <div className="space-y-16">
+                {salonSteps.map((step, index) => (
+                  <div key={index} className="relative">
+                    {/* Step number bubble */}
+                    <div className="absolute left-8 top-4 transform -translate-x-1/2 w-6 h-6 bg-white border-4 border-blue-600 rounded-full z-10"></div>
 
-                {/* Desktop Layout */}
-                <div
-                  className={`hidden lg:flex ${
-                    index % 2 === 0 ? "flex-row-reverse justify-start mr-1/2" : "flex-row justify-end ml-1/2"
-                  } items-center w-1/2 mb-16`}
-                >
-                  <div className={`text-center ${index % 2 === 0 ? "mr-8" : "ml-8"} max-w-xs`}>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
-                    <p className="text-gray-700">{step.description}</p>
-                  </div>
-                  <div className="relative">
-                    <div className="w-16 h-16 flex items-center justify-center bg-blue-600 text-white rounded-full text-2xl shadow-lg z-10">
-                      {step.icon}
+                    {/* Content card with improved text containment */}
+                    <div className="ml-16 bg-white rounded-xl shadow-md p-5 border-l-4 border-blue-600 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1">
+                      <div className="flex items-center mb-3">
+                        <div className="w-10 h-10 flex items-center justify-center bg-blue-600 text-white rounded-full text-xl mr-3 flex-shrink-0">
+                          {step.icon}
+                        </div>
+                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 break-words">
+                          {index + 1}. {step.title}
+                        </h3>
+                      </div>
+                      <p className="text-sm sm:text-base text-gray-700 break-words">{step.description}</p>
+
+                      {/* Visual indicator for current step */}
+                      <div className="w-full h-1 bg-gray-200 rounded-full mt-4 overflow-hidden">
+                        <div
+                          className="h-full bg-blue-600 rounded-full"
+                          style={{ width: `${((index + 1) / salonSteps.length) * 100}%` }}
+                        ></div>
+                      </div>
                     </div>
-                    <div
-                      className={`absolute top-1/2 transform -translate-y-1/2 w-6 h-1 bg-blue-200 z-0 ${
-                        index % 2 === 0 ? "right-full" : "left-full"
-                      }`}
-                    ></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop View - Clean Uniform Design */}
+          <div className="hidden lg:block">
+            <div className="bg-white rounded-2xl shadow-lg p-8 relative">
+              {/* Progress bar */}
+              <div className="absolute top-0 left-0 w-full h-2 bg-blue-100 rounded-t-2xl overflow-hidden">
+                <div className="h-full bg-blue-600 animate-progressBar"></div>
+              </div>
+
+              {/* First row - 3 steps */}
+              <div className="grid grid-cols-3 gap-8 mb-10">
+                {salonSteps.slice(0, 3).map((step, index) => (
+                  <div key={index} className="relative">
+                    <div className="bg-blue-50 rounded-xl p-6 h-full transition-all duration-300 hover:shadow-lg hover:bg-blue-100 flex flex-col">
+                      <div className="absolute -top-4 -left-4 w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
+                        {index + 1}
+                      </div>
+
+                      <div className="flex justify-center mb-5 mt-2">
+                        <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-2xl shadow-md">
+                          {step.icon}
+                        </div>
+                      </div>
+
+                      <h3 className="text-center text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
+                      <p className="text-center text-gray-700">{step.description}</p>
+                    </div>
+
+                    {/* Connecting line */}
+                    {index < 2 && (
+                      <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-blue-300"></div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Down arrow */}
+              <div className="flex justify-center mb-10">
+                <div className="w-0.5 h-8 bg-blue-300"></div>
+              </div>
+
+              {/* Second row - 3 steps */}
+              <div className="grid grid-cols-3 gap-8 mb-10">
+                {salonSteps.slice(3, 6).map((step, index) => (
+                  <div key={index + 3} className="relative">
+                    <div className="bg-blue-50 rounded-xl p-6 h-full transition-all duration-300 hover:shadow-lg hover:bg-blue-100 flex flex-col">
+                      <div className="absolute -top-4 -left-4 w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
+                        {index + 4}
+                      </div>
+
+                      <div className="flex justify-center mb-5 mt-2">
+                        <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-2xl shadow-md">
+                          {step.icon}
+                        </div>
+                      </div>
+
+                      <h3 className="text-center text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
+                      <p className="text-center text-gray-700">{step.description}</p>
+                    </div>
+
+                    {/* Connecting line */}
+                    {index < 2 && (
+                      <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-blue-300"></div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Down arrow */}
+              <div className="flex justify-center mb-10">
+                <div className="w-0.5 h-8 bg-blue-300"></div>
+              </div>
+
+              {/* Final step */}
+              <div className="flex justify-center">
+                <div className="relative max-w-md w-full">
+                  <div className="bg-blue-600 text-white rounded-xl p-6 shadow-lg">
+                    <div className="absolute -top-4 -left-4 w-10 h-10 bg-yellow-500 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
+                      7
+                    </div>
+
+                    <div className="flex justify-center mb-5 mt-2">
+                      <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-2xl shadow-md">
+                        {salonSteps[6].icon}
+                      </div>
+                    </div>
+
+                    <h3 className="text-center text-xl font-bold mb-3">{salonSteps[6].title}</h3>
+                    <p className="text-center">{salonSteps[6].description}</p>
+
+                    <div className="mt-4 flex justify-center">
+                      <div className="px-4 py-1 bg-white text-blue-600 rounded-full text-sm font-medium">
+                        Langkah Final
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
 
-          <div className="mt-12 md:mt-16">
+          {/* Animation keyframes */}
+          <style jsx>{`
+            @keyframes progressBar {
+              0% { width: 0; }
+              100% { width: 100%; }
+            }
+            
+            .animate-progressBar {
+              animation: progressBar 3s ease-out forwards;
+            }
+          `}</style>
+
+          {/* Call-to-action button */}
+          <div className="text-center mt-16">
             <button
-              className="bg-blue-600 text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg hover:bg-blue-700 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               onClick={() => (window.location.href = `https://wa.me/${whatsappNumber}`)}
             >
               Booking Salon Mobil Sekarang
@@ -325,7 +432,8 @@ const SalonMobil = () => {
             Berikan Perawatan Terbaik untuk Mobil Anda
           </h2>
           <p className="text-lg sm:text-xl mb-6 md:mb-10 max-w-3xl mx-auto">
-          Rasakan layanan salon mobil terbaik! Hubungi kami sekarang!          </p>
+            Rasakan layanan salon mobil terbaik! Hubungi kami sekarang!{" "}
+          </p>
           <button
             className="bg-white text-blue-900 font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg hover:bg-blue-100 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             onClick={() => (window.location.href = `https://wa.me/${whatsappNumber}`)}
@@ -334,8 +442,8 @@ const SalonMobil = () => {
           </button>
         </div>
       </section>
-{/* Location Section */}
-<section className="py-12 md:py-20 bg-white">
+      {/* Location Section */}
+      <section className="py-12 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div className="w-full md:w-1/2 mb-8 md:mb-0">
@@ -396,3 +504,4 @@ const SalonMobil = () => {
 }
 
 export default SalonMobil
+
