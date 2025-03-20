@@ -10,7 +10,7 @@ readingTime: "8 menit"
 ---
 
 # Musim Hujan: Waktu Sempurna untuk Salon Interior Mobil
-![Salon Interior Mobil di Jakarta Intl Denso Cirebon](/images/cuaca-hujan.jpg)
+![Salon Interior Mobil di Jakarta Intl Denso Cirebon](/images/Salon-mobil.jpeg)
 
 Musim hujan telah tiba, dan dengan intensitas curah hujan yang tinggi, kendaraan Anda menjadi lebih rentan terhadap berbagai masalah, terutama pada bagian interior. Mungkin terdengar kontra-intuitif, tetapi cuaca hujan sebenarnya adalah waktu yang tepat untuk melakukan salon interior mobil. Mari kita bahas mengapa dan bagaimana Anda bisa mendapatkan manfaat maksimal dari perawatan interior kendaraan Anda di musim hujan.
 
