@@ -1,7 +1,7 @@
 ---
 title: "Promo Service AC Mobil di Cirebon Hanya Rp100.000 Lengkap dengan Ganti Filter Kabin dan Maintenance"
 date: "2025-04-11"
-excerpt: "Dapatkan promo spesial service AC mobil hanya Rp100.000 sudah termasuk penggantian filter kabin, pembersihan motor blower dan kondensor. Kenyamanan berkendara dengan AC sejuk kembali dalam genggaman Anda!"
+excerpt: "Dapatkan promo spesial service AC mobil hanya Rp100.000 sudah termasuk penggantian filter kabin, pembersihan motor blower dan evaporator. Kenyamanan berkendara dengan AC sejuk kembali dalam genggaman Anda!"
 coverImage: "/images/foto-promo-ac-mobil.jpg"
 author: "Tim Jakarta Int'l Denso"
 category: "Promo AC Mobil"
@@ -9,7 +9,7 @@ tags: ["Service AC Mobil", "Promo Bengkel", "Cirebon", "Filter Kabin", "Jakarta 
 readingTime: "5 menit"
 ---
 
-# Promo Spesial: Service AC Mobil Cuma Rp100.000 Termasuk Ganti Filter Kabin dan Pembersihan Motor Blower & Kondensor!
+# Promo Spesial: Service AC Mobil Cuma Rp100.000 Termasuk Ganti Filter Kabin dan Pembersihan Motor Blower & Evaporator!
 
 Apakah AC mobil Anda sudah mulai tidak dingin? Atau mungkin mengeluarkan bau tidak sedap saat dinyalakan? Jangan khawatir! Jakarta Int'l Denso Cirebon menghadirkan **promo spesial service AC mobil** yang akan membuat AC mobil Anda kembali dingin maksimal dan segar seperti baru.
 
@@ -19,7 +19,7 @@ Dengan hanya **Rp100.000**, Anda sudah mendapatkan paket perawatan AC mobil yang
 
 - **Penggantian filter AC kabin baru** - Menyaring udara yang masuk ke kabin agar bebas debu dan partikel berbahaya
 - **Pembersihan motor blower** - Menghilangkan kotoran dan jamur yang menumpuk pada kipas AC
-- **Pembersihan kondensor** - Mengoptimalkan proses pendinginan dengan memastikan kondensor bersih dari kotoran
+- **Pembersihan Evaporator** - Mengoptimalkan proses pendinginan dengan memastikan evaporator bersih dari kotoran
 
 Paket ini biasanya berharga **Rp250.000**, tapi sekarang Anda bisa mendapatkannya dengan diskon 60%! Kesempatan terbatas, jangan sampai terlewatkan!
 
