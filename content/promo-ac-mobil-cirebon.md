@@ -53,8 +53,6 @@ Jika Anda mengalami salah satu gejala di atas, segera manfaatkan promo service A
 Mengapa harus service AC di bengkel kami?
 
 - **Teknisi Berpengalaman** - Ditangani oleh teknisi profesional dengan sertifikasi khusus
-- **Peralatan Modern** - Menggunakan alat diagnostik dan service terkini
-- **Waktu Pengerjaan Cepat** - Hanya 1-2 jam dan mobil Anda siap jalan kembali
 - **Garansi Service** - Kami berikan garansi service selama 1 bulan
 - **Ruang Tunggu Nyaman** - Dilengkapi WiFi gratis, TV, dan minuman selama menunggu
 
