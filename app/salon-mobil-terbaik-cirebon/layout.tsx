@@ -244,7 +244,7 @@ const localBusinessSchema = {
       name: "Indramayu",
     },
   ],
-  sameAs: ["https://www.instagram.com/jakarta_intl_denso", "https://www.tiktok.com/@jakdenso"],
+  sameAs: ["https://www.instagram.com/jakarta_intl_denso", "https://www.tiktok.com/@jakartaintldensocirebon"],
 }
 
 // Structured data for FAQ

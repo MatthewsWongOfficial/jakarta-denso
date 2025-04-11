@@ -244,7 +244,7 @@ const localBusinessSchema = {
       name: "Indramayu",
     },
   ],
-  sameAs: ["https://www.instagram.com/jakarta_intl_denso", "https://www.tiktok.com/@jakdenso"],
+  sameAs: ["https://www.instagram.com/jakarta_intl_denso", "https://www.tiktok.com/@jakartaintldensocirebon"],
 }
 
 // Structured data for FAQ
@@ -274,6 +274,102 @@ const faqSchema = {
       acceptedAnswer: {
         "@type": "Answer",
         text: "Ya, kami buka setiap hari Minggu dari jam 08:00 sampai 16:00 WIB.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Berapa biaya service AC mobil di Jakarta Int'l Denso Cirebon?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Biaya service AC mobil dimulai dari Rp100.000 untuk cuci blower ac dan perawatan standar, sementara freon recharge berkisar Rp350.000-Rp500.000 tergantung jenis freon dan mobil. Perbaikan komponen AC memiliki biaya yang bervariasi sesuai kerusakan.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Dimana lokasi Jakarta Int'l Denso Cirebon?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Jakarta Int'l Denso Cirebon berlokasi strategis di Jl. Garuda No 2, Cirebon, Jawa Barat. Kami mudah diakses dari pusat kota maupun jalan utama.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Apa keunggulan service AC mobil di Jakarta Int'l Denso dibanding bengkel lain?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Jakarta Int'l Denso memiliki keunggulan berupa teknisi berpengalaman, peralatan modern, suku cadang original, garansi service hingga 1 bulan, dan fasilitas ruang tunggu nyaman dengan WiFi gratis dan minuman.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Apakah Jakarta Int'l Denso menyediakan layanan antar-jemput mobil?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Ya, kami menyediakan layanan antar-jemput mobil dalam radius 10 km dari bengkel dengan biaya tambahan yang terjangkau. Layanan ini dapat dipesan melalui telepon atau WhatsApp.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Berapa lama garansi untuk service AC mobil?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Kami memberikan garansi service AC selama 1 bulan untuk perbaikan dan penggantian komponen. Untuk pengisian freon, kami berikan garansi 1 bulan. Syarat dan ketentuan berlaku.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Bagaimana cara membuat janji service AC mobil di Jakarta Int'l Denso?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Anda dapat membuat janji service melalui telepon di 0231-205148, WhatsApp di 085-2756-47333, atau mengisi form booking online di website kami. Dengan membuat janji, Anda tidak perlu antri lama.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Apakah Jakarta Int'l Denso menerima pembayaran non-tunai?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Ya, kami menerima berbagai metode pembayaran termasuk tunai, kartu debit/kredit, QRIS, e-wallet seperti GoPay, OVO, Dana, dan transfer bank untuk kenyamanan pelanggan.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Mobil apa saja yang dapat diservis di Jakarta Int'l Denso Cirebon?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Kami melayani service AC untuk semua jenis dan merk mobil, termasuk mobil Jepang (Toyota, Honda, Daihatsu, dll), mobil Eropa (BMW, Mercedes, Audi, dll), dan berbagai jenis mobil lainnya.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Apa tanda-tanda AC mobil perlu diservis?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Tanda-tanda AC mobil perlu diservis antara lain: udara tidak dingin, ada bau tidak sedap, bunyi-bunyi aneh, kebocoran air di kabin, dan embun pada windshield. Kami sarankan pengecekan rutin setiap 6 bulan.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Apakah Jakarta Int'l Denso menyediakan suku cadang original?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Ya, kami hanya menggunakan suku cadang original dan berkualitas tinggi untuk menjamin kualitas perbaikan dan keawetan sistem AC mobil Anda.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Berapa jam operasional Jakarta Int'l Denso Cirebon?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Kami buka setiap hari Senin-Sabtu pukul 08:00-17:00 WIB dan Minggu pukul 08:00-16:00 WIB. Kami juga buka pada hari libur nasional dengan jam operasional terbatas.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Apakah Jakarta Int'l Denso menyediakan layanan darurat untuk AC mobil?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Ya, kami menyediakan layanan darurat untuk masalah AC mobil dengan respons cepat. Hubungi hotline kami di 0819-647-333 untuk bantuan darurat dalam area Cirebon dan sekitarnya.",
       },
     },
   ],

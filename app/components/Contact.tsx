@@ -92,7 +92,7 @@ const Contact: FC = () => {
     openingHours: "Mo-Su 08:00-17:00",
     image: "https://www.jakartaintldenso.com/images/owner.jpeg",
     url: "https://www.jakartaintldenso.com",
-    sameAs: ["https://www.instagram.com/jakarta_intl_denso", "https://www.tiktok.com/@jakdenso"],
+    sameAs: ["https://www.instagram.com/jakarta_intl_denso", "https://www.tiktok.com/@jakartaintldensocirebon"],
   }
 
   return (
@@ -197,7 +197,7 @@ const Contact: FC = () => {
                 </SocialButton>
 
                 <SocialButton
-                  href="https://www.tiktok.com/@jakdenso"
+                  href="https://www.tiktok.com/@jakartaintldensocirebon"
                   className="bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black flex-1"
                   ariaLabel="Kunjungi TikTok kami"
                 >
