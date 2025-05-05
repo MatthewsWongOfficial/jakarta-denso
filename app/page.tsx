@@ -19,8 +19,8 @@ const HASH_TO_ID_MAP: Record<string, string> = {
   galeri: "galeri",
   ulasan: "ulasan",
   contact: "contact",
-  beranda: "",  // Added beranda mapping to empty string for top of page
-} as const
+  beranda: "", // Added beranda mapping to empty string for top of page
+}
 
 // Lazy load components with Next.js suspense boundaries
 const Services = dynamic(() => import("./components/Services"), {
@@ -69,6 +69,9 @@ const WhatsAppButton = dynamic(() => import("./components/WhatsAppButton"), {
   loading: () => null,
 })
 
+// Define the type for requestIdleCallback
+// type IdleRequestCallback = (deadline: { didTimeout: boolean; timeRemaining: () => number }) => void
+
 export default function Home() {
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
@@ -76,7 +79,7 @@ export default function Home() {
   const [initialHashProcessed, setInitialHashProcessed] = useState(false)
   const [isNavigating, setIsNavigating] = useState(false)
   const [isProgrammaticNavigation, setIsProgrammaticNavigation] = useState(false)
-  
+
   // Optimized intersection observer with better thresholds
   const observerOptions = useMemo(
     () => ({
@@ -84,7 +87,7 @@ export default function Home() {
       threshold: 0.1,
       rootMargin: "200px 0px",
     }),
-    []
+    [],
   )
 
   const [servicesRef, servicesInView] = useInView(observerOptions)
@@ -110,67 +113,67 @@ export default function Home() {
   // Fix for navigation from subdir to beranda
   useEffect(() => {
     if (!mounted) return
-    
+
     // Store current navigation timestamp
     const storeNavTime = () => {
-      sessionStorage.setItem('lastNavTime', Date.now().toString())
+      sessionStorage.setItem("lastNavTime", Date.now().toString())
     }
-    
+
     // Handle click on beranda link
     const handleBerandaClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement
-      const link = target.closest('a')
-      
+      const link = target.closest("a")
+
       if (!link) return
-      
-      const href = link.getAttribute('href')
+
+      const href = link.getAttribute("href")
       // Check if this is a beranda link
-      if (href === '/' || href === '/#beranda' || href === '#beranda') {
+      if (href === "/" || href === "/#beranda" || href === "#beranda") {
         // If we're already on home page just scroll to top
-        if (pathname === '/') {
+        if (pathname === "/") {
           e.preventDefault()
-          window.scrollTo({ top: 0, behavior: 'smooth' })
+          window.scrollTo({ top: 0, behavior: "smooth" })
           return
         }
-        
+
         // Coming from subdir - mark as programmatic navigation and store timestamp
         storeNavTime()
         setIsProgrammaticNavigation(true)
       }
     }
-    
-    document.addEventListener('click', handleBerandaClick)
-    return () => document.removeEventListener('click', handleBerandaClick)
+
+    document.addEventListener("click", handleBerandaClick)
+    return () => document.removeEventListener("click", handleBerandaClick)
   }, [mounted, pathname])
 
   // Check if we need to handle a programmatic navigation to beranda
   useEffect(() => {
     if (!mounted || !pathname) return
-    
+
     const checkProgrammaticNav = () => {
-      if (pathname === '/' && !isProgrammaticNavigation) {
-        const lastNavTime = sessionStorage.getItem('lastNavTime')
+      if (pathname === "/" && !isProgrammaticNavigation) {
+        const lastNavTime = sessionStorage.getItem("lastNavTime")
         const currentTime = Date.now()
-        
-        if (lastNavTime && (currentTime - parseInt(lastNavTime, 10)) < 2000) {
+
+        if (lastNavTime && currentTime - Number.parseInt(lastNavTime, 10) < 2000) {
           // This is likely a navigation from subdir to beranda that just completed
           // Clear the flag and scroll to top
-          sessionStorage.removeItem('lastNavTime')
-          window.scrollTo({ top: 0, behavior: 'auto' })
-          
+          sessionStorage.removeItem("lastNavTime")
+          window.scrollTo({ top: 0, behavior: "auto" })
+
           // Enable smooth scrolling again after a short delay
           setTimeout(() => {
-            const styleEl = document.createElement('style')
-            styleEl.textContent = 'html { scroll-behavior: smooth; }'
+            const styleEl = document.createElement("style")
+            styleEl.textContent = "html { scroll-behavior: smooth; }"
             document.head.appendChild(styleEl)
           }, 100)
         }
       }
     }
-    
+
     // Run once on initial mount
     checkProgrammaticNav()
-    
+
     // And also when isProgrammaticNavigation changes
     if (isProgrammaticNavigation) {
       setIsProgrammaticNavigation(false)
@@ -181,36 +184,41 @@ export default function Home() {
   const scrollToHash = useCallback((hash: string) => {
     if (!hash) return false
 
-    // Remove the # if it exists
-    const cleanHash = hash.startsWith("#") ? hash.substring(1) : hash
+    try {
+      // Remove the # if it exists
+      const cleanHash = hash.startsWith("#") ? hash.substring(1) : hash
 
-    // Special case for 'beranda' - scroll to top
-    if (cleanHash === 'beranda') {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      return true
-    }
+      // Special case for 'beranda' - scroll to top
+      if (cleanHash === "beranda") {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+        return true
+      }
 
-    // Look up the section ID in our mapping or use the hash directly
-    const id = HASH_TO_ID_MAP[cleanHash] || cleanHash
-    
-    // If id is empty string (top of page), scroll to top
-    if (id === '') {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      return true
-    }
+      // Look up the section ID in our mapping or use the hash directly
+      const id = HASH_TO_ID_MAP[cleanHash] || cleanHash
 
-    const element = document.getElementById(id)
-    if (element) {
-      // Use requestAnimationFrame for smoother scrolling
-      requestAnimationFrame(() => {
-        element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
+      // If id is empty string (top of page), scroll to top
+      if (id === "") {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+        return true
+      }
+
+      const element = document.getElementById(id)
+      if (element) {
+        // Use requestAnimationFrame for smoother scrolling
+        requestAnimationFrame(() => {
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          })
         })
-      })
-      return true
+        return true
+      }
+      return false
+    } catch (error) {
+      console.error("Error scrolling to hash:", error)
+      return false
     }
-    return false
   }, [])
 
   // Handle initial hash on page load
@@ -223,7 +231,7 @@ export default function Home() {
       if (hash) {
         // Show loading state while attempting to scroll
         setIsNavigating(true)
-        
+
         // First quick attempt
         const scrolled = scrollToHash(hash)
 
@@ -263,7 +271,7 @@ export default function Home() {
         setIsNavigating(true)
         setAllComponentsVisible(true) // Ensure all components load for hash navigation
         const scrolled = scrollToHash(hash)
-        
+
         // If initial scroll fails, try again after components have loaded
         if (!scrolled) {
           setTimeout(() => {
@@ -275,7 +283,7 @@ export default function Home() {
         }
       } else {
         // No hash means we should scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.scrollTo({ top: 0, behavior: "smooth" })
         setIsNavigating(false)
       }
     }
@@ -287,19 +295,19 @@ export default function Home() {
   // Handle browser back button and popstate
   useEffect(() => {
     if (!mounted) return
-    
+
     const handlePopState = () => {
       // When using back button to navigate to home
       if (pathname === "/" && !window.location.hash) {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.scrollTo({ top: 0, behavior: "smooth" })
       } else if (window.location.hash) {
         // When back button navigates to a hash
         scrollToHash(window.location.hash)
       }
     }
 
-    window.addEventListener('popstate', handlePopState)
-    return () => window.removeEventListener('popstate', handlePopState)
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
   }, [mounted, pathname, scrollToHash])
 
   // Show all components immediately if there's a hash in the URL
@@ -340,29 +348,47 @@ export default function Home() {
   }, [mounted])
 
   useEffect(() => {
-    if (!mounted) return;
-  
-    const loadWhatsApp = () => setShouldLoadWhatsApp(true);
-  
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      (window.requestIdleCallback as (callback: IdleRequestCallback, options?: { timeout: number }) => void)(
-        loadWhatsApp,
-        { timeout: 3000 }
-      );
+    if (!mounted) return
+
+    const loadWhatsApp = () => setShouldLoadWhatsApp(true)
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      // Use proper typing for requestIdleCallback
+      interface RequestIdleCallbackOptions {
+        timeout: number
+      }
+
+      interface RequestIdleCallbackDeadline {
+        didTimeout: boolean
+        timeRemaining: () => number
+      }
+
+      type RequestIdleCallbackHandle = number
+      type RequestIdleCallbackFn = (deadline: RequestIdleCallbackDeadline) => void
+
+      // Add these to the Window interface
+      interface MyWindow extends Window {
+        requestIdleCallback: (
+          callback: RequestIdleCallbackFn,
+          opts?: RequestIdleCallbackOptions,
+        ) => RequestIdleCallbackHandle
+      }
+      // Use the properly typed window
+      ;(window as unknown as MyWindow).requestIdleCallback(loadWhatsApp, { timeout: 3000 })
     } else {
-      setTimeout(loadWhatsApp, 3000);
+      setTimeout(loadWhatsApp, 3000)
     }
-  }, [mounted]);
+  }, [mounted])
 
   return (
     <main className="min-h-screen bg-white">
       {isNavigating && <Loading />}
-      
+
       <Navbar />
       <Hero />
 
       <div ref={servicesRef} id="services">
-        {(mounted && (servicesInView || allComponentsVisible)) && (
+        {mounted && (servicesInView || allComponentsVisible) && (
           <Suspense fallback={<Loading />}>
             <section
               className="content-visibility-auto"
@@ -378,7 +404,7 @@ export default function Home() {
       </div>
 
       <div ref={midSectionRef}>
-        {(mounted && (midSectionInView || allComponentsVisible)) && (
+        {mounted && (midSectionInView || allComponentsVisible) && (
           <Suspense fallback={<Loading />}>
             <section
               className="content-visibility-auto"
@@ -396,7 +422,7 @@ export default function Home() {
       </div>
 
       <div ref={bottomSectionRef}>
-        {(mounted && (bottomSectionInView || allComponentsVisible)) && (
+        {mounted && (bottomSectionInView || allComponentsVisible) && (
           <Suspense fallback={<Loading />}>
             <section
               className="content-visibility-auto"
