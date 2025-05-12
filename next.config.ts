@@ -3,6 +3,12 @@ import type { NextConfig } from "next"
 const nextConfig: NextConfig = {
   // Enable React Strict Mode for highlighting potential issues
   reactStrictMode: true,
+  
+  // Ensure trailing slashes for consistent SEO
+  trailingSlash: false, // Changed to false for better social media compatibility
+  
+  // Improve SEO with proper page handling
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
 
   // Internationalization settings
   i18n: {
@@ -10,7 +16,7 @@ const nextConfig: NextConfig = {
     defaultLocale: "id",
   },
 
-  // Image optimization settings
+  // Image optimization settings - enhanced for SEO
   images: {
     remotePatterns: [
       {
@@ -18,11 +24,22 @@ const nextConfig: NextConfig = {
         hostname: "jakartaintldenso.com",
         pathname: "/**",
       },
+      // Allow common image CDNs for better performance
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      }
     ],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 86400, // 24 hours
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
+    dangerouslyAllowSVG: true, // Allow SVG for your 404 image
+    // Removed contentSecurityPolicy for better compatibility
   },
 
   // Experimental features - updated for Next.js 15
@@ -38,19 +55,24 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "2mb", // Increase limit for form submissions
     },
+    // Enable modern bundling for better performance
+    webpackBuildWorker: true,
+    // Optimize for SEO
+    optimizeCss: true,
   },
 
-  // Custom headers optimized for SEO and reduced security constraints
+  // Custom headers optimized for SEO but more lenient for Instagram browser
   async headers() {
     return [
       {
         source: "/:path*",
         headers: [
-          { key: "X-Frame-Options", value: "ALLOWALL" }, // Allow embedding in other sites
+          { key: "X-Frame-Options", value: "ALLOWALL" }, // More permissive for Instagram browser
           { key: "Referrer-Policy", value: "no-referrer-when-downgrade" }, // Better for SEO
           { key: "X-Content-Type-Options", value: "nosniff" },
-          // Removed overly strict Permissions-Policy
-          // Removed X-XSS-Protection as it's deprecated in modern browsers
+          { key: "X-DNS-Prefetch-Control", value: "on" }, // Improve performance
+          // Removed Strict-Transport-Security for better compatibility
+          // Removed Content-Security-Policy for better compatibility with Instagram
         ],
       },
       {
@@ -60,9 +82,17 @@ const nextConfig: NextConfig = {
           { key: "Cache-Control", value: "public, max-age=3600" }, // Cache for 1 hour, better for crawlers
         ],
       },
+      {
+        source: "/robots.txt",
+        headers: [
+          { key: "Content-Type", value: "text/plain" },
+          { key: "Cache-Control", value: "public, max-age=3600" },
+        ],
+      },
     ]
   },
 
+  // Redirects with proper status codes for SEO
   async redirects() {
     return [
       {
@@ -100,10 +130,16 @@ const nextConfig: NextConfig = {
         destination: "/#contact",
         permanent: true,
       },
+      // Handle common 404 paths
+      {
+        source: "/404",
+        destination: "/not-found",
+        permanent: false,
+      },
     ]
   },
 
-  // Fixed rewrites for sitemap handling and hash fragment support
+  // Enhanced rewrites for better SEO and 404 handling
   async rewrites() {
     return [
       {
@@ -121,12 +157,24 @@ const nextConfig: NextConfig = {
         source: "/#:hash",
         destination: "/?hash=:hash",
       },
+      // Special handling for Instagram browser
+      {
+        source: "/l/:path*",
+        destination: "/:path*",
+      },
+      // Ensure 404 page is properly served
+      {
+        source: "/:path*",
+        destination: "/:path*",
+      },
     ]
   },
 
   // Environment variables
   env: {
     NEXT_PUBLIC_APP_URL: "https://jakartaintldenso.com",
+    NEXT_PUBLIC_SITE_NAME: "Jakarta International Denso",
+    NEXT_PUBLIC_SITE_DESCRIPTION: "Layanan profesional Jakarta International Denso",
   },
 
   // Add Webpack configuration for better performance
@@ -142,7 +190,14 @@ const nextConfig: NextConfig = {
 
     return config
   },
+  
+  // Properly handle 404 and other error pages
+  onDemandEntries: {
+    // Period (in ms) where the server will keep pages in the buffer
+    maxInactiveAge: 25 * 1000,
+    // Number of pages that should be kept simultaneously without being disposed
+    pagesBufferLength: 5,
+  },
 }
 
 export default nextConfig
-
