@@ -130,11 +130,10 @@ const nextConfig: NextConfig = {
         destination: "/#contact",
         permanent: true,
       },
-      // Handle common 404 paths
       {
-        source: "/404",
-        destination: "/not-found",
-        permanent: false,
+        source: "/BlogPreview",
+        destination: "/#BlogPreview",
+        permanent: true,
       },
     ]
   },
