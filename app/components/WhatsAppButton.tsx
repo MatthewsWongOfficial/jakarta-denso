@@ -25,25 +25,33 @@ export default function WhatsAppButton() {
           transform ${showText ? 'translate-x-0' : 'translate-x-2 group-hover:translate-x-0'}`}>
           Kunjugi Kami
         </span>
-        <div className="relative w-16 h-16">
-          {/* Shadow element */}
-          <div className="absolute inset-0 rounded-full bg-black/20 blur-md transform-gpu translate-y-1" />
-          
-          {/* Image container */}
-          <div className="relative w-full h-full rounded-full bg-white/5 transform-gpu
-            hover:scale-105 
-            active:scale-95
-            transition-transform duration-200
-            will-change-transform">
-            <Image
-              src="/images/gmaps-logo.png"
-              alt="Google Maps"
-              fill
-              sizes="64px"
-              className="object-contain transform-gpu"
-            />
-          </div>
-        </div>
+       <a
+  href="https://g.co/kgs/EjRq4kU"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="relative w-16 h-16 transform-gpu
+    hover:scale-105 
+    active:scale-95
+    transition-transform duration-200
+    rounded-full
+    will-change-transform"
+  aria-label="Open in Google Maps"
+>
+  {/* Shadow element */}
+  <div className="absolute inset-0 rounded-full bg-black/20 blur-md transform-gpu translate-y-1" />
+  
+  {/* Image container */}
+  <div className="relative w-full h-full rounded-full bg-white/5 transform-gpu">
+    <Image
+      src="/images/gmaps-logo.png"
+      alt="Google Maps"
+      fill
+      sizes="64px"
+      className="object-contain transform-gpu"
+    />
+  </div>
+</a>
+
       </div>
 
       {/* WhatsApp Button */}
