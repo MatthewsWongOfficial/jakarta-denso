@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import dynamic from "next/dynamic"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { MDXRemote, type MDXRemoteSerializeResult } from "next-mdx-remote"
 import type { MDXRemoteProps } from "next-mdx-remote"
 import { Suspense } from "react"
@@ -223,20 +223,10 @@ const BlogPost: React.FC = () => {
   const [post, setPost] = useState<BlogPost | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
-  const [isScrolled, setIsScrolled] = useState<boolean>(false)
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
   const [recentPosts] = useState<BlogLink[]>([])
   const router = useRouter()
-
-  const handleScroll = useCallback((): void => {
-    setIsScrolled(window.scrollY > 100)
-  }, [])
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [handleScroll])
-
+  
   useEffect(() => {
     const fetchPost = async (): Promise<void> => {
       setIsLoading(true)
@@ -647,29 +637,6 @@ const BlogPost: React.FC = () => {
           </div>
         </article>
       </main>
-
-      {/* Floating Share Button */}
-      <AnimatePresence>
-        {isScrolled && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ duration: 0.3 }}
-            className="fixed bottom-24 right-6 z-50"
-          >
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={handleShare}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              aria-label="Share post"
-            >
-              <Share2 className="w-6 h-6" />
-            </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <Footer />
 

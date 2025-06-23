@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   keywords: [
     "bengkel terbaik cirebon",
     "bengkel ac cirebon",
-    "jakarta international denso",
+    "jakarta intl denso",
     "bengkel mobil cirebon",
     "service ac mobil cirebon",
     "cuci mobil cirebon",
@@ -220,7 +220,7 @@ const localBusinessSchema = {
       },
       datePublished: "2024-01-15",
       reviewBody:
-        "Jakarta International Denso merupakan pilihan tepat bagi Anda yang sedang mencari jasa cuci mobil terbaik di Cirebon. Dengan pengalaman bertahun-tahun, mereka telah membuktikan diri sebagai penyedia layanan cuci mobil terpercaya.",
+        "Jakarta Intl Denso merupakan pilihan tepat bagi Anda yang sedang mencari jasa cuci mobil terbaik di Cirebon. Dengan pengalaman bertahun-tahun, mereka telah membuktikan diri sebagai penyedia layanan cuci mobil terpercaya.",
     },
   ],
   aggregateRating: {
@@ -247,37 +247,77 @@ const localBusinessSchema = {
   sameAs: ["https://www.instagram.com/jakarta_intl_denso", "https://www.tiktok.com/@jakartaintldensocirebon"],
 }
 
-// Structured data for FAQ
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
+  "mainEntity": [
     {
       "@type": "Question",
-      name: "Apa saja layanan bengkel Jakarta Int'l Denso Cirebon?",
-      acceptedAnswer: {
+      "name": "Apa saja layanan bengkel Jakarta Int'l Denso Cirebon?",
+      "acceptedAnswer": {
         "@type": "Answer",
-        text: "Kami menyediakan layanan lengkap meliputi service AC mobil, cuci mobil, salon mobil, poles mobil, dan detailing mobil dengan teknisi berpengalaman.",
-      },
+        "text": "Kami menyediakan layanan lengkap meliputi service AC mobil, cuci mobil, salon mobil, poles mobil, dan detailing mobil dengan teknisi berpengalaman."
+      }
     },
     {
       "@type": "Question",
-      name: "Berapa lama waktu service AC mobil di Jakarta Int'l Denso?",
-      acceptedAnswer: {
+      "name": "Berapa lama waktu service AC mobil di Jakarta Int'l Denso?",
+      "acceptedAnswer": {
         "@type": "Answer",
-        text: "Waktu service AC mobil bervariasi tergantung kerusakan, mulai dari 1-3 jam untuk perawatan rutin hingga 1 hari untuk perbaikan kompresor.",
-      },
+        "text": "Waktu service AC mobil bervariasi tergantung kerusakan, mulai dari 1-3 jam untuk perawatan rutin hingga 1 hari untuk perbaikan kompresor."
+      }
     },
     {
       "@type": "Question",
-      name: "Apakah Jakarta Int'l Denso buka hari Minggu?",
-      acceptedAnswer: {
+      "name": "Apakah Jakarta Int'l Denso buka hari Minggu?",
+      "acceptedAnswer": {
         "@type": "Answer",
-        text: "Ya, kami buka setiap hari Minggu dari jam 08:00 sampai 16:00 WIB.",
-      },
+        "text": "Ya, kami buka setiap hari Minggu dari jam 08:00 sampai 16:00 WIB."
+      }
     },
-  ],
+    {
+      "@type": "Question",
+      "name": "Di mana lokasi Jakarta Int'l Denso Cirebon?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Kami berlokasi di Jl. Garuda No 2, Cirebon, Jawa Barat. Lokasi mudah dijangkau dan strategis."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Apakah perlu reservasi sebelum datang ke bengkel?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Tidak wajib, namun kami menyarankan untuk melakukan reservasi agar pelayanan lebih cepat dan nyaman. Hubungi kami melalui WhatsApp atau telepon."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Apakah tersedia ruang tunggu untuk pelanggan?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ya, kami menyediakan ruang tunggu yang nyaman dengan fasilitas WiFi dan minuman untuk pelanggan yang menunggu service selesai."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Jenis kendaraan apa saja yang dapat diservice?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Kami melayani berbagai jenis kendaraan mulai dari mobil kecil (city car), SUV, MPV, hingga mobil premium."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Apakah menggunakan suku cadang original?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ya, kami selalu menggunakan suku cadang original atau OEM untuk menjaga kualitas dan ketahanan kendaraan Anda."
+      }
+    }
+  ]
 }
+
 
 export default function RootLayout({
   children,

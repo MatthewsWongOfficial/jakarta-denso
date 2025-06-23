@@ -161,19 +161,14 @@ const nextConfig: NextConfig = {
         source: "/l/:path*",
         destination: "/:path*",
       },
-      // Ensure 404 page is properly served
-      {
-        source: "/:path*",
-        destination: "/:path*",
-      },
     ]
   },
 
   // Environment variables
   env: {
     NEXT_PUBLIC_APP_URL: "https://jakartaintldenso.com",
-    NEXT_PUBLIC_SITE_NAME: "Jakarta International Denso",
-    NEXT_PUBLIC_SITE_DESCRIPTION: "Layanan profesional Jakarta International Denso",
+    NEXT_PUBLIC_SITE_NAME: "Jakarta Intl Denso Cirebon - AC Mobil",
+    NEXT_PUBLIC_SITE_DESCRIPTION: "Layanan profesional Jakarta Intl Denso di Cirebon",
   },
 
   // Add Webpack configuration for better performance

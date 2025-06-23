@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   keywords: [
     "bengkel terbaik cirebon",
     "bengkel ac cirebon",
-    "jakarta international denso",
+    "jakarta intl denso",
     "bengkel mobil cirebon",
     "service ac mobil cirebon",
     "cuci mobil cirebon",
@@ -220,7 +220,7 @@ const localBusinessSchema = {
       },
       datePublished: "2024-01-15",
       reviewBody:
-        "Jakarta International Denso merupakan pilihan tepat bagi Anda yang sedang mencari jasa cuci mobil terbaik di Cirebon. Dengan pengalaman bertahun-tahun, mereka telah membuktikan diri sebagai penyedia layanan cuci mobil terpercaya.",
+        "Jakarta Intl Denso merupakan pilihan tepat bagi Anda yang sedang mencari jasa cuci mobil terbaik di Cirebon. Dengan pengalaman bertahun-tahun, mereka telah membuktikan diri sebagai penyedia layanan cuci mobil terpercaya.",
     },
   ],
   aggregateRating: {
