@@ -23,7 +23,7 @@ export default function WhatsAppButton() {
           relative overflow-hidden
           transition-all duration-500 ease-out
           transform ${showText ? 'translate-x-0' : 'translate-x-2 group-hover:translate-x-0'}`}>
-          Kunjugi Kami
+          Kunjungi Kami
         </span>
        <a
   href="https://maps.app.goo.gl/awMB6uDFkX3MnPdj7"
