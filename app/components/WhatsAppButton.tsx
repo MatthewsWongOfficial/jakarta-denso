@@ -26,7 +26,7 @@ export default function WhatsAppButton() {
           Kunjugi Kami
         </span>
        <a
-  href="https://g.co/kgs/EjRq4kU"
+  href="https://maps.app.goo.gl/awMB6uDFkX3MnPdj7"
   target="_blank"
   rel="noopener noreferrer"
   className="relative w-16 h-16 transform-gpu
