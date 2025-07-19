@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next"
 import BlogPageClient from "./BlogPageClient"
 
 export const metadata: Metadata = {
-  title: "Blog Otomotif | Jakarta Int'l Denso Cirebon",
+  title: "Blog Otomotif",
   description:
     "Temukan tips dan informasi terbaru seputar perawatan mobil, cuci mobil, dan layanan otomotif di Cirebon.",
   keywords: [
