@@ -107,30 +107,16 @@ const Navbar: React.FC = () => {
     }
   }, [dropdownRef])
 
-  // Fix scroll behavior when navigating between pages
+  // Reset states on route change
   useEffect(() => {
-    const handleRouteChange = () => {
-      // Reset dropdown and menu states on route change
-      setIsOpen(false)
-      setIsServiceOpen(false)
-      setActiveServiceDropdown(false)
-
-      // Ensure body scroll is enabled
-      document.body.style.overflow = ""
-      document.documentElement.style.overflow = ""
-
-      // Scroll to top when navigating to home from service pages
-      if (pathname === "/" && isServicePage) {
-        window.scrollTo(0, 0)
-      }
-    }
-
-    handleRouteChange()
-
-    return () => {
-      // Clean up any event listeners if needed
-    }
-  }, [pathname, isServicePage])
+    setIsOpen(false)
+    setIsServiceOpen(false)
+    setActiveServiceDropdown(false)
+    
+    // Ensure body scroll is enabled
+    document.body.style.overflow = ""
+    document.documentElement.style.overflow = ""
+  }, [pathname])
 
   // Toggle body scroll when mobile menu is open
   useEffect(() => {
@@ -145,86 +131,41 @@ const Navbar: React.FC = () => {
     }
   }, [isOpen])
 
-  const getNavHref = useCallback(
-    (item: NavItem): string => {
-      if (isBlogPage && item.href.startsWith("/#")) {
-        return `/${item.href.slice(2)}`
-      }
-      return item.href
-    },
-    [isBlogPage],
-  )
-
-  const scrollToElement = (id: string) => {
-    const element = document.getElementById(id)
-    if (element) {
-      // Add a small delay to ensure smooth scrolling after state changes
-      setTimeout(() => {
-        element.scrollIntoView({ behavior: "smooth" })
-      }, 100)
-    }
-  }
-
   const handleNavClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-      e.preventDefault()
-
       // Close mobile menu and dropdowns
       setIsOpen(false)
       setIsServiceOpen(false)
       setActiveServiceDropdown(false)
-
-      if (href === "/" && pathname !== "/") {
-        // Navigate to home from another page
-        router.push(href)
-      } else if (href === "/" && pathname === "/") {
-        // Already on home, scroll to top
-        window.scrollTo({ top: 0, behavior: "smooth" })
-      } else if (href.includes("#") && (pathname === "/" || (isBlogPage && href.startsWith("/")))) {
-        // Handle anchor links
-        const id = href.split("#")[1]
-        scrollToElement(id)
-
-        // Update URL without page reload
-        if (pathname === "/") {
-          window.history.pushState({}, "", `/#${id}`)
-        } else if (isBlogPage) {
-          window.history.pushState({}, "", `/${id}`)
-        }
-      } else {
-        // Regular navigation
-        router.push(href)
-      }
     },
-    [router, pathname, isBlogPage],
+    [],
   )
 
   const handleServiceItemClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
       e.preventDefault()
-      e.stopPropagation() // Prevent event bubbling
+      e.stopPropagation()
 
       // Close menus before navigation
       setIsServiceOpen(false)
       setIsOpen(false)
       setActiveServiceDropdown(false)
 
-      // Small delay to ensure animations complete
-      setTimeout(() => {
-        router.push(href)
-      }, 10)
+      // Navigate to the service page
+      router.push(href)
     },
     [router],
   )
 
   const toggleMobileServiceDropdown = useCallback(
     (e: React.MouseEvent) => {
-      e.stopPropagation() // Prevent event bubbling
+      e.stopPropagation()
       setActiveServiceDropdown(!activeServiceDropdown)
     },
     [activeServiceDropdown],
   )
 
+  // Determine if navbar should have background
   const useScrolledStyle = scrolled || isBlogPage || !isHomePage || isServicePage
 
   // Animation variants for mobile menu
@@ -274,10 +215,7 @@ const Navbar: React.FC = () => {
   }
 
   return (
-    <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        useScrolledStyle ? "bg-white shadow-md py-2" : "bg-transparent py-4"
-      }`}
+    <nav className="fixed w-full z-50 bg-white shadow-md py-2 transition-all duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
@@ -292,11 +230,7 @@ const Navbar: React.FC = () => {
                 sizes="(max-width: 640px) 48px, 64px"
               />
             </div>
-            <span
-              className={`text-lg sm:text-2xl font-extrabold tracking-tight ${
-                useScrolledStyle ? "text-blue-900" : "text-white"
-              }`}
-            >
+            <span className="text-lg sm:text-2xl font-extrabold tracking-tight text-blue-900">
               Jakarta Intl Denso
             </span>
           </div>
@@ -310,11 +244,7 @@ const Navbar: React.FC = () => {
                     <button
                       onClick={() => setIsServiceOpen(!isServiceOpen)}
                       onMouseEnter={() => setIsServiceOpen(true)}
-                      className={`group inline-flex items-center px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
-                        useScrolledStyle
-                          ? "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
-                          : "text-white hover:bg-white/20"
-                      }`}
+                      className="group inline-flex items-center px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-700"
                       aria-expanded={isServiceOpen}
                       aria-haspopup="true"
                     >
@@ -327,13 +257,9 @@ const Navbar: React.FC = () => {
                     </button>
                   ) : (
                     <Link
-                      href={getNavHref(item)}
-                      onClick={(e) => handleNavClick(e, getNavHref(item))}
-                      className={`px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
-                        useScrolledStyle
-                          ? "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
-                          : "text-white hover:bg-white/20"
-                      }`}
+                      href={item.href}
+                      onClick={(e) => handleNavClick(e, item.href)}
+                      className="px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-700"
                     >
                       {item.name}
                     </Link>
@@ -368,12 +294,7 @@ const Navbar: React.FC = () => {
                 href="https://wa.me/+62819647333"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`ml-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 
-                  ${
-                    useScrolledStyle
-                      ? "bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900"
-                      : "bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800"
-                  } text-white shadow-lg hover:shadow-xl`}
+                className="ml-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white shadow-lg hover:shadow-xl"
               >
                 Hubungi Kami
               </Link>
@@ -385,9 +306,7 @@ const Navbar: React.FC = () => {
             {/* Quick call button on mobile navbar */}
             <a
               href="tel:+62819647333"
-              className={`mr-1 p-2 rounded-full ${
-                useScrolledStyle ? "bg-blue-50 text-blue-600" : "bg-white/20 text-white"
-              } transition-all duration-300`}
+              className="mr-1 p-2 rounded-full bg-blue-50 text-blue-600 transition-all duration-300"
               aria-label="Call us"
             >
               <Phone className="h-5 w-5" />
@@ -397,9 +316,7 @@ const Navbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className={`inline-flex items-center justify-center p-3 rounded-lg ${
-                useScrolledStyle ? "text-gray-700 hover:bg-gray-100" : "text-white hover:bg-white/20"
-              } z-50 relative ${isOpen ? "opacity-0" : ""}`}
+              className="inline-flex items-center justify-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 z-50 relative"
               aria-expanded={isOpen}
               aria-label={isOpen ? "Close menu" : "Open menu"}
             >
@@ -433,7 +350,7 @@ const Navbar: React.FC = () => {
               </button>
             </div>
 
-            {/* Logo and branding in mobile menu - moved higher */}
+            {/* Logo and branding in mobile menu */}
             <div className="pt-14 pb-3 px-6">
               <div className="flex items-center gap-4 mb-3">
                 <div className="relative h-12 w-12">
@@ -512,8 +429,8 @@ const Navbar: React.FC = () => {
                       </div>
                     ) : (
                       <Link
-                        href={getNavHref(item)}
-                        onClick={(e) => handleNavClick(e, getNavHref(item))}
+                        href={item.href}
+                        onClick={(e) => handleNavClick(e, item.href)}
                         className="flex items-center justify-between px-4 py-3.5 text-base font-medium text-gray-800 hover:text-blue-700 transition-colors duration-200 rounded-lg hover:bg-blue-50/50"
                       >
                         {item.name}
@@ -533,7 +450,7 @@ const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* Improved mobile contact options with multiple buttons */}
+            {/* Mobile contact options */}
             <motion.div
               variants={itemVariants}
               className="px-6 pb-6 pt-2 bg-gradient-to-b from-white/0 via-white to-white"
@@ -594,4 +511,3 @@ const Navbar: React.FC = () => {
 }
 
 export default Navbar
-
