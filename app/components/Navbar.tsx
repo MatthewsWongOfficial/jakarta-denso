@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useEffect, useState, useRef, useCallback } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { usePathname, useRouter } from "next/navigation"
-import { Menu, X, ChevronDown, Car, SprayCanIcon as Spray, PenToolIcon as Tool, Phone } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import type React from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, X, ChevronDown, Car, SprayCanIcon as Spray, PenToolIcon as Tool, Phone } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface NavItem {
-  name: string
-  href: string
-  hasDropdown?: boolean
+  name: string;
+  href: string;
+  hasDropdown?: boolean;
 }
 
 interface ServiceItem {
-  name: string
-  href: string
-  icon: React.ElementType
-  description: string
+  name: string;
+  href: string;
+  icon: React.ElementType;
+  description: string;
 }
 
 const serviceItems: ServiceItem[] = [
@@ -40,7 +40,7 @@ const serviceItems: ServiceItem[] = [
     icon: Tool,
     description: "Perbaikan dan perawatan AC & mesin oleh teknisi ahli",
   },
-]
+];
 
 const navItems: NavItem[] = [
   { name: "Beranda", href: "/" },
@@ -51,122 +51,108 @@ const navItems: NavItem[] = [
   { name: "Ulasan", href: "/#ulasan" },
   { name: "Blog", href: "/#BlogPreview" },
   { name: "Kontak", href: "/#contact" },
-]
+];
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [scrolled, setScrolled] = useState<boolean>(false)
-  const [isServiceOpen, setIsServiceOpen] = useState<boolean>(false)
-  const [activeServiceDropdown, setActiveServiceDropdown] = useState<boolean>(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
-  const mobileDropdownRef = useRef<HTMLDivElement>(null)
-  const pathname = usePathname()
-  const router = useRouter()
-  const isBlogPage = pathname?.startsWith("/blogs")
-  const isHomePage = pathname === "/"
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [scrolled, setScrolled] = useState<boolean>(false);
+  const [isServiceOpen, setIsServiceOpen] = useState<boolean>(false);
+  const [activeServiceDropdown, setActiveServiceDropdown] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const mobileDropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // Determine if navbar should have background, combining all conditions.
+  const isBlogPage = pathname?.startsWith("/blogs");
+  const isHomePage = pathname === "/";
   const isServicePage =
     pathname?.includes("/cuci-mobil") ||
     pathname?.includes("/salon-mobil") ||
-    pathname?.includes("/service-ac-dan-mesin")
+    pathname?.includes("/service-ac-dan-mesin");
+
+  const useScrolledStyle = scrolled || isBlogPage || !isHomePage || isServicePage;
 
   // Use throttled scroll handler for better performance
   useEffect(() => {
-    let ticking = false
+    let ticking = false;
 
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 10)
-          ticking = false
-        })
-        ticking = true
+          setScrolled(window.scrollY > 10);
+          ticking = false;
+        });
+        ticking = true;
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
-
+    window.addEventListener("scroll", handleScroll, { passive: true });
     // Check initial scroll position
-    handleScroll()
+    handleScroll();
 
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   // Handle outside clicks for desktop dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsServiceOpen(false)
+        setIsServiceOpen(false);
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [dropdownRef])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []); // Empty dependency array is correct here as the ref doesn't change.
 
   // Reset states on route change
   useEffect(() => {
-    setIsOpen(false)
-    setIsServiceOpen(false)
-    setActiveServiceDropdown(false)
-    
-    // Ensure body scroll is enabled
-    document.body.style.overflow = ""
-    document.documentElement.style.overflow = ""
-  }, [pathname])
+    setIsOpen(false);
+    setIsServiceOpen(false);
+    setActiveServiceDropdown(false);
+    document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
+  }, [pathname]);
 
   // Toggle body scroll when mobile menu is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = ""
+      document.body.style.overflow = "";
     }
-
     return () => {
-      document.body.style.overflow = ""
-    }
-  }, [isOpen])
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
-  const handleNavClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-      // Close mobile menu and dropdowns
-      setIsOpen(false)
-      setIsServiceOpen(false)
-      setActiveServiceDropdown(false)
-    },
-    [],
-  )
+  // Removed unnecessary useCallback as the function doesn't depend on external state
+  const handleNavClick = () => {
+    // Close mobile menu and dropdowns
+    setIsOpen(false);
+    setIsServiceOpen(false);
+    setActiveServiceDropdown(false);
+  };
 
-  const handleServiceItemClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-      e.preventDefault()
-      e.stopPropagation()
+  // Removed unnecessary useCallback as the function doesn't depend on external state
+  const handleServiceItemClick = (href: string) => {
+    // Close menus before navigation
+    setIsServiceOpen(false);
+    setIsOpen(false);
+    setActiveServiceDropdown(false);
 
-      // Close menus before navigation
-      setIsServiceOpen(false)
-      setIsOpen(false)
-      setActiveServiceDropdown(false)
+    // Navigate to the service page
+    router.push(href);
+  };
 
-      // Navigate to the service page
-      router.push(href)
-    },
-    [router],
-  )
-
-  const toggleMobileServiceDropdown = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation()
-      setActiveServiceDropdown(!activeServiceDropdown)
-    },
-    [activeServiceDropdown],
-  )
-
-  // Determine if navbar should have background
-  const useScrolledStyle = scrolled || isBlogPage || !isHomePage || isServicePage
+  const toggleMobileServiceDropdown = useCallback(() => {
+    setActiveServiceDropdown((prev) => !prev);
+  }, []);
 
   // Animation variants for mobile menu
   const mobileMenuVariants = {
@@ -189,13 +175,13 @@ const Navbar: React.FC = () => {
         staggerDirection: -1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: -20 },
     visible: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -10 },
-  }
+  };
 
   const serviceDropdownVariants = {
     hidden: { opacity: 0, height: 0 },
@@ -212,11 +198,10 @@ const Navbar: React.FC = () => {
       height: 0,
       transition: { duration: 0.2 },
     },
-  }
+  };
 
   return (
-    <nav className="fixed w-full z-50 bg-white shadow-md py-2 transition-all duration-300"
-    >
+    <nav className={`fixed w-full z-50 py-2 transition-all duration-300 ${useScrolledStyle ? "bg-white shadow-md" : "bg-transparent"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           <div className="flex items-center gap-4">
@@ -258,7 +243,7 @@ const Navbar: React.FC = () => {
                   ) : (
                     <Link
                       href={item.href}
-                      onClick={(e) => handleNavClick(e, item.href)}
+                      onClick={handleNavClick}
                       className="px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-700"
                     >
                       {item.name}
@@ -275,7 +260,7 @@ const Navbar: React.FC = () => {
                         <Link
                           key={service.name}
                           href={service.href}
-                          onClick={(e) => handleServiceItemClick(e, service.href)}
+                          onClick={() => handleServiceItemClick(service.href)}
                           className="flex items-start space-x-4 p-4 rounded-lg hover:bg-blue-50 transition-colors duration-200"
                         >
                           <service.icon className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" />
@@ -410,7 +395,7 @@ const Navbar: React.FC = () => {
                                 <motion.div key={service.name} variants={itemVariants} custom={idx}>
                                   <Link
                                     href={service.href}
-                                    onClick={(e) => handleServiceItemClick(e, service.href)}
+                                    onClick={() => handleServiceItemClick(service.href)}
                                     className="flex items-start space-x-3 p-3 my-1 rounded-xl bg-blue-50/80 hover:bg-blue-100 transition-colors duration-200"
                                   >
                                     <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
@@ -430,7 +415,7 @@ const Navbar: React.FC = () => {
                     ) : (
                       <Link
                         href={item.href}
-                        onClick={(e) => handleNavClick(e, item.href)}
+                        onClick={handleNavClick}
                         className="flex items-center justify-between px-4 py-3.5 text-base font-medium text-gray-800 hover:text-blue-700 transition-colors duration-200 rounded-lg hover:bg-blue-50/50"
                       >
                         {item.name}
@@ -465,7 +450,7 @@ const Navbar: React.FC = () => {
                 </a>
                 <Link
                   href="/#contact"
-                  onClick={(e) => handleNavClick(e, "/#contact")}
+                  onClick={handleNavClick}
                   className="flex items-center justify-center gap-2 py-3 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl text-center transition-all duration-300"
                 >
                   <svg
@@ -490,7 +475,7 @@ const Navbar: React.FC = () => {
                 href="https://wa.me/+62819647333"
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => setIsOpen(false)}
+                onClick={handleNavClick}
                 className="flex items-center justify-center gap-2 w-full py-3.5 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 rounded-xl text-center transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -507,7 +492,7 @@ const Navbar: React.FC = () => {
         )}
       </AnimatePresence>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
