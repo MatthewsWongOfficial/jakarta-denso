@@ -94,7 +94,7 @@ export default function Hero() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Link
-                href="tel:+62123456789"
+                href="tel:+62819647333"
                 className="inline-flex items-center justify-center px-8 py-4 
                   bg-[#ed3f36] hover:bg-[#d73530] text-white font-semibold rounded-lg
                   transition-colors shadow-lg hover:shadow-xl transform hover:scale-105
@@ -139,14 +139,12 @@ export default function Hero() {
             {/* Main Workshop Image */}
             <div className="relative h-96 lg:h-full rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/images/hero.avif"
+                src="/images/jakartaintldenso-cover.jpg"
                 alt="Teknisi profesional sedang memperbaiki AC mobil di bengkel kami"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 priority
                 quality={95}
-                placeholder="blur"
-                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+I="
                 className="object-cover"
               />
               
