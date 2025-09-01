@@ -101,11 +101,6 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: "/price-list",
-        destination: "/#price-list",
-        permanent: true,
-      },
-      {
         source: "/kelebihan-kami",
         destination: "/#kelebihan-kami",
         permanent: true,

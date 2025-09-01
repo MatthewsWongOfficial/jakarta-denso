@@ -275,7 +275,7 @@ const FAQSection: React.FC = () => {
             <p className="text-gray-600 mb-4">Masih punya pertanyaan?</p>
             <a
               href="https://wa.me/62819647333"
-              className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium rounded-full transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 shadow-md hover:shadow-lg"
+              className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium rounded-full transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-off-2 shadow-md hover:shadow-lg"
             >
               Hubungi Kami
             </a>

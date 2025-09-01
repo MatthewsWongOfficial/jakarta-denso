@@ -45,8 +45,7 @@ const serviceItems: ServiceItem[] = [
 const navItems: NavItem[] = [
   { name: "Beranda", href: "/" },
   { name: "Layanan", href: "/#services", hasDropdown: true },
-  { name: "Harga", href: "/#price-list" },
-  { name: "Kelebihan Kami", href: "/#kelebihan-kami" },
+  { name: "Harga", href: "/harga" },
   { name: "Galeri", href: "/#galeri" },
   { name: "Ulasan", href: "/#ulasan" },
   { name: "Blog", href: "/#BlogPreview" },
