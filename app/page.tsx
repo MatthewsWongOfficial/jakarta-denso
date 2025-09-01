@@ -14,7 +14,7 @@ import Loading from "./loading" // Import the Next.js loading component
 // Hash to section ID mapping for consistency
 const HASH_TO_ID_MAP: Record<string, string> = {
   services: "services",
-  "price-list": "price-list",
+  // "price-list": "price-list", // Removed
   "kelebihan-kami": "kelebihan-kami",
   galeri: "galeri",
   ulasan: "ulasan",
@@ -28,10 +28,11 @@ const Services = dynamic(() => import("./components/Services"), {
   ssr: true,
 })
 
-const PriceList = dynamic(() => import("./components/PriceList"), {
-  loading: () => <Loading />,
-  ssr: true,
-})
+// PriceList component is completely removed
+// const PriceList = dynamic(() => import("./components/PriceList"), {
+//   loading: () => <Loading />,
+//   ssr: true,
+// })
 
 const WhyChooseUs = dynamic(() => import("./components/WhyChooseUs"), {
   loading: () => <Loading />,
@@ -325,9 +326,8 @@ export default function Home() {
         const hash = window.location.hash.substring(1)
         if (hash in HASH_TO_ID_MAP) {
           // Preload components related to the hash
-          if (["services", "price-list"].includes(hash)) {
+          if (["services"].includes(hash)) {
             import("./components/Services")
-            import("./components/PriceList")
           } else if (["kelebihan-kami", "galeri"].includes(hash)) {
             import("./components/WhyChooseUs")
             import("./components/Gallery")
@@ -342,7 +342,6 @@ export default function Home() {
       // Delayed preload of first sections for better initial performance
       setTimeout(() => {
         import("./components/Services")
-        import("./components/PriceList")
       }, 1000)
     }
   }, [mounted])
@@ -395,9 +394,7 @@ export default function Home() {
               style={{ contain: "content", containIntrinsicSize: "1px 600px" }}
             >
               <Services />
-              <div id="price-list">
-                <PriceList />
-              </div>
+              {/* Removed PriceList component here */}
             </section>
           </Suspense>
         )}

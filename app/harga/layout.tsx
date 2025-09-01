@@ -2,55 +2,68 @@ import type React from "react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Daftar Harga Layanan Cuci Mobil & Service AC Cirebon | Bengkel Terpercaya",
+  title: "Harga Jakarta Int'l Denso Cirebon | Daftar Harga Layanan Cuci Mobil & Service AC",
   description:
     "Daftar harga lengkap layanan cuci mobil, salon mobil, service AC, dan perawatan mesin di Cirebon. Harga terjangkau, kualitas premium, teknisi berpengalaman. Hubungi sekarang!",
   keywords: [
-    "cuci mobil cirebon",
-    "service ac mobil cirebon",
-    "salon mobil cirebon",
+    "harga jakarta intl denso cirebon",
+    "bengkel terbaik cirebon",
+    "bengkel ac cirebon",
+    "jakarta intl denso",
     "bengkel mobil cirebon",
+    "service ac mobil cirebon",
+    "cuci mobil cirebon",
+    "detailing mobil cirebon",
     "poles mobil cirebon",
+    "harga cuci mobil cirebon",
+    "harga service ac cirebon",
+    "salon mobil cirebon",
     "snow wash cirebon",
     "wetlook mobil cirebon",
-    "detailing mobil cirebon",
-    "harga cuci mobil cirebon",
-    "bengkel ac cirebon",
+    "bengkel ac mobil terbaik cirebon",
+    "cuci mobil profesional cirebon",
+    "perawatan mobil cirebon",
+    "freon ac mobil cirebon",
+    "kompresor ac mobil cirebon",
+    "servis ac mobil pantura",
+    "bengkel resmi denso cirebon",
   ],
-  authors: [{ name: "Bengkel Cirebon" }],
-  creator: "Bengkel Cirebon",
-  publisher: "Bengkel Cirebon",
+  authors: [{ name: "Jakarta Int'l Denso" }],
+  creator: "Jakarta Int'l Denso",
+  publisher: "Jakarta Int'l Denso",
   formatDetection: {
     email: false,
-    address: false,
-    telephone: false,
+    address: true,
+    telephone: true,
   },
-  metadataBase: new URL("https://bengkel-cirebon.com"),
+  metadataBase: new URL("https://jakartaintldenso.com"),
   alternates: {
-    canonical: "/price-list",
+    canonical: "/harga",
   },
   openGraph: {
-    title: "Daftar Harga Layanan Cuci Mobil & Service AC Cirebon",
+    title: "Harga Jakarta Int'l Denso Cirebon - Daftar Harga Layanan Cuci Mobil & Service AC",
     description:
-      "Layanan cuci mobil, salon mobil, service AC terbaik di Cirebon dengan harga terjangkau. Snow wash, wetlook, poles mobil profesional.",
-    url: "/price-list",
-    siteName: "Bengkel Cirebon",
+      "Layanan cuci mobil, salon mobil, service AC terbaik di Cirebon dengan harga terjangkau. Snow wash, wetlook, poles mobil profesional. Rating 4.9/5 dari 160+ pelanggan.",
+    url: "/harga",
+    siteName: "Jakarta Int'l Denso Cirebon",
     locale: "id_ID",
     type: "website",
     images: [
       {
-        url: "/og-price-list.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Daftar Harga Layanan Bengkel Cirebon",
+        url: "/android-chrome-512x512.png",
+        width: 512,
+        height: 512,
+        alt: "Jakarta Int'l Denso Logo",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Daftar Harga Layanan Cuci Mobil & Service AC Cirebon",
-    description: "Layanan cuci mobil, salon mobil, service AC terbaik di Cirebon dengan harga terjangkau.",
-    images: ["/og-price-list.jpg"],
+    title: "Harga Jakarta Int'l Denso Cirebon - Daftar Harga Layanan Cuci Mobil & Service AC",
+    description: "Layanan cuci mobil, salon mobil, service AC terbaik di Cirebon dengan harga terjangkau. Rating 4.9/5 dari 160+ pelanggan.",
+    images: ["/android-chrome-512x512.png"],
+    creator: "@jakartaintldenso",
+    site: "@jakartaintldenso",
   },
   robots: {
     index: true,
@@ -72,40 +85,58 @@ export default function PriceListLayout({
 }) {
   return (
     <>
-      {/* Structured Data for Local Business */}
+      {/* Structured Data for Local Business with Price List */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "LocalBusiness",
-            name: "Bengkel Cirebon",
+            "@type": ["AutoRepair", "CarWash"],
+            name: "Jakarta Int'l Denso Cirebon",
+            alternateName: "Bengkel AC Mobil Terbaik Cirebon",
             description: "Layanan cuci mobil, salon mobil, service AC, dan perawatan kendaraan terbaik di Cirebon",
-            url: "https://bengkel-cirebon.com",
-            telephone: "+62-xxx-xxxx-xxxx",
+            url: "https://jakartaintldenso.com",
+            logo: "https://jakartaintldenso.com/android-chrome-512x512.png",
+            image: "https://jakartaintldenso.com/android-chrome-512x512.png",
+            telephone: "+62819647333",
+            priceRange: "$$",
             address: {
               "@type": "PostalAddress",
-              streetAddress: "Jl. Raya Cirebon",
+              streetAddress: "Jl. Garuda No 2",
               addressLocality: "Cirebon",
               addressRegion: "Jawa Barat",
-              postalCode: "45111",
+              postalCode: "45131",
               addressCountry: "ID",
             },
             geo: {
               "@type": "GeoCoordinates",
-              latitude: -6.7063,
-              longitude: 108.5571,
+              latitude: "-6.732022",
+              longitude: "108.552316",
             },
-            openingHours: "Mo-Su 08:00-17:00",
-            priceRange: "Rp 10.000 - Rp 700.000",
+            openingHoursSpecification: [
+              {
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                opens: "08:00",
+                closes: "17:00",
+              },
+              {
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: "Sunday",
+                opens: "08:00",
+                closes: "16:00",
+              },
+            ],
             aggregateRating: {
               "@type": "AggregateRating",
-              ratingValue: "4.4",
-              reviewCount: "140",
+              ratingValue: "4.9",
+              reviewCount: "160",
+              bestRating: "5",
+              worstRating: "3",
             },
             hasOfferCatalog: {
               "@type": "OfferCatalog",
-              name: "Layanan Bengkel Cirebon",
+              name: "Layanan Jakarta Int'l Denso Cirebon",
               itemListElement: [
                 {
                   "@type": "Offer",
@@ -124,11 +155,49 @@ export default function PriceListLayout({
                     name: "Service AC Mobil",
                     description: "Perbaikan dan perawatan AC mobil oleh teknisi berpengalaman",
                   },
-                  price: "600000",
+                  price: "350000",
+                  priceCurrency: "IDR",
+                },
+                {
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: "Salon Mobil",
+                    description: "Detailing dan poles mobil profesional",
+                  },
+                  price: "150000",
+                  priceCurrency: "IDR",
+                },
+                {
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: "Cuci Mobil Wetlook",
+                    description: "Cuci mobil dengan coating wetlook premium",
+                  },
+                  price: "75000",
                   priceCurrency: "IDR",
                 },
               ],
             },
+            areaServed: [
+              {
+                "@type": "City",
+                name: "Cirebon",
+              },
+              {
+                "@type": "City",
+                name: "Kuningan",
+              },
+              {
+                "@type": "City",
+                name: "Indramayu",
+              },
+            ],
+            sameAs: [
+              "https://www.instagram.com/jakarta_intl_denso",
+              "https://www.tiktok.com/@jakartaintldensocirebon"
+            ],
           }),
         }}
       />
