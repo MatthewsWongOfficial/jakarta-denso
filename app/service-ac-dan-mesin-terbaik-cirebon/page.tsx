@@ -160,7 +160,7 @@ const ServiceACMesin = () => {
               <div className="relative h-[300px] sm:h-[400px] rounded-lg overflow-hidden shadow-2xl">
                 <Image
                   src="/images/cek-ac-mobil.jpeg"
-                  alt="Workshop service AC dan mesin mobil Jakarta Intl Denso Cirebon"
+                  alt="Bengkel service AC dan mesin mobil Jakarta Intl Denso Cirebon"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"

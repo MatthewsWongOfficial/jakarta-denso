@@ -189,7 +189,7 @@ export default function Hero() {
               <div className="absolute inset-0 bg-gradient-to-r from-[#27398f]/10 to-transparent"></div>
 
               <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-r from-white/95 to-white/90 backdrop-blur-md rounded-xl p-4 shadow-2xl border border-white/20">
-                <h3 className="font-bold text-gray-800 mb-1 text-base sm:text-lg">Workshop Terpercaya Cirebon</h3>
+                <h3 className="font-bold text-gray-800 mb-1 text-base sm:text-lg">Bengkel Terpercaya Cirebon</h3>
                 <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-2">
                   Fasilitas modern dengan peralatan canggih
                 </p>
