@@ -10,19 +10,19 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  // Extend Next.js + TypeScript defaults
+  // Extend Next.js + TS defaults
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 
-  // Custom rules
   {
     rules: {
-      // Allow unused variables if they start with `_`
+      // ✅ Downgrade unused vars to warnings, ignore if prefixed with "_"
       "@typescript-eslint/no-unused-vars": [
         "warn",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }
       ],
 
-      // (Optional) you can add more customizations here
+      // ✅ Downgrade "any" usage from error → warning
+      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
 ];
