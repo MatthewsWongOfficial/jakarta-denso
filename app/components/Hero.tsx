@@ -134,7 +134,7 @@ export default function Hero() {
               </Link>
 
               <Link
-                href="#layanan"
+                href="#services"
                 className="inline-flex items-center justify-center px-8 py-4 
                   bg-gradient-to-r from-white to-gray-50 border-2 border-gray-200 hover:border-[#27398f] 
                   text-gray-700 hover:text-[#27398f] font-semibold rounded-xl 

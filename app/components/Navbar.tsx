@@ -46,10 +46,10 @@ const navItems: NavItem[] = [
   { name: "Beranda", href: "/" },
   { name: "Layanan", href: "/#services", hasDropdown: true },
   { name: "Harga", href: "/harga" },
-  { name: "Galeri", href: "/#galeri" },
-  { name: "Ulasan", href: "/#ulasan" },
-  { name: "Blog", href: "/#BlogPreview" },
-  { name: "Kontak", href: "/#contact" },
+  { name: "Galeri", href: "/gallery" },
+  { name: "Ulasan", href: "/ulasan-kami" },
+  { name: "Blog", href: "/blogs" },
+  { name: "Kontak", href: "/kontak-kami" },
 ];
 
 const Navbar: React.FC = () => {

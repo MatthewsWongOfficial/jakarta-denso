@@ -2,31 +2,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import PriceList from "../components/price-list";
 import WhatsAppButton from "../components/WhatsAppButton";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Daftar Harga Layanan Cuci Mobil & Service AC Cirebon | Bengkel Terpercaya",
-  description:
-    "Daftar harga lengkap layanan cuci mobil, salon mobil, service AC, dan perawatan mesin di Cirebon. Harga terjangkau, kualitas premium, teknisi berpengalaman. Hubungi sekarang!",
-  keywords: [
-    "daftar harga cuci mobil cirebon",
-    "harga service ac mobil cirebon",
-    "tarif salon mobil cirebon",
-    "biaya perawatan mobil cirebon",
-    "bengkel murah cirebon",
-    "cuci mobil premium cirebon",
-  ],
-  openGraph: {
-    title: "Daftar Harga Layanan Cuci Mobil & Service AC Cirebon",
-    description:
-      "Harga terjangkau untuk layanan cuci mobil, service AC, dan perawatan kendaraan di Cirebon. Teknisi berpengalaman, kualitas terjamin.",
-    type: "website",
-    locale: "id_ID",
-  },
-  alternates: {
-    canonical: "/price-list",
-  },
-};
 
 export default function PriceListPage() {
   return (
