@@ -335,7 +335,7 @@ const Contact: FC = () => {
                           Jam Operasional
                         </h3>
                         <p className="text-gray-700 font-semibold">Senin - Minggu</p>
-                        <p className="text-gray-500 text-sm mt-1">08:00 - 21:00 WIB</p>
+                        <p className="text-gray-500 text-sm mt-1">08:00 - 17:00 WIB</p>
                       </div>
                     </div>
                   </div>
@@ -597,7 +597,7 @@ const Contact: FC = () => {
                   <div className="space-y-3 text-gray-700">
                     <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
                       <span className="font-medium">Senin - Minggu</span>
-                      <span className="font-bold text-green-600">08:00 - 21:00 WIB</span>
+                      <span className="font-bold text-green-600">08:00 - 17:00 WIB</span>
                     </div>
                     <p className="text-sm text-gray-600 mt-4 leading-relaxed">
                       Buka setiap hari untuk melayani kebutuhan kendaraan Anda dengan pelayanan terbaik
@@ -613,7 +613,7 @@ const Contact: FC = () => {
                 <strong className="text-[#27398f]">Jakarta Intl Denso Cirebon</strong> - Bengkel AC Mobil & Cuci Mobil
                 Terpercaya #1 di Cirebon
               </p>
-              <p className="text-sm">📍 Jl. Garuda Raya No 2-4, Cirebon | 📞 {phoneNumber} | ⏰ 08:00 - 21:00 WIB</p>
+              <p className="text-sm">📍 Jl. Garuda Raya No 2-4, Cirebon | 📞 {phoneNumber} | ⏰ 08:00 - 17:00 WIB</p>
               <p className="text-sm text-blue-600 font-medium">
                 💬 Konsultasi Gratis Sebelum Service | 🔧 Teknisi Berpengalaman 20+ Tahun
               </p>

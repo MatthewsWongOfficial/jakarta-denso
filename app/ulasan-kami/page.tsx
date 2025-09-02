@@ -704,7 +704,7 @@ export default function TestimonialPage() {
                 <strong className="text-[#27398f]">Bengkel AC Mobil Terpercaya #1 Cirebon</strong> - Melayani seluruh wilayah Cirebon Raya
               </p>
               <p className="text-sm">
-                📍 Jl. Ampera, Pusat Kota Cirebon | ⏰ Buka Setiap Hari: 08:00 - 21:00 WIB
+                📍 Jl. Ampera, Pusat Kota Cirebon | ⏰ Buka Setiap Hari: 08:00 - 17:00 WIB
               </p>
               <p className="text-sm text-blue-600 font-medium">
                 📞 Hubungi: 0819-647-333 | 💬 Konsultasi Gratis Sebelum Service

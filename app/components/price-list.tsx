@@ -432,7 +432,7 @@ const PriceList: React.FC = () => {
               <strong className="text-[#27398f]">Bengkel Mobil Cirebon Terpercaya</strong> - Melayani Kota Cirebon dan sekitarnya
             </p>
             <p className="text-sm">
-              Alamat: Pusat Kota Cirebon | Buka: Setiap Hari 08:00 - 21:00 WIB
+              Alamat: Pusat Kota Cirebon | Buka: Setiap Hari 08:00 - 17:00 WIB
             </p>
           </div>
         </motion.div>
